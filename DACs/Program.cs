@@ -19,5 +19,7 @@ namespace DACs
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new LoginForm());
         }
+        // Test commit cho Anh sync code
+        // Test commit cho Anh sync code 2
     }
 }
