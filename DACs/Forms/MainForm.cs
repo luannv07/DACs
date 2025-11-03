@@ -53,6 +53,7 @@ namespace DACs
         private void btnMenuSale_Click(object sender, EventArgs e)
         {
             activateButton(btnMenuSale);
+            ControlUtil.LoadContentControl(new ucSaleControl(), panelContent);
         }
 
         private void btnMenuProduct_Click(object sender, EventArgs e)

@@ -41,6 +41,7 @@
             this.dgvUserList = new System.Windows.Forms.DataGridView();
             this.panel2 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnAccountResetFields = new System.Windows.Forms.Button();
             this.dtpAccountBirthDate = new System.Windows.Forms.DateTimePicker();
             this.label8 = new System.Windows.Forms.Label();
@@ -72,6 +73,7 @@
             this.btnAccountDeleteUser = new System.Windows.Forms.Button();
             this.btnAccountEditUser = new System.Windows.Forms.Button();
             this.btnAccountAddUser = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.panel1.SuspendLayout();
             this.groupBoxWrapperUsers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUserList)).BeginInit();
@@ -171,6 +173,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.groupBox3);
             this.groupBox1.Controls.Add(this.btnAccountResetFields);
             this.groupBox1.Controls.Add(this.dtpAccountBirthDate);
             this.groupBox1.Controls.Add(this.label8);
@@ -203,6 +206,15 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông tin chi tiết";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Location = new System.Drawing.Point(231, 25);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(8, 8);
+            this.groupBox3.TabIndex = 4;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "groupBox3";
             // 
             // btnAccountResetFields
             // 
@@ -603,5 +615,7 @@
         private System.Windows.Forms.Button btnAccountEditUser;
         private System.Windows.Forms.Button btnAccountResetFields;
         private System.Windows.Forms.Button btnAccountResetData;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }

@@ -16,5 +16,21 @@ namespace DACs.Controls
         {
             InitializeComponent();
         }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ucSaleControl_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnThem_Click(object sender, EventArgs e)
+        {
+            FormAddSale formAddSale = new FormAddSale();
+            formAddSale.ShowDialog();
+        }
     }
 }
