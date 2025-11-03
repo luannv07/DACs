@@ -266,6 +266,7 @@
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.Size = new System.Drawing.Size(282, 29);
             this.txtEmail.TabIndex = 0;
+            this.txtEmail.TextChanged += new System.EventHandler(this.txtEmail_TextChanged);
             // 
             // ForgotPasswordForm
             // 
@@ -275,7 +276,7 @@
             this.ClientSize = new System.Drawing.Size(384, 462);
             this.Controls.Add(this.panelForgotPassword);
             this.Name = "ForgotPasswordForm";
-            this.Text = "S";
+            this.Text = "Lấy lại mật khẩu";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();

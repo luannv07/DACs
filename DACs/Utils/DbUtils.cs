@@ -1,90 +1,76 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace DACs.Utils
 {
     public static class DbUtils
     {
-        private const string dataSrc = "anh\\SQLEXPRESS"; // thay dong nay
-        private static string GetConnectionString(string dataSrc)
-        {
-            return $"Data Source={dataSrc};Initial Catalog=YODY_LTAT_DB;Integrated Security=True";
-        }
-        private static string connectionString = GetConnectionString(dataSrc);
-        private static SqlConnection sqlConnection = new SqlConnection(connectionString);
-        private static SqlCommand sqlCommand = null;
-        private static SqlDataAdapter dataAdapter = null;
-        private static DataTable dataTable = null;
-        private static void initOperators()
-        {
-            sqlCommand = new SqlCommand();
-            dataAdapter = new SqlDataAdapter();
-            dataTable = new DataTable();
-        }
-        private static void openConnection()
-        {
-            if (sqlConnection != null && ConnectionState.Closed == sqlConnection.State)
-                sqlConnection.Open();
-        }
+        // src luan: .\\SQLEXPRESS
+        // src anh: anh\\SQLEXPRESS
+        private const string dataSrc = ".\\SQLEXPRESS";
 
-        private static void closeConnection()
+        private static string ConnectionString => $"Data Source={dataSrc};Initial Catalog=YODY_LTAT_DB;Integrated Security=True";
+
+        public static DataTable ExecuteSelectQuery(string query, SqlParameter[] parameters = null)
         {
-            if (sqlCommand != null)
-                sqlCommand.Dispose();
-            if (dataAdapter != null)
-                dataAdapter.Dispose();
-            if (sqlConnection != null && ConnectionState.Open == sqlConnection.State)
-                sqlConnection.Close();
-        }
-        public static DataTable executeSelectQuery(string query, SqlParameter[] parameters)  
-        {
-            initOperators();
+            DataTable dt = new DataTable();
             try
             {
-                openConnection();
-                sqlCommand = sqlConnection.CreateCommand();
-                sqlCommand.CommandText = query;
-                if (parameters != null && parameters.Length >= 1)
-                    sqlCommand.Parameters.AddRange(parameters);
-                dataTable.Clear();
-                dataAdapter.SelectCommand = sqlCommand;
-                dataAdapter.Fill(dataTable);
-            } catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                closeConnection();
-            }
-            return dataTable;
-        }
-        public static int executeNonDataQuery(string query, SqlParameter[] parameters)
-        {
-            int rows = 0;
-            sqlCommand = new SqlCommand();
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                {
+                    if (parameters != null && parameters.Length > 0)
+                        cmd.Parameters.AddRange(parameters);
 
-            try
-            {
-                openConnection();
-                sqlCommand = sqlConnection.CreateCommand();
-                sqlCommand.CommandText = query;
-                if (parameters != null && parameters.Length >= 1)
-                    sqlCommand.Parameters.AddRange(parameters);
-                rows = sqlCommand.ExecuteNonQuery();
+                    da.Fill(dt);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Lỗi DB", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            finally
+            return dt;
+        }
+
+        public static int ExecuteNonQuery(string query, SqlParameter[] parameters = null)
+        {
+            int affectedRows = 0;
+            try
             {
-                closeConnection();
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    if (parameters != null && parameters.Length > 0)
+                        cmd.Parameters.AddRange(parameters);
+
+                    conn.Open();
+                    affectedRows = cmd.ExecuteNonQuery();
+                }
             }
-            return rows;
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Lỗi DB", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return affectedRows;
+        }
+
+        public static bool TestConnection()
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

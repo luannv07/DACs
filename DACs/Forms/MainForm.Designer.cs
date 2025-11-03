@@ -180,6 +180,7 @@
             this.btnMenuSupplier.BackColor = System.Drawing.Color.LightYellow;
             this.btnMenuSupplier.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnMenuSupplier.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnMenuSupplier.Enabled = false;
             this.btnMenuSupplier.FlatAppearance.BorderColor = System.Drawing.Color.LightGray;
             this.btnMenuSupplier.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuSupplier.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -352,7 +353,7 @@
             this.txtHelloUser.Padding = new System.Windows.Forms.Padding(15, 15, 15, 0);
             this.txtHelloUser.Size = new System.Drawing.Size(217, 40);
             this.txtHelloUser.TabIndex = 2;
-            this.txtHelloUser.Text = "Xin chào, LastName";
+            this.txtHelloUser.Text = "Xin chào, Username";
             this.txtHelloUser.Click += new System.EventHandler(this.txtHelloUser_Click);
             // 
             // picLogo
