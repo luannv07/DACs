@@ -187,5 +187,10 @@ namespace DACs.Controls
         {
 
         }
+
+        private void btnAccountDeleteUser_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

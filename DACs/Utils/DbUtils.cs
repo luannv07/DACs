@@ -8,7 +8,7 @@ namespace DACs.Utils
 {
     public static class DbUtils
     {
-        private const string dataSrc = ".\\SQLEXPRESS";
+        private const string dataSrc = "anh\\SQLEXPRESS"; // thay dong nay
         private static string GetConnectionString(string dataSrc)
         {
             return $"Data Source={dataSrc};Initial Catalog=YODY_LTAT_DB;Integrated Security=True";
