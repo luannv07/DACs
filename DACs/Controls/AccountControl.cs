@@ -1,4 +1,5 @@
 ﻿using DACs.Enums;
+using DACs.Services;
 using DACs.Utils;
 using System;
 using System.Collections.Generic;
@@ -15,45 +16,17 @@ namespace DACs.Controls
 {
     public partial class ucAccountControl : UserControl
     {
+        private readonly UserService userService = new UserService();
+
         public ucAccountControl()
         {
             InitializeComponent();
         }
         private void loadUserList()
         {
-            //string query =
-            //"select manhanvien as 'Mã NV', ho as 'Họ', ten as 'Tên', Email, Ngaysinh as 'Ngày sinh', Diachi as 'Địa chỉ', gioitinh as 'Giới tính', Taikhoan as 'Tài khoản', matkhau as 'Mật khẩu', vaitro as 'Vai trò', trangthai as 'Trạng thái', ngaytao as 'Ngày tạo' from nhan_vien";
-            string query = "select " +
-                "manhanvien, ho, ten, vaitro, email, ngaysinh, diachi, gioitinh, taikhoan, matkhau, trangthai, ngaytao " +
-                "from nhan_vien";
+            DataTable dataTable = userService.GetAllUsers();
 
-            DataTable dataTable = DbUtils.executeSelectQuery(query, null);
-
-            dataTable.Columns.Add("gioitinh_text", typeof(string));
-            dataTable.Columns.Add("trangthai_text", typeof(string));
-            dataTable.Columns.Add("vaitro_text", typeof(string));
-
-            foreach (DataRow row in dataTable.Rows)
-            {
-                try
-                {
-                    row["gioitinh_text"] =
-                        Convert.ToInt32(row["gioitinh"]) == (int)Gender.Male ? "Nam" :
-                        Convert.ToInt32(row["gioitinh"]) == (int)Gender.Female ? "Nữ" :
-                        "Khác";
-                    row["trangthai_text"] =
-                        Convert.ToInt32(row["trangthai"]) == (int)UserStatus.Online ? "Hoạt động" :
-                        "Đã nghỉ";
-                    row["vaitro_text"] =
-                        Convert.ToInt32(row["vaitro"]) == (int)Role.Staff ? "Nhân viên" :
-                        Convert.ToInt32(row["vaitro"]) == (int)Role.StoreStaff ? "Kiểm kho" :
-                        "Quản trị";
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
+            
             dgvUserList.DataSource = dataTable;
             dgvUserList.Columns["gioitinh"].Visible = false;
             dgvUserList.Columns["trangthai"].Visible = false;
@@ -134,54 +107,41 @@ namespace DACs.Controls
                 cbAccountStatus.SelectedItem = status;
         }
 
+
         private void btnAccountAddUser_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(txtAccountCode.Text))
+            if (string.IsNullOrWhiteSpace(txtAccountFirstName.Text) || string.IsNullOrWhiteSpace(txtAccountEmail.Text))
             {
-                MessageBox.Show("Bạn đang chọn một nhân viên, không thể thêm mới!", "Thông báo");
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!");
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(txtAccountFirstName.Text) ||
-                string.IsNullOrWhiteSpace(txtAccountLastName.Text) ||
-                string.IsNullOrWhiteSpace(txtAccountEmail.Text))
+            if (userService.CheckEmailExists(txtAccountEmail.Text.Trim()))
             {
-                MessageBox.Show("Vui lòng nhập đầy đủ họ, tên và email!", "Cảnh báo");
+                MessageBox.Show("Email đã tồn tại");
                 return;
             }
 
-            string query = "insert into nhan_vien (ho, ten, vaitro, email, ngaysinh, diachi, gioitinh, taikhoan, matkhau, trangthai, ngaytao) " +
-                "values (@ho, @ten, @vaitro, @email, @ngaysinh, @diachi, @gioitinh, @taikhoan, @matkhau, @trangthai, @ngaytao)";
-            txtAccountUsername.Text = StringUtils.ConvertToUsername(txtAccountFirstName.Text + " " + txtAccountLastName.Text);
-            // check email exists
-            string checkExistEmailQuery = "select count(email) from nhan_vien where email = @email";
-            SqlParameter[] sqlParameters = new SqlParameter[] { new SqlParameter("@email", txtAccountEmail.Text.Trim()) };
-            DataTable dataTable = DbUtils.executeSelectQuery(checkExistEmailQuery, sqlParameters);
+            string username = StringUtils.ConvertToUsername(txtAccountFirstName.Text + " " + txtAccountLastName.Text);
 
-            if (dataTable.Columns.Count > 0 && Convert.ToInt32(dataTable.Rows[0][0]) > 0)
-            {
-                MessageBox.Show("Email đã tồn tại", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                return;
-            }
+            userService.AddUser(
+                txtAccountFirstName.Text.Trim(),
+                txtAccountLastName.Text.Trim(),
+                cbAccountRole.SelectedIndex > -1 ? cbAccountRole.SelectedIndex : (int)Role.Staff,
+                txtAccountEmail.Text.Trim(),
+                dtpAccountBirthDate.Value,
+                txtAccountAddress.Text.Trim(),
+                cbAccountGender.SelectedIndex > -1 ? cbAccountGender.SelectedIndex : (int)Gender.Other,
+                username,
+                txtAccountPassword.Text.Trim().Length < 1 ? "1" : txtAccountPassword.Text.Trim(),
+                cbAccountStatus.SelectedIndex > -1 ? cbAccountStatus.SelectedIndex : (int)UserStatus.Online
+            );
 
-            SqlParameter[] parameters = new SqlParameter[] {
-                new SqlParameter("@ho", txtAccountLastName.Text.Trim()),
-                new SqlParameter("@ten", txtAccountFirstName.Text.Trim()),
-                new SqlParameter("@vaitro", cbAccountRole.SelectedIndex > -1 ? cbAccountRole.SelectedIndex : (int)Role.Staff),
-                new SqlParameter("@email", txtAccountEmail.Text.Trim()),
-                new SqlParameter("@ngaysinh", dtpAccountBirthDate.Value),
-                new SqlParameter("@diachi", txtAccountAddress.Text.Trim()),
-                new SqlParameter("@gioitinh", cbAccountGender.SelectedIndex > -1 ? cbAccountGender.SelectedIndex : (int)Gender.Other),
-                new SqlParameter("@taikhoan", txtAccountUsername.Text.Trim()),
-                new SqlParameter("@matkhau", txtAccountPassword.Text.Trim()),
-                new SqlParameter("@trangthai", cbAccountStatus.SelectedIndex > -1 ? cbAccountStatus.SelectedIndex : (int)UserStatus.Online),
-                new SqlParameter("@ngaytao", DateTime.Now)
-            };
-            DbUtils.executeNonDataQuery(query, parameters);
             loadUserList();
             resetInputFields();
-            MessageBox.Show("Thêm nhân viên thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Thêm nhân viên thành công!");
         }
+
 
         private void btnAccountEditUser_Click(object sender, EventArgs e)
         {
@@ -189,6 +149,11 @@ namespace DACs.Controls
         }
 
         private void btnAccountDeleteUser_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgvUserList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }

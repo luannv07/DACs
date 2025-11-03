@@ -32,5 +32,10 @@ namespace DACs.Forms.Authentication
         {
             // xu li gui code ve email o day
         }
+
+        private void txtEmail_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

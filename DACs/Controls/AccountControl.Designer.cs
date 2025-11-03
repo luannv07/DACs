@@ -160,6 +160,7 @@
             this.dgvUserList.Size = new System.Drawing.Size(920, 287);
             this.dgvUserList.TabIndex = 0;
             this.dgvUserList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUserList_CellClick);
+            this.dgvUserList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUserList_CellContentClick);
             // 
             // panel2
             // 

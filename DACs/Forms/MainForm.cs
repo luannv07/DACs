@@ -1,4 +1,5 @@
 ﻿using DACs.Controls;
+using DACs.Enums;
 using DACs.Forms.Authentication;
 using DACs.Utils;
 using System;
@@ -77,12 +78,16 @@ namespace DACs
 
         private void btnMenuAccount_Click(object sender, EventArgs e)
         {
+            // how can i get currentUser role here???
+
             activateButton(btnMenuAccount);
             ControlUtil.LoadContentControl(new ucAccountControl(), panelContent);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            RoleUtil.ApplyRole(Session.CurrentRole, panelMenu);
+            txtHelloUser.Text = "Xin chào, " + Session.CurrentUsername;
             activateButton(btnMenuHome);
             ControlUtil.LoadContentControl(new ucHomeControl(), panelContent);
         }
