@@ -11,7 +11,7 @@ namespace DACs.Services
     {
         public DataTable AuthenticateUser(string username, string password)
         {
-            string query = "SELECT * FROM nhan_vien WHERE taikhoan = @username AND matkhau = @password";
+            string query = "SELECT * FROM nhan_vien WHERE taikhoan = @username AND matkhau = @password and xoataikhoan = 0";
             SqlParameter[] parameters = {
                 new SqlParameter("@username", username),
                 new SqlParameter("@password", password)
@@ -22,8 +22,8 @@ namespace DACs.Services
         {
             string query = "select " +
                 "manhanvien, ho, ten, vaitro, email, ngaysinh, diachi, gioitinh, taikhoan, matkhau, trangthai, ngaytao " +
-                "from nhan_vien";
-            DataTable dataTable = DbUtils.ExecuteSelectQuery(query, null);
+                "from nhan_vien where xoataikhoan = 0 and taikhoan != @username";
+            DataTable dataTable = DbUtils.ExecuteSelectQuery(query, new SqlParameter[] { new SqlParameter("@username", Session.CurrentUsername) });
             dataTable.Columns.Add("gioitinh_text", typeof(string));
             dataTable.Columns.Add("trangthai_text", typeof(string));
             dataTable.Columns.Add("vaitro_text", typeof(string));
@@ -69,8 +69,8 @@ namespace DACs.Services
                              (@ho, @ten, @vaitro, @email, @ngaysinh, @diachi, @gioitinh, @taikhoan, @matkhau, @trangthai, @ngaytao)";
 
             SqlParameter[] parameters = {
-                new SqlParameter("@ho", lastName),
-                new SqlParameter("@ten", firstName),
+                new SqlParameter("@ho", firstName),
+                new SqlParameter("@ten", lastName),
                 new SqlParameter("@vaitro", role),
                 new SqlParameter("@email", email),
                 new SqlParameter("@ngaysinh", dob),
@@ -84,6 +84,62 @@ namespace DACs.Services
 
             DbUtils.ExecuteNonQuery(query, parameters);
         }
+        public int UpdateUser(string firstName, string lastName, int role, string email, DateTime dob,
+                            string address, int gender, string username, string password, int status)
+        {
+            if (string.IsNullOrWhiteSpace(firstName) ||
+                string.IsNullOrWhiteSpace(lastName) ||
+                string.IsNullOrWhiteSpace(email) ||
+                string.IsNullOrWhiteSpace(address) ||
+                string.IsNullOrWhiteSpace(username) ||
+                string.IsNullOrWhiteSpace(password))
+            {
+                MessageBox.Show("Có 1 vài trường bạn để trống kìaaaa!!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return -1;
+            }
+            DataTable oldEmail = DbUtils.ExecuteSelectQuery("select email from nhan_vien where taikhoan = @taikhoan", 
+                   new SqlParameter[] { new SqlParameter("@taikhoan", username) });
+            if (oldEmail.Rows.Count > 0 && !oldEmail.Rows[0]["email"].ToString().Equals(email))
+            {
+                if (this.CheckEmailExists(email))
+                {
+                    MessageBox.Show("Bạn cập nhật email trùng rồiii!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return -1;
+                }
+            }
 
+            string query = @"UPDATE nhan_vien SET 
+                             ho = @ho, 
+                             ten = @ten, 
+                             vaitro = @vaitro, 
+                             email = @email, 
+                             ngaysinh = @ngaysinh, 
+                             diachi = @diachi, 
+                             gioitinh = @gioitinh, 
+                             matkhau = @matkhau, 
+                             trangthai = @trangthai
+                             WHERE taikhoan = @taikhoan";
+            SqlParameter[] parameters = {
+                new SqlParameter("@ho", firstName),
+                new SqlParameter("@ten", lastName),
+                new SqlParameter("@vaitro", role),
+                new SqlParameter("@email", email),
+                new SqlParameter("@ngaysinh", dob),
+                new SqlParameter("@diachi", address),
+                new SqlParameter("@gioitinh", gender),
+                new SqlParameter("@taikhoan", username),
+                new SqlParameter("@matkhau", password),
+                new SqlParameter("@trangthai", status)
+                };
+            return DbUtils.ExecuteNonQuery(query, parameters);
+        }
+        public int DeleteUser(string username)
+        {
+            string query = "Update nhan_vien set xoaTaiKhoan = 1 where taikhoan = @taikhoan";
+            SqlParameter[] parameters = {
+                new SqlParameter("@taikhoan", username)
+            };
+            return DbUtils.ExecuteNonQuery(query, parameters);
+        }
     }
 }

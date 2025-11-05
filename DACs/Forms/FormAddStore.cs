@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DACs.Utils;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,6 +21,18 @@ namespace DACs.Forms
         private void button1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FormAddStore_Load(object sender, EventArgs e)
+        {
+            comboBox1.DataSource = DbUtils.ExecuteSelectQuery("select * from SAN_PHAM", null);
+            comboBox1.DisplayMember = "tensanpham";
+            comboBox1.ValueMember = "masanpham";
         }
     }
 }

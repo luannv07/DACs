@@ -55,7 +55,7 @@ namespace DACs.Forms.Authentication
 
             if (dataTable.Rows.Count == 0)
             {
-                MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng! Hoặc tài khoản đã bị xoá!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -88,6 +88,15 @@ namespace DACs.Forms.Authentication
                 txtUsername.Text = Properties.Settings.Default.username;
                 txtPassword.Text = Properties.Settings.Default.password;
                 chkRememberMe.Checked = true;
+
+                DataTable dataTable = userService.AuthenticateUser(txtUsername.Text, txtPassword.Text);
+                if (dataTable.Rows.Count > 0)
+                {
+                    Session.CurrentRole = dataTable.Rows[0]["vaitro"].ToString() == "0" ? Role.Staff :
+                                          dataTable.Rows[0]["vaitro"].ToString() == "1" ? Role.StoreStaff :
+                                          Role.Admin;
+                    Session.CurrentUsername = dataTable.Rows[0]["taikhoan"].ToString();
+                }
             }
         }
 
