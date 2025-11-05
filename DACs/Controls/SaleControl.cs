@@ -32,5 +32,10 @@ namespace DACs.Controls
             FormAddSale formAddSale = new FormAddSale();
             formAddSale.ShowDialog();
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

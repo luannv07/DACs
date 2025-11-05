@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label1 = new System.Windows.Forms.Label();
             this.dgvSaleList = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -49,13 +49,14 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Hệ thống quản lý bán hàng";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // dgvSaleList
             // 
             this.dgvSaleList.AllowUserToOrderColumns = true;
             this.dgvSaleList.AllowUserToResizeRows = false;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.IndianRed;
-            this.dgvSaleList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.IndianRed;
+            this.dgvSaleList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvSaleList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvSaleList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvSaleList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;

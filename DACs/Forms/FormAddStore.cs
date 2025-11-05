@@ -8,19 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DACs.Controls
+namespace DACs.Forms
 {
-    public partial class ucStoreControl : UserControl
+    public partial class FormAddStore : Form
     {
-        public ucStoreControl()
+        public FormAddStore()
         {
             InitializeComponent();
         }
 
-        private void btnThem_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            FormAddSale formAddSale = new FormAddSale();
-            formAddSale.ShowDialog();
+
         }
     }
 }

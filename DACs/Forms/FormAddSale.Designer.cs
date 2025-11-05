@@ -162,7 +162,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(876, 548);
+            this.ClientSize = new System.Drawing.Size(884, 561);
             this.Controls.Add(this.txtNhanVienBanHang);
             this.Controls.Add(this.txtTrangThai);
             this.Controls.Add(this.label5);
