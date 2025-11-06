@@ -25,7 +25,9 @@ namespace DACs.Utils
                 "btnMenuAccount"} },
             { Role.Staff, new List<string> {
                 "btnMenuHome",
-                "btnMenuSale"
+                "btnMenuSale",
+                "btnMenuSupplier",
+                "btnMenuProduct",
             } },
             { Role.StoreStaff, new List<string> { 
                 "btnMenuHome",

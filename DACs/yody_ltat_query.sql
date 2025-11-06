@@ -202,7 +202,13 @@ VALUES
 (N'Chân Váy Jean', N'Chân váy chữ A, xẻ tà nhẹ, màu xanh nhạt', 34, 180, 360, 7, 1, 2.3),
 (N'Áo Sweater Nữ', N'Áo nỉ sweater in hình, form rộng, màu vàng pastel', 40, 200, 310, 15, 1, 2.0),
 (N'Quần Legging Thể Thao', N'Quần legging cạp cao, vải thun co giãn, màu đen', 38, 500, 140, 2, 1, 3.0);
-
+ALTER TABLE SAN_PHAM
+DROP COLUMN MoTa
+ALTER TABLE SAN_PHAM
+DROP COLUMN SOlUONG
+ALTER TABLE SAN_PHAM
+DROP COLUMN KICHCO
+SELECT * FROM SAN_PHAM
 INSERT INTO PHIEU_NHAP (NgayNhap, MaNCC, MaNV) VALUES
 ('2025-10-25 10:30:00', 3, 1),
 ('2025-10-26 14:45:00', 8, 3),
@@ -275,3 +281,17 @@ INSERT INTO CHI_TIET_DON_HANG (MaDonHang, MaSanPham, SoLuong, DonGia) VALUES
 (10, 2, 1, 890.00), -- Áo Vest Nữ (DH 11)
 (5, 3, 1, 520.00),  -- Quần Âu Nam (DH 5) - *SP mới cho DH 5*
 (8, 5, 1, 190.00);  -- Quần Short Vải (DH 8) - *SP mới cho DH 8*
+
+
+create table BIEN_THE_SAN_PHAM (
+	ma int primary key,
+	MaSanPham int,
+	MauSac varchar(50) not null,
+	KichCo int not null,
+	SoLuong int not null,
+	foreign key (MaSanPham) references San_pham(MaSanPham)
+)
+select * from san_pham
+
+select * from kho
+drop table kho
