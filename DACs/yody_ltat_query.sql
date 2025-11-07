@@ -1,7 +1,17 @@
 ﻿create database YODY_LTAT_DB;
-
+go
 use YODY_LTAT_DB;
-
+go
+DROP TABLE IF EXISTS CHI_TIET_DON_HANG;
+DROP TABLE IF EXISTS DON_HANG;
+DROP TABLE IF EXISTS KHACH_HANG;
+DROP TABLE IF EXISTS CHI_TIET_PHIEU_NHAP;
+DROP TABLE IF EXISTS PHIEU_NHAP;
+DROP TABLE IF EXISTS BIEN_THE_SAN_PHAM;
+DROP TABLE IF EXISTS SAN_PHAM;
+DROP TABLE IF EXISTS NHA_CUNG_CAP;
+DROP TABLE IF EXISTS NHAN_VIEN;
+go
 /*
 gộp 2 bảng nhân viên + tài khoản
 Bảng Nhân viên
@@ -13,6 +23,7 @@ Bảng Nhân viên
 - Địa chỉ
 - Giới tính
 - Tài khoản (fk 1-1 với Tài khoản bên Bảng Tài khoản)
+- SoftDelete bằng cách thêm trường XoaTaiKhoan
 
 Bảng Tài khoản
 - Tài khoản (pk)
@@ -87,30 +98,36 @@ CREATE TABLE NHAN_VIEN (
     NgayTao DATE NOT NULL DEFAULT GETDATE() ,
 	XoaTaiKhoan TINYINT NOT NULL DEFAULT 0
 );
-alter table nhan_vien
-add XoaTaiKhoan TINYINT NOT NULL DEFAULT 0
-
+go
 
 create table NHA_CUNG_CAP (
 	MaNhaCungCap int identity(1,1) primary key,
 	Ten nvarchar(50) not null,
 	Email varchar(100) not null
 );
-
-create table SAN_PHAM (
-	MaSanPham int identity(1,1) primary key,
-	TenSanPham nvarchar(255) not null,
-	MoTa nvarchar(1000) not null,
-	KichCo int not null,
-	SoLuong int not null,
-	DonGia decimal(6,2) not null,
-	MaNCC int not null,
-	TrangThaiSanPham tinyint default 1,
-	GiamGia DECIMAL(5,2) NOT NULL DEFAULT 0,
-	foreign key (MaNCC) references NHA_CUNG_CAP(MaNhaCungCap),
-	CONSTRAINT CHK_GiamGia CHECK (GiamGia >= 0 AND GiamGia <= 100)
+go
+CREATE TABLE SAN_PHAM (
+    MaSanPham INT IDENTITY(1,1) PRIMARY KEY,
+    TenSanPham NVARCHAR(255) NOT NULL,
+    MaNCC INT NOT NULL,
+    TrangThaiSanPham TINYINT DEFAULT 1,
+    GiamGia DECIMAL(5,2) NOT NULL DEFAULT 0,
+    NgayTao DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (MaNCC) REFERENCES NHA_CUNG_CAP(MaNhaCungCap),
+    CONSTRAINT CHK_GiamGia CHECK (GiamGia >= 0 AND GiamGia <= 100)
 );
-
+go
+CREATE TABLE BIEN_THE_SAN_PHAM (
+    MaBienThe INT IDENTITY(1,1) PRIMARY KEY,
+    MaSanPham INT NOT NULL,
+    MauSac NVARCHAR(50),
+    KichCo NVARCHAR(20),
+    SoLuong INT DEFAULT 0,
+    DonGia DECIMAL(10,2) NOT NULL,
+    TrangThaiBienThe TINYINT DEFAULT 1,
+    FOREIGN KEY (MaSanPham) REFERENCES SAN_PHAM(MaSanPham)
+);
+go
 create table PHIEU_NHAP (
 	MaPhieuNhap int identity(1,1) primary key,
 	NgayNhap datetime not null default getdate(),
@@ -119,6 +136,7 @@ create table PHIEU_NHAP (
 	foreign key (MaNCC) references NHA_CUNG_CAP(MaNhaCungCap),
 	foreign key (MaNV) references NHAN_VIEN(MaNhanVien)
 );
+go
 
 CREATE TABLE CHI_TIET_PHIEU_NHAP (
     IdChiTiet INT IDENTITY(1,1) PRIMARY KEY,
@@ -129,6 +147,7 @@ CREATE TABLE CHI_TIET_PHIEU_NHAP (
     FOREIGN KEY (MaPhieuNhap) REFERENCES PHIEU_NHAP(MaPhieuNhap),
     FOREIGN KEY (MaSanPham) REFERENCES SAN_PHAM(MaSanPham)
 );
+go
 
 create table KHACH_HANG (
 	MaKhachHang int identity(1,1) primary key,
@@ -138,6 +157,7 @@ create table KHACH_HANG (
 	GioiTinh tinyint,
 	LoaiKhachHang tinyint default 0
 );
+go
 
 create table DON_HANG (
 	MaDonHang int identity(1,1) primary key,
@@ -146,6 +166,7 @@ create table DON_HANG (
 	TrangThai tinyint not null default 0,
 	foreign key (MaKhachHang) references KHACH_HANG(MaKhachHang)
 );
+go
 
 create table CHI_TIET_DON_HANG (
 	MaDonHangChiTiet int identity(1,1) primary key,
@@ -157,6 +178,7 @@ create table CHI_TIET_DON_HANG (
 	foreign key (MaSanPham) references SAN_PHAM(MaSanPham),
 	UNIQUE(MaDonHang, MaSanPham)
 );
+go
 
 INSERT INTO NHAN_VIEN (Ho, Ten, Email, NgaySinh, DiaChi, GioiTinh, TaiKhoan, MatKhau, VaiTro)
 VALUES
@@ -171,7 +193,7 @@ VALUES
 (N'Phan Thị',   N'Vân',    'vanpt112025@gmail.com',   '2004-06-03', N'Số 88, Đường Láng, Đống Đa, Hà Nội', 1, 'vanpt', '1', 0),
 (N'Võ Minh',    N'Quân',   'quanvm112025@gmail.com',  '2001-10-28', N'Phố Trần Hưng Đạo, Hoàn Kiếm, Hà Nội', 0, 'quanvm', '1', 1),
 (N'Hoàng Thị',  N'Ngọc',   'ngocht112025@gmail.com',  '1999-04-20', N'Tổ 5, Phường Cầu Giấy, Quận Cầu Giấy, Hà Nội', 1, 'ngocht', '1', 1);
-
+go
 INSERT INTO NHA_CUNG_CAP (Ten, Email)
 VALUES
 (N'Công ty ABC', 'abc@gmail.com'),
@@ -189,26 +211,62 @@ VALUES
 (N'Công ty KLM', 'klm@gmail.com'),
 (N'Công ty NOP', 'nop@gmail.com'),
 (N'Công ty QRS', 'qrs@gmail.com');
-
-INSERT INTO SAN_PHAM
-(TenSanPham, MoTa, KichCo, SoLuong, DonGia, MaNCC, TrangThaiSanPham, GiamGia)
+go
+INSERT INTO SAN_PHAM (TenSanPham, MaNCC, GiamGia)
 VALUES
-(N'Áo Vest Nữ', N'Áo vest công sở, hai hàng nút, màu đen', 38, 50, 890, 10, 1, 1.1),
-(N'Quần Âu Nam', N'Quần tây slim fit, chất liệu co giãn, màu xanh navy', 33, 140, 520, 6, 1, 2.7),
-(N'Váy Maxi Voan', N'Váy dài maxi, cổ V, họa tiết chấm bi', 36, 95, 450, 1, 1, 3.4),
-(N'Áo Polo Nam', N'Áo polo cotton, cổ bẻ, màu xám chuột', 42, 250, 280, 13, 1, 1.9),
-(N'Quần Short Vải', N'Quần short linen nữ, cạp chun, màu trắng', 30, 310, 190, 4, 1, 3.1),
-(N'Áo Khoác Da', N'Áo khoác da PU, kiểu biker, màu nâu đậm', 44, 40, 990, 11, 1, 1.5),
-(N'Chân Váy Jean', N'Chân váy chữ A, xẻ tà nhẹ, màu xanh nhạt', 34, 180, 360, 7, 1, 2.3),
-(N'Áo Sweater Nữ', N'Áo nỉ sweater in hình, form rộng, màu vàng pastel', 40, 200, 310, 15, 1, 2.0),
-(N'Quần Legging Thể Thao', N'Quần legging cạp cao, vải thun co giãn, màu đen', 38, 500, 140, 2, 1, 3.0);
-ALTER TABLE SAN_PHAM
-DROP COLUMN MoTa
-ALTER TABLE SAN_PHAM
-DROP COLUMN SOlUONG
-ALTER TABLE SAN_PHAM
-DROP COLUMN KICHCO
-SELECT * FROM SAN_PHAM
+(N'Áo Vest Nữ', 10, 1.1),
+(N'Quần Âu Nam', 6, 2.7),
+(N'Váy Maxi Voan', 1, 3.4),
+(N'Áo Polo Nam', 13, 1.9),
+(N'Quần Short Vải', 4, 3.1),
+(N'Áo Khoác Da', 11, 1.5),
+(N'Chân Váy Jean', 7, 2.3),
+(N'Áo Sweater Nữ', 15, 2.0),
+(N'Quần Legging Thể Thao', 2, 3.0);
+go
+INSERT INTO BIEN_THE_SAN_PHAM (MaSanPham, MauSac, KichCo, SoLuong, DonGia)
+VALUES
+-- 1. Áo Vest Nữ
+(1, N'Đen', N'S', 20, 950.00),
+(1, N'Đen', N'M', 15, 950.00),
+(1, N'Trắng', N'M', 15, 960.00),
+
+-- 2. Quần Âu Nam
+(2, N'Xanh Navy', N'31', 50, 520.00),
+(2, N'Xanh Navy', N'32', 45, 520.00),
+(2, N'Đen', N'33', 45, 530.00),
+
+-- 3. Váy Maxi Voan
+(3, N'Trắng', N'S', 30, 460.00),
+(3, N'Hồng', N'M', 40, 470.00),
+(3, N'Xanh Biển', N'L', 25, 480.00),
+
+-- 4. Áo Polo Nam
+(4, N'Xám Chuột', N'M', 80, 280.00),
+(4, N'Đen', N'L', 90, 285.00),
+(4, N'Trắng', N'XL', 80, 290.00),
+
+-- 5. Quần Short Vải
+(5, N'Trắng', N'S', 100, 190.00),
+(5, N'Be', N'M', 110, 195.00),
+
+-- 6. Áo Khoác Da
+(6, N'Nâu Đậm', N'L', 25, 990.00),
+(6, N'Đen', N'M', 15, 995.00),
+
+-- 7. Chân Váy Jean
+(7, N'Xanh Nhạt', N'S', 80, 360.00),
+(7, N'Xanh Đậm', N'M', 100, 365.00),
+
+-- 8. Áo Sweater Nữ
+(8, N'Vàng Pastel', N'M', 120, 310.00),
+(8, N'Hồng', N'L', 80, 315.00),
+
+-- 9. Quần Legging Thể Thao
+(9, N'Đen', N'S', 150, 140.00),
+(9, N'Xám', N'M', 200, 145.00);
+
+go
 INSERT INTO PHIEU_NHAP (NgayNhap, MaNCC, MaNV) VALUES
 ('2025-10-25 10:30:00', 3, 1),
 ('2025-10-26 14:45:00', 8, 3),
@@ -222,7 +280,7 @@ INSERT INTO PHIEU_NHAP (NgayNhap, MaNCC, MaNV) VALUES
 ('2025-11-02 11:55:00', 6, 5),
 ('2025-10-20 15:10:00', 1, 1),
 ('2025-10-23 09:40:00', 3, 3);
-
+go
 INSERT INTO CHI_TIET_PHIEU_NHAP (MaPhieuNhap, MaSanPham, SoLuong, DonGia) VALUES
 (1, 4, 150, 290.00),
 (1, 7, 200, 350.00),
@@ -244,7 +302,7 @@ INSERT INTO CHI_TIET_PHIEU_NHAP (MaPhieuNhap, MaSanPham, SoLuong, DonGia) VALUES
 (10, 9, 200, 135.00),
 (11, 1, 150, 140.00),
 (12, 4, 120, 300.00);
-
+go
 INSERT INTO KHACH_HANG (TenKhachHang, DiaChi, SoDienThoai, GioiTinh, LoaiKhachHang) VALUES
 (N'Nguyễn Thị Hồng Anh', N'Số 15, Ngõ 40, P. Cầu Giấy, Hà Nội', '0987123456', 0, 1),
 (N'Trần Văn Bảo', N'Đường 3/2, Q. Ninh Kiều, Cần Thơ', '0912345678', 1, 1),
@@ -256,7 +314,7 @@ INSERT INTO KHACH_HANG (TenKhachHang, DiaChi, SoDienThoai, GioiTinh, LoaiKhachHa
 (N'Bùi Mai Phương', N'345 Lê Lợi, P. Bến Thành, TP. HCM', '0933221100', 0, 1),
 (N'Đinh Công Quyết', N'Khu phố 3, P. Hòa Minh, Đà Nẵng', '0868121314', 1, 0),
 (N'Cao Ngọc Diệp', N'Số 10, Đường 19/5, Q. Hà Đông, Hà Nội', '0922334455', 0, 0);
-
+go
 INSERT INTO DON_HANG (NgayDatHang, MaKhachHang, TrangThai) VALUES
 ('2025-10-15 11:20:00', 3, 2), -- Lê Thanh Duy (Đã giao)
 ('2025-10-16 15:40:00', 8, 2), -- Bùi Mai Phương (Đã giao)
@@ -268,7 +326,7 @@ INSERT INTO DON_HANG (NgayDatHang, MaKhachHang, TrangThai) VALUES
 ('2025-10-25 08:45:00', 4, 1), -- Phạm Hải Yến (Đã xác nhận)
 ('2025-10-27 12:25:00', 9, 2), -- Đinh Công Quyết (Đã giao)
 ('2025-10-28 13:30:00', 6, 1); -- Đỗ Thu Hà (Đã xác nhận)
-
+go
 INSERT INTO CHI_TIET_DON_HANG (MaDonHang, MaSanPham, SoLuong, DonGia) VALUES
 (1, 6, 1, 990.00),  -- Áo Khoác Da (DH 1)
 (2, 3, 1, 520.00),  -- Quần Âu Nam (DH 2)
@@ -283,15 +341,3 @@ INSERT INTO CHI_TIET_DON_HANG (MaDonHang, MaSanPham, SoLuong, DonGia) VALUES
 (8, 5, 1, 190.00);  -- Quần Short Vải (DH 8) - *SP mới cho DH 8*
 
 
-create table BIEN_THE_SAN_PHAM (
-	ma int primary key,
-	MaSanPham int,
-	MauSac varchar(50) not null,
-	KichCo int not null,
-	SoLuong int not null,
-	foreign key (MaSanPham) references San_pham(MaSanPham)
-)
-select * from san_pham
-
-select * from kho
-drop table kho
