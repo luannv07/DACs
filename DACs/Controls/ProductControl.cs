@@ -29,5 +29,10 @@ namespace DACs.Controls
         {
             dgvProductList.DataSource = productService.getAllProducts();
         }
+
+        private void dgvProductList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

@@ -30,9 +30,6 @@ namespace DACs.Forms
 
         private void FormAddStore_Load(object sender, EventArgs e)
         {
-            comboBox1.DataSource = DbUtils.ExecuteSelectQuery("select * from SAN_PHAM", null);
-            comboBox1.DisplayMember = "tensanpham";
-            comboBox1.ValueMember = "masanpham";
         }
     }
 }

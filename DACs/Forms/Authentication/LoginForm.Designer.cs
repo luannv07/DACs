@@ -87,7 +87,6 @@
             this.btnForgot.TabIndex = 4;
             this.btnForgot.Text = "Quên tài khoản";
             this.btnForgot.UseVisualStyleBackColor = false;
-            this.btnForgot.Click += new System.EventHandler(this.button2_Click);
             // 
             // btnLogin
             // 
@@ -114,7 +113,6 @@
             this.chkRememberMe.TabIndex = 2;
             this.chkRememberMe.Text = "Ghi nhớ";
             this.chkRememberMe.UseVisualStyleBackColor = true;
-            this.chkRememberMe.CheckedChanged += new System.EventHandler(this.chkRememberMe_CheckedChanged);
             // 
             // pictureBox2
             // 
@@ -125,7 +123,6 @@
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 4;
             this.pictureBox2.TabStop = false;
-            this.pictureBox2.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // pictureBox1
             // 
@@ -136,7 +133,6 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // labelPassword
             // 
@@ -158,7 +154,6 @@
             this.txtPassword.Size = new System.Drawing.Size(282, 29);
             this.txtPassword.TabIndex = 1;
             this.txtPassword.UseSystemPasswordChar = true;
-            this.txtPassword.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // labelUsername
             // 
@@ -179,7 +174,6 @@
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(282, 29);
             this.txtUsername.TabIndex = 0;
-            this.txtUsername.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // LoginForm
             // 

@@ -1,15 +1,8 @@
 ﻿using DACs.Enums;
+using DACs.Models;
 using DACs.Services;
 using DACs.Utils;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DACs.Forms.Authentication
@@ -17,24 +10,10 @@ namespace DACs.Forms.Authentication
     public partial class LoginForm : Form
     {
         private readonly UserService userService = new UserService();
+
         public LoginForm()
         {
             InitializeComponent();
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Vui lòng liên hệ quản trị viên để lấy lại mật khẩu.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -51,21 +30,23 @@ namespace DACs.Forms.Authentication
                 return;
             }
 
-            DataTable dataTable = userService.AuthenticateUser(txtUsername.Text, txtPassword.Text);
+            NhanVien user = userService.AuthenticateUser(txtUsername.Text, txtPassword.Text);
 
-            if (dataTable.Rows.Count == 0)
+            if (user == null)
             {
                 MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng! Hoặc tài khoản đã bị xoá!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             MessageBox.Show("Đăng nhập thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            Session.CurrentRole = dataTable.Rows[0]["vaitro"].ToString() == "0" ? Role.Staff :
-                                  dataTable.Rows[0]["vaitro"].ToString() == "1" ? Role.StoreStaff :
-                                  Role.Admin;
-            Session.CurrentUsername = dataTable.Rows[0]["taikhoan"].ToString();
+
+            // Lưu thông tin session
+            Session.CurrentRole = ParseRole(user.VaiTro);
+            Session.CurrentUsername = user.TaiKhoan;
+
             ControlUtil.LoadForm(this, new MainForm());
 
+            // Remember me
             if (chkRememberMe.Checked)
             {
                 Properties.Settings.Default.username = txtUsername.Text;
@@ -89,20 +70,20 @@ namespace DACs.Forms.Authentication
                 txtPassword.Text = Properties.Settings.Default.password;
                 chkRememberMe.Checked = true;
 
-                DataTable dataTable = userService.AuthenticateUser(txtUsername.Text, txtPassword.Text);
-                if (dataTable.Rows.Count > 0)
+                NhanVien user = userService.AuthenticateUser(txtUsername.Text, txtPassword.Text);
+                if (user != null)
                 {
-                    Session.CurrentRole = dataTable.Rows[0]["vaitro"].ToString() == "0" ? Role.Staff :
-                                          dataTable.Rows[0]["vaitro"].ToString() == "1" ? Role.StoreStaff :
-                                          Role.Admin;
-                    Session.CurrentUsername = dataTable.Rows[0]["taikhoan"].ToString();
+                    Session.CurrentRole = ParseRole(user.VaiTro);
+                    Session.CurrentUsername = user.TaiKhoan;
                 }
             }
         }
 
-        private void chkRememberMe_CheckedChanged(object sender, EventArgs e)
+        private Role ParseRole(string vaiTro)
         {
-
+            if (vaiTro == Enums.Role.Admin.ToString()) return Enums.Role.Admin;
+            if (vaiTro == Enums.Role.StoreStaff.ToString()) return Enums.Role.StoreStaff;
+            return Enums.Role.Staff;
         }
     }
 }

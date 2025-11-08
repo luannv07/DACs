@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS SAN_PHAM;
 DROP TABLE IF EXISTS NHA_CUNG_CAP;
 DROP TABLE IF EXISTS NHAN_VIEN;
 go
+
 /*
 gộp 2 bảng nhân viên + tài khoản
 Bảng Nhân viên
@@ -106,16 +107,19 @@ create table NHA_CUNG_CAP (
 	Email varchar(100) not null
 );
 go
+
 CREATE TABLE SAN_PHAM (
     MaSanPham INT IDENTITY(1,1) PRIMARY KEY,
     TenSanPham NVARCHAR(255) NOT NULL,
     MaNCC INT NOT NULL,
-    TrangThaiSanPham TINYINT DEFAULT 1,
     GiamGia DECIMAL(5,2) NOT NULL DEFAULT 0,
     NgayTao DATETIME DEFAULT GETDATE(),
     FOREIGN KEY (MaNCC) REFERENCES NHA_CUNG_CAP(MaNhaCungCap),
     CONSTRAINT CHK_GiamGia CHECK (GiamGia >= 0 AND GiamGia <= 100)
 );
+alter table san_pham
+add CONSTRAINT CHK_TenSanPham_Length CHECK (LEN(TenSanPham) <= 30)
+
 go
 CREATE TABLE BIEN_THE_SAN_PHAM (
     MaBienThe INT IDENTITY(1,1) PRIMARY KEY,
@@ -127,6 +131,7 @@ CREATE TABLE BIEN_THE_SAN_PHAM (
     TrangThaiBienThe TINYINT DEFAULT 1,
     FOREIGN KEY (MaSanPham) REFERENCES SAN_PHAM(MaSanPham)
 );
+truncate table BIEN_THE_SAN_PHAM
 go
 create table PHIEU_NHAP (
 	MaPhieuNhap int identity(1,1) primary key,
@@ -214,7 +219,7 @@ VALUES
 go
 INSERT INTO SAN_PHAM (TenSanPham, MaNCC, GiamGia)
 VALUES
-(N'Áo Vest Nữ', 10, 1.1),
+(N'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 10, 1.1),
 (N'Quần Âu Nam', 6, 2.7),
 (N'Váy Maxi Voan', 1, 3.4),
 (N'Áo Polo Nam', 13, 1.9),
@@ -341,3 +346,29 @@ INSERT INTO CHI_TIET_DON_HANG (MaDonHang, MaSanPham, SoLuong, DonGia) VALUES
 (8, 5, 1, 190.00);  -- Quần Short Vải (DH 8) - *SP mới cho DH 8*
 
 
+SELECT p.[MaSanPham]
+      ,p.[TenSanPham]
+      ,p.[MaNCC]
+      ,p.[GiamGia]
+      ,p.[NgayTao]
+      ,pp.[MauSac]
+      ,pp.[KichCo]
+      ,pp.[SoLuong]
+      ,pp.[DonGia]
+      ,pp.[TrangThaiBienThe]
+FROM [YODY_LTAT_DB].[dbo].[SAN_PHAM] as p
+left join [YODY_LTAT_DB].[dbo].[BIEN_THE_SAN_PHAM] as pp on pp.MaSanPham = p.MaSanPham
+
+
+
+/*
+DELETE FROM CHI_TIET_DON_HANG;
+DELETE FROM CHI_TIET_PHIEU_NHAP;
+DELETE FROM BIEN_THE_SAN_PHAM;
+DELETE FROM DON_HANG;
+DELETE FROM PHIEU_NHAP;
+DELETE FROM SAN_PHAM;
+DELETE FROM KHACH_HANG;
+DELETE FROM NHA_CUNG_CAP;
+DELETE FROM NHAN_VIEN;
+*/

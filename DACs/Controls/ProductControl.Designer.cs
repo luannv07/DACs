@@ -29,21 +29,21 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ucProductControl));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             this.labelUsers = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnAccountResetData = new System.Windows.Forms.Button();
-            this.btnAccountVipFeatures = new System.Windows.Forms.Button();
             this.btnXoa = new System.Windows.Forms.Button();
             this.btnSua = new System.Windows.Forms.Button();
             this.btnThem = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cbMaNCC = new System.Windows.Forms.ComboBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnAccountResetFields = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
@@ -66,7 +66,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBoxProduct = new System.Windows.Forms.GroupBox();
             this.dgvProductList = new System.Windows.Forms.DataGridView();
-            this.cbMaNCC = new System.Windows.Forms.ComboBox();
             this.panel3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -87,19 +86,19 @@
             this.labelUsers.Size = new System.Drawing.Size(277, 37);
             this.labelUsers.TabIndex = 1;
             this.labelUsers.Text = "Danh sách sản phẩm";
+            this.labelUsers.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // panel3
             // 
             this.panel3.Controls.Add(this.groupBox2);
-            this.panel3.Location = new System.Drawing.Point(685, 384);
+            this.panel3.Location = new System.Drawing.Point(17, 589);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(258, 284);
+            this.panel3.Size = new System.Drawing.Size(557, 79);
             this.panel3.TabIndex = 2;
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.btnAccountResetData);
-            this.groupBox2.Controls.Add(this.btnAccountVipFeatures);
             this.groupBox2.Controls.Add(this.btnXoa);
             this.groupBox2.Controls.Add(this.btnSua);
             this.groupBox2.Controls.Add(this.btnThem);
@@ -108,7 +107,7 @@
             this.groupBox2.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(258, 284);
+            this.groupBox2.Size = new System.Drawing.Size(557, 79);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Các chức năng";
@@ -116,66 +115,47 @@
             // btnAccountResetData
             // 
             this.btnAccountResetData.Image = ((System.Drawing.Image)(resources.GetObject("btnAccountResetData.Image")));
-            this.btnAccountResetData.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAccountResetData.Location = new System.Drawing.Point(30, 35);
+            this.btnAccountResetData.Location = new System.Drawing.Point(6, 23);
             this.btnAccountResetData.Name = "btnAccountResetData";
-            this.btnAccountResetData.Size = new System.Drawing.Size(201, 42);
+            this.btnAccountResetData.Size = new System.Drawing.Size(50, 50);
             this.btnAccountResetData.TabIndex = 0;
-            this.btnAccountResetData.Text = "Làm mới";
             this.btnAccountResetData.UseVisualStyleBackColor = true;
-            // 
-            // btnAccountVipFeatures
-            // 
-            this.btnAccountVipFeatures.Image = ((System.Drawing.Image)(resources.GetObject("btnAccountVipFeatures.Image")));
-            this.btnAccountVipFeatures.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAccountVipFeatures.Location = new System.Drawing.Point(30, 227);
-            this.btnAccountVipFeatures.Name = "btnAccountVipFeatures";
-            this.btnAccountVipFeatures.Size = new System.Drawing.Size(201, 42);
-            this.btnAccountVipFeatures.TabIndex = 0;
-            this.btnAccountVipFeatures.Text = "Nâng cao";
-            this.btnAccountVipFeatures.UseVisualStyleBackColor = true;
             // 
             // btnXoa
             // 
             this.btnXoa.Enabled = false;
             this.btnXoa.Image = ((System.Drawing.Image)(resources.GetObject("btnXoa.Image")));
-            this.btnXoa.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnXoa.Location = new System.Drawing.Point(30, 179);
+            this.btnXoa.Location = new System.Drawing.Point(174, 23);
             this.btnXoa.Name = "btnXoa";
-            this.btnXoa.Size = new System.Drawing.Size(201, 42);
+            this.btnXoa.Size = new System.Drawing.Size(50, 50);
             this.btnXoa.TabIndex = 0;
-            this.btnXoa.Text = "Xoá sản phẩm";
             this.btnXoa.UseVisualStyleBackColor = true;
             // 
             // btnSua
             // 
             this.btnSua.Enabled = false;
             this.btnSua.Image = ((System.Drawing.Image)(resources.GetObject("btnSua.Image")));
-            this.btnSua.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSua.Location = new System.Drawing.Point(30, 131);
+            this.btnSua.Location = new System.Drawing.Point(118, 23);
             this.btnSua.Name = "btnSua";
-            this.btnSua.Size = new System.Drawing.Size(201, 42);
+            this.btnSua.Size = new System.Drawing.Size(50, 50);
             this.btnSua.TabIndex = 0;
-            this.btnSua.Text = "Sửa sản phẩm";
             this.btnSua.UseVisualStyleBackColor = true;
             // 
             // btnThem
             // 
             this.btnThem.Image = ((System.Drawing.Image)(resources.GetObject("btnThem.Image")));
-            this.btnThem.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnThem.Location = new System.Drawing.Point(30, 83);
+            this.btnThem.Location = new System.Drawing.Point(62, 23);
             this.btnThem.Name = "btnThem";
-            this.btnThem.Size = new System.Drawing.Size(201, 42);
+            this.btnThem.Size = new System.Drawing.Size(50, 50);
             this.btnThem.TabIndex = 0;
-            this.btnThem.Text = "Thêm sản phẩm";
             this.btnThem.UseVisualStyleBackColor = true;
             // 
             // panel2
             // 
             this.panel2.Controls.Add(this.groupBox1);
-            this.panel2.Location = new System.Drawing.Point(17, 384);
+            this.panel2.Location = new System.Drawing.Point(580, 63);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(649, 284);
+            this.panel2.Size = new System.Drawing.Size(363, 605);
             this.panel2.TabIndex = 3;
             // 
             // groupBox1
@@ -205,10 +185,18 @@
             this.groupBox1.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(649, 284);
+            this.groupBox1.Size = new System.Drawing.Size(363, 605);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông tin chi tiết";
+            // 
+            // cbMaNCC
+            // 
+            this.cbMaNCC.FormattingEnabled = true;
+            this.cbMaNCC.Location = new System.Drawing.Point(102, 356);
+            this.cbMaNCC.Name = "cbMaNCC";
+            this.cbMaNCC.Size = new System.Drawing.Size(126, 29);
+            this.cbMaNCC.TabIndex = 5;
             // 
             // groupBox3
             // 
@@ -223,10 +211,12 @@
             // 
             this.btnAccountResetFields.Image = ((System.Drawing.Image)(resources.GetObject("btnAccountResetFields.Image")));
             this.btnAccountResetFields.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAccountResetFields.Location = new System.Drawing.Point(608, 15);
+            this.btnAccountResetFields.Location = new System.Drawing.Point(182, 25);
             this.btnAccountResetFields.Name = "btnAccountResetFields";
-            this.btnAccountResetFields.Size = new System.Drawing.Size(38, 38);
+            this.btnAccountResetFields.Size = new System.Drawing.Size(162, 38);
             this.btnAccountResetFields.TabIndex = 0;
+            this.btnAccountResetFields.Text = "Đặt lại dữ liệu";
+            this.btnAccountResetFields.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnAccountResetFields.UseVisualStyleBackColor = true;
             // 
             // label8
@@ -234,7 +224,7 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label8.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label8.Location = new System.Drawing.Point(348, 227);
+            this.label8.Location = new System.Drawing.Point(6, 291);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(57, 19);
             this.label8.TabIndex = 1;
@@ -248,7 +238,7 @@
             this.cbMauSac.Items.AddRange(new object[] {
             "Hoạt động",
             "Đã nghỉ"});
-            this.cbMauSac.Location = new System.Drawing.Point(90, 115);
+            this.cbMauSac.Location = new System.Drawing.Point(90, 121);
             this.cbMauSac.Name = "cbMauSac";
             this.cbMauSac.Size = new System.Drawing.Size(149, 29);
             this.cbMauSac.TabIndex = 2;
@@ -262,7 +252,7 @@
             "Nhân viên",
             "Kiểm kho",
             "Quản trị"});
-            this.cbKichCo.Location = new System.Drawing.Point(431, 115);
+            this.cbKichCo.Location = new System.Drawing.Point(142, 191);
             this.cbKichCo.Name = "cbKichCo";
             this.cbKichCo.Size = new System.Drawing.Size(126, 29);
             this.cbKichCo.TabIndex = 2;
@@ -283,7 +273,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label7.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label7.Location = new System.Drawing.Point(411, 65);
+            this.label7.Location = new System.Drawing.Point(10, 78);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(70, 19);
             this.label7.TabIndex = 1;
@@ -294,7 +284,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label3.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label3.Location = new System.Drawing.Point(348, 121);
+            this.label3.Location = new System.Drawing.Point(21, 140);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(52, 19);
             this.label3.TabIndex = 1;
@@ -305,7 +295,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label4.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label4.Location = new System.Drawing.Point(151, 65);
+            this.label4.Location = new System.Drawing.Point(6, 422);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(49, 19);
             this.label4.TabIndex = 1;
@@ -327,7 +317,7 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label6.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label6.Location = new System.Drawing.Point(348, 171);
+            this.label6.Location = new System.Drawing.Point(64, 197);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(61, 19);
             this.label6.TabIndex = 1;
@@ -347,7 +337,7 @@
             // txtTrangThai
             // 
             this.txtTrangThai.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.txtTrangThai.Location = new System.Drawing.Point(485, 59);
+            this.txtTrangThai.Location = new System.Drawing.Point(111, 86);
             this.txtTrangThai.Name = "txtTrangThai";
             this.txtTrangThai.Size = new System.Drawing.Size(148, 29);
             this.txtTrangThai.TabIndex = 0;
@@ -355,7 +345,7 @@
             // txtDonGia
             // 
             this.txtDonGia.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.txtDonGia.Location = new System.Drawing.Point(431, 221);
+            this.txtDonGia.Location = new System.Drawing.Point(90, 291);
             this.txtDonGia.Name = "txtDonGia";
             this.txtDonGia.Size = new System.Drawing.Size(202, 29);
             this.txtDonGia.TabIndex = 0;
@@ -363,7 +353,7 @@
             // txtTenSP
             // 
             this.txtTenSP.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.txtTenSP.Location = new System.Drawing.Point(223, 59);
+            this.txtTenSP.Location = new System.Drawing.Point(25, 326);
             this.txtTenSP.Name = "txtTenSP";
             this.txtTenSP.Size = new System.Drawing.Size(162, 29);
             this.txtTenSP.TabIndex = 0;
@@ -379,7 +369,7 @@
             // txtSoLuong
             // 
             this.txtSoLuong.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.txtSoLuong.Location = new System.Drawing.Point(90, 165);
+            this.txtSoLuong.Location = new System.Drawing.Point(79, 165);
             this.txtSoLuong.Name = "txtSoLuong";
             this.txtSoLuong.Size = new System.Drawing.Size(149, 29);
             this.txtSoLuong.TabIndex = 0;
@@ -389,7 +379,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label1.Location = new System.Drawing.Point(10, 65);
+            this.label1.Location = new System.Drawing.Point(10, 37);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(48, 19);
             this.label1.TabIndex = 1;
@@ -398,9 +388,9 @@
             // txtMaSP
             // 
             this.txtMaSP.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.txtMaSP.Location = new System.Drawing.Point(68, 59);
+            this.txtMaSP.Location = new System.Drawing.Point(68, 31);
             this.txtMaSP.Name = "txtMaSP";
-            this.txtMaSP.Size = new System.Drawing.Size(57, 29);
+            this.txtMaSP.Size = new System.Drawing.Size(108, 29);
             this.txtMaSP.TabIndex = 0;
             this.txtMaSP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -409,7 +399,7 @@
             this.panel1.Controls.Add(this.groupBoxProduct);
             this.panel1.Location = new System.Drawing.Point(17, 63);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(926, 315);
+            this.panel1.Size = new System.Drawing.Size(557, 520);
             this.panel1.TabIndex = 4;
             // 
             // groupBoxProduct
@@ -421,7 +411,7 @@
             this.groupBoxProduct.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.groupBoxProduct.Location = new System.Drawing.Point(0, 0);
             this.groupBoxProduct.Name = "groupBoxProduct";
-            this.groupBoxProduct.Size = new System.Drawing.Size(926, 315);
+            this.groupBoxProduct.Size = new System.Drawing.Size(557, 520);
             this.groupBoxProduct.TabIndex = 0;
             this.groupBoxProduct.TabStop = false;
             this.groupBoxProduct.Text = "Danh sách sản phẩm";
@@ -430,59 +420,52 @@
             // 
             this.dgvProductList.AllowUserToOrderColumns = true;
             this.dgvProductList.AllowUserToResizeRows = false;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.IndianRed;
-            this.dgvProductList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle11.BackColor = System.Drawing.Color.IndianRed;
+            this.dgvProductList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle11;
             this.dgvProductList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvProductList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvProductList.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Info;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Red;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvProductList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Info;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.Red;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvProductList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle12;
             this.dgvProductList.ColumnHeadersHeight = 30;
             this.dgvProductList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.HotTrack;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvProductList.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.HotTrack;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvProductList.DefaultCellStyle = dataGridViewCellStyle13;
             this.dgvProductList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvProductList.EnableHeadersVisualStyles = false;
             this.dgvProductList.Location = new System.Drawing.Point(3, 25);
             this.dgvProductList.Name = "dgvProductList";
             this.dgvProductList.ReadOnly = true;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvProductList.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle14.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvProductList.RowHeadersDefaultCellStyle = dataGridViewCellStyle14;
             this.dgvProductList.RowHeadersVisible = false;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            this.dgvProductList.RowsDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
+            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            this.dgvProductList.RowsDefaultCellStyle = dataGridViewCellStyle15;
             this.dgvProductList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.dgvProductList.RowTemplate.Height = 25;
-            this.dgvProductList.Size = new System.Drawing.Size(920, 287);
+            this.dgvProductList.Size = new System.Drawing.Size(551, 492);
             this.dgvProductList.TabIndex = 0;
-            // 
-            // cbMaNCC
-            // 
-            this.cbMaNCC.FormattingEnabled = true;
-            this.cbMaNCC.Location = new System.Drawing.Point(431, 165);
-            this.cbMaNCC.Name = "cbMaNCC";
-            this.cbMaNCC.Size = new System.Drawing.Size(126, 29);
-            this.cbMaNCC.TabIndex = 5;
+            this.dgvProductList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductList_CellContentClick);
             // 
             // ucProductControl
             // 
@@ -514,7 +497,6 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnAccountResetData;
-        private System.Windows.Forms.Button btnAccountVipFeatures;
         private System.Windows.Forms.Button btnXoa;
         private System.Windows.Forms.Button btnSua;
         private System.Windows.Forms.Button btnThem;

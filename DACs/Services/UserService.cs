@@ -1,57 +1,48 @@
 ﻿using DACs.Enums;
+using DACs.Models;
 using DACs.Utils;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Windows.Forms;
 
 namespace DACs.Services
 {
-    internal class UserService
+    public class UserService
     {
-        public DataTable AuthenticateUser(string username, string password)
+        // Lấy 1 user theo username/password
+        public NhanVien AuthenticateUser(string username, string password)
         {
-            string query = "SELECT * FROM nhan_vien WHERE taikhoan = @username AND matkhau = @password and xoataikhoan = 0";
+            string query = "SELECT * FROM nhan_vien WHERE taikhoan = @username AND matkhau = @password AND xoataikhoan = 0";
             SqlParameter[] parameters = {
                 new SqlParameter("@username", username),
                 new SqlParameter("@password", password)
             };
-            return DbUtils.ExecuteSelectQuery(query, parameters);
+
+            DataTable dt = DbUtils.ExecuteSelectQuery(query, parameters);
+            if (dt.Rows.Count == 0) return null;
+
+            return MapNhanVien(dt.Rows[0]);
         }
-        public DataTable GetAllUsers()
+
+        // Lấy tất cả user
+        public List<NhanVien> GetAllUsers()
         {
-            string query = "select " +
-                "manhanvien, ho, ten, vaitro, email, ngaysinh, diachi, gioitinh, taikhoan, matkhau, trangthai, ngaytao " +
-                "from nhan_vien where xoataikhoan = 0 and taikhoan != @username";
-            DataTable dataTable = DbUtils.ExecuteSelectQuery(query, new SqlParameter[] { new SqlParameter("@username", Session.CurrentUsername) });
-            dataTable.Columns.Add("gioitinh_text", typeof(string));
-            dataTable.Columns.Add("trangthai_text", typeof(string));
-            dataTable.Columns.Add("vaitro_text", typeof(string));
+            string query = "SELECT * FROM nhan_vien WHERE xoataikhoan = 0 AND taikhoan != @username";
+            SqlParameter[] parameters = { new SqlParameter("@username", Session.CurrentUsername) };
 
-            foreach (DataRow row in dataTable.Rows)
+            DataTable dt = DbUtils.ExecuteSelectQuery(query, parameters);
+
+            List<NhanVien> users = new List<NhanVien>();
+            foreach (DataRow row in dt.Rows)
             {
-                try
-                {
-                    row["gioitinh_text"] =
-                        Convert.ToInt32(row["gioitinh"]) == (int)Gender.Male ? "Nam" :
-                        Convert.ToInt32(row["gioitinh"]) == (int)Gender.Female ? "Nữ" :
-                        "Khác";
-                    row["trangthai_text"] =
-                        Convert.ToInt32(row["trangthai"]) == (int)UserStatus.Online ? "Hoạt động" :
-                        "Đã nghỉ";
-                    row["vaitro_text"] =
-                        Convert.ToInt32(row["vaitro"]) == (int)Role.Staff ? "Nhân viên" :
-                        Convert.ToInt32(row["vaitro"]) == (int)Role.StoreStaff ? "Kiểm kho" :
-                        "Quản trị";
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+                users.Add(MapNhanVien(row));
             }
-            return dataTable;
+
+            return users;
         }
 
+        // Kiểm tra email tồn tại
         public bool CheckEmailExists(string email)
         {
             string query = "SELECT COUNT(email) FROM nhan_vien WHERE email = @email";
@@ -60,8 +51,8 @@ namespace DACs.Services
             return dt.Rows.Count > 0 && Convert.ToInt32(dt.Rows[0][0]) > 0;
         }
 
-        public void AddUser(string firstName, string lastName, int role, string email, DateTime dob,
-                            string address, int gender, string username, string password, int status)
+        // Thêm user
+        public void AddUser(NhanVien user)
         {
             string query = @"INSERT INTO nhan_vien 
                              (ho, ten, vaitro, email, ngaysinh, diachi, gioitinh, taikhoan, matkhau, trangthai, ngaytao) 
@@ -69,45 +60,25 @@ namespace DACs.Services
                              (@ho, @ten, @vaitro, @email, @ngaysinh, @diachi, @gioitinh, @taikhoan, @matkhau, @trangthai, @ngaytao)";
 
             SqlParameter[] parameters = {
-                new SqlParameter("@ho", firstName),
-                new SqlParameter("@ten", lastName),
-                new SqlParameter("@vaitro", role),
-                new SqlParameter("@email", email),
-                new SqlParameter("@ngaysinh", dob),
-                new SqlParameter("@diachi", address),
-                new SqlParameter("@gioitinh", gender),
-                new SqlParameter("@taikhoan", username),
-                new SqlParameter("@matkhau", password),
-                new SqlParameter("@trangthai", status),
+                new SqlParameter("@ho", user.Ho),
+                new SqlParameter("@ten", user.Ten),
+                new SqlParameter("@vaitro", RoleToInt(user.VaiTro)),
+                new SqlParameter("@email", user.Email),
+                new SqlParameter("@ngaysinh", user.NgaySinh),
+                new SqlParameter("@diachi", user.DiaChi),
+                new SqlParameter("@gioitinh", GenderToInt(user.GioiTinh)),
+                new SqlParameter("@taikhoan", user.TaiKhoan),
+                new SqlParameter("@matkhau", user.MatKhau),
+                new SqlParameter("@trangthai", UserStatusToInt(user.TrangThai)),
                 new SqlParameter("@ngaytao", DateTime.Now)
             };
 
             DbUtils.ExecuteNonQuery(query, parameters);
         }
-        public int UpdateUser(string firstName, string lastName, int role, string email, DateTime dob,
-                            string address, int gender, string username, string password, int status)
-        {
-            if (string.IsNullOrWhiteSpace(firstName) ||
-                string.IsNullOrWhiteSpace(lastName) ||
-                string.IsNullOrWhiteSpace(email) ||
-                string.IsNullOrWhiteSpace(address) ||
-                string.IsNullOrWhiteSpace(username) ||
-                string.IsNullOrWhiteSpace(password))
-            {
-                MessageBox.Show("Có 1 vài trường bạn để trống kìaaaa!!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return -1;
-            }
-            DataTable oldEmail = DbUtils.ExecuteSelectQuery("select email from nhan_vien where taikhoan = @taikhoan", 
-                   new SqlParameter[] { new SqlParameter("@taikhoan", username) });
-            if (oldEmail.Rows.Count > 0 && !oldEmail.Rows[0]["email"].ToString().Equals(email))
-            {
-                if (this.CheckEmailExists(email))
-                {
-                    MessageBox.Show("Bạn cập nhật email trùng rồiii!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return -1;
-                }
-            }
 
+        // Cập nhật user
+        public void UpdateUser(NhanVien user)
+        {
             string query = @"UPDATE nhan_vien SET 
                              ho = @ho, 
                              ten = @ten, 
@@ -119,27 +90,91 @@ namespace DACs.Services
                              matkhau = @matkhau, 
                              trangthai = @trangthai
                              WHERE taikhoan = @taikhoan";
+
             SqlParameter[] parameters = {
-                new SqlParameter("@ho", firstName),
-                new SqlParameter("@ten", lastName),
-                new SqlParameter("@vaitro", role),
-                new SqlParameter("@email", email),
-                new SqlParameter("@ngaysinh", dob),
-                new SqlParameter("@diachi", address),
-                new SqlParameter("@gioitinh", gender),
-                new SqlParameter("@taikhoan", username),
-                new SqlParameter("@matkhau", password),
-                new SqlParameter("@trangthai", status)
-                };
-            return DbUtils.ExecuteNonQuery(query, parameters);
-        }
-        public int DeleteUser(string username)
-        {
-            string query = "Update nhan_vien set xoaTaiKhoan = 1 where taikhoan = @taikhoan";
-            SqlParameter[] parameters = {
-                new SqlParameter("@taikhoan", username)
+                new SqlParameter("@ho", user.Ho),
+                new SqlParameter("@ten", user.Ten),
+                new SqlParameter("@vaitro", RoleToInt(user.VaiTro)),
+                new SqlParameter("@email", user.Email),
+                new SqlParameter("@ngaysinh", user.NgaySinh),
+                new SqlParameter("@diachi", user.DiaChi),
+                new SqlParameter("@gioitinh", GenderToInt(user.GioiTinh)),
+                new SqlParameter("@taikhoan", user.TaiKhoan),
+                new SqlParameter("@matkhau", user.MatKhau),
+                new SqlParameter("@trangthai", UserStatusToInt(user.TrangThai))
             };
-            return DbUtils.ExecuteNonQuery(query, parameters);
+
+            DbUtils.ExecuteNonQuery(query, parameters);
+        }
+
+        // Xóa user
+        public void DeleteUser(string username)
+        {
+            string query = "UPDATE nhan_vien SET xoaTaiKhoan = 1 WHERE taikhoan = @taikhoan";
+            SqlParameter[] parameters = { new SqlParameter("@taikhoan", username) };
+            DbUtils.ExecuteNonQuery(query, parameters);
+        }
+
+        private NhanVien MapNhanVien(DataRow row)
+        {
+            return new NhanVien
+            {
+                MaNhanVien = Convert.ToInt32(row["manhanvien"]),
+                Ho = row["ho"].ToString(),
+                Ten = row["ten"].ToString(),
+                VaiTro = ParseRole(Convert.ToInt32(row["vaitro"])).ToString(),
+                Email = row["email"].ToString(),
+                NgaySinh = Convert.ToDateTime(row["ngaysinh"]),
+                DiaChi = row["diachi"].ToString(),
+                GioiTinh = ParseGender(Convert.ToInt32(row["gioitinh"])).ToString(),
+                TaiKhoan = row["taikhoan"].ToString(),
+                MatKhau = row["matkhau"].ToString(),
+                TrangThai = ParseUserStatus(Convert.ToInt32(row["trangthai"])).ToString(),
+                NgayTao = Convert.ToDateTime(row["ngaytao"])
+            };
+        }
+
+
+        private Role ParseRole(int value)
+        {
+            if (value == 0) return Role.Staff;
+            else if (value == 1) return Role.StoreStaff;
+            else if (value == 2) return Role.Admin;
+            return Role.Staff;
+        }
+
+        private Gender ParseGender(int value)
+        {
+            if (value == 0) return Gender.Male;
+            else if (value == 1) return Gender.Female;
+            return Gender.Other;
+        }
+
+        private UserStatus ParseUserStatus(int value)
+        {
+            if (value == 0) return UserStatus.Offline;
+            else if (value == 1) return UserStatus.Online;
+            return UserStatus.Offline;
+        }
+
+        private int RoleToInt(string value)
+        {
+            if (value == Role.Admin.ToString()) return 2;
+            if (value == Role.StoreStaff.ToString()) return 1;
+            return 0;
+        }
+
+        private int GenderToInt(string value)
+        {
+            if (value == Gender.Male.ToString()) return 0;
+            if (value == Gender.Female.ToString()) return 1;
+            return 2;
+        }
+
+        private int UserStatusToInt(string value)
+        {
+            if (value == UserStatus.Offline.ToString()) return 0;
+            return 1;
         }
     }
 }

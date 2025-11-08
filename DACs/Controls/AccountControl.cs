@@ -1,17 +1,10 @@
 ﻿using DACs.Enums;
+using DACs.Models;
 using DACs.Services;
 using DACs.Utils;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DACs.Controls
@@ -19,56 +12,75 @@ namespace DACs.Controls
     public partial class ucAccountControl : UserControl
     {
         private readonly UserService userService = new UserService();
+        private List<NhanVien> users = new List<NhanVien>();
+
+        private readonly Dictionary<string, string> genderMap = new Dictionary<string, string>
+        {
+            { Gender.Male.ToString(), "Nam" },
+            { Gender.Female.ToString(), "Nữ" },
+            { Gender.Other.ToString(), "Khác" }
+        };
+
+        private readonly Dictionary<string, string> roleMap = new Dictionary<string, string>
+        {
+            { Role.Admin.ToString(), "Quản trị" },
+            { Role.StoreStaff.ToString(), "Kiểm kho" },
+            { Role.Staff.ToString(), "Nhân viên" }
+        };
+
+        private readonly Dictionary<string, string> statusMap = new Dictionary<string, string>
+        {
+            { UserStatus.Online.ToString(), "Hoạt động" },
+            { UserStatus.Offline.ToString(), "Đã nghỉ" }
+        };
 
         public ucAccountControl()
         {
             InitializeComponent();
         }
-        private void loadUserList()
+
+        private void ucAccountControl_Load(object sender, EventArgs e)
         {
-            DataTable dataTable = userService.GetAllUsers();
+            LoadUserList();
+        }
 
-            
-            dgvUserList.DataSource = dataTable;
-            dgvUserList.Columns["gioitinh"].Visible = false;
-            dgvUserList.Columns["trangthai"].Visible = false;
-            dgvUserList.Columns["vaitro"].Visible = false;
+        private void LoadUserList()
+        {
+            users = userService.GetAllUsers();
 
-            dgvUserList.Columns["manhanvien"].HeaderText = "Mã NV";
-            dgvUserList.Columns["ho"].HeaderText = "Họ";
-            dgvUserList.Columns["ten"].HeaderText = "Tên";
+            dgvUserList.DataSource = users
+                .Select(u => new
+                {
+                    u.MaNhanVien,
+                    u.Ho,
+                    u.Ten,
+                    u.Email,
+                    NgaySinh = u.NgaySinh.ToString("dd/MM/yyyy"),
+                    u.DiaChi,
+                    GioiTinh = genderMap.ContainsKey(u.GioiTinh) ? genderMap[u.GioiTinh] : "Khác",
+                    u.TaiKhoan,
+                    u.MatKhau,
+                    VaiTro = roleMap.ContainsKey(u.VaiTro) ? roleMap[u.VaiTro] : "Nhân viên",
+                    TrangThai = statusMap.ContainsKey(u.TrangThai) ? statusMap[u.TrangThai] : "Đã nghỉ",
+                    NgayTao = u.NgayTao.ToString("dd/MM/yyyy")
+                })
+                .ToList();
+
+            // Header
+            dgvUserList.Columns["MaNhanVien"].HeaderText = "Mã NV";
+            dgvUserList.Columns["Ho"].HeaderText = "Họ";
+            dgvUserList.Columns["Ten"].HeaderText = "Tên";
             dgvUserList.Columns["Email"].HeaderText = "Email";
             dgvUserList.Columns["NgaySinh"].HeaderText = "Ngày sinh";
             dgvUserList.Columns["DiaChi"].HeaderText = "Địa chỉ";
             dgvUserList.Columns["GioiTinh"].HeaderText = "Giới tính";
             dgvUserList.Columns["TaiKhoan"].HeaderText = "Tài khoản";
             dgvUserList.Columns["MatKhau"].HeaderText = "Mật khẩu";
+            dgvUserList.Columns["VaiTro"].HeaderText = "Vai trò";
+            dgvUserList.Columns["TrangThai"].HeaderText = "Trạng thái";
             dgvUserList.Columns["NgayTao"].HeaderText = "Ngày tạo";
-
-            dgvUserList.Columns["gioitinh_text"].HeaderText = "Giới tính";
-            dgvUserList.Columns["trangthai_text"].HeaderText = "Trạng thái";
-            dgvUserList.Columns["vaitro_text"].HeaderText = "Vai trò";
-
-            dgvUserList.Columns["vaitro_text"].DisplayIndex = 3;
-        }
-        private void ucAccountControl_Load(object sender, EventArgs e)
-        {
-            loadUserList();
         }
 
-        private void btnAccountResetData_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Làm mới danh sách nhân viên thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            loadUserList();
-        }
-
-        private void btnAccountResetFields_Click(object sender, EventArgs e)
-        {
-            btnAccountEditUser.Enabled = false;
-            btnAccountDeleteUser.Enabled = false;
-            btnAccountAddUser.Enabled = true;
-            resetInputFields();
-        }
         private void resetInputFields()
         {
             txtAccountCode.Clear();
@@ -83,6 +95,7 @@ namespace DACs.Controls
             cbAccountRole.SelectedIndex = -1;
             cbAccountStatus.SelectedIndex = -1;
         }
+
         private void dgvUserList_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             btnAccountAddUser.Enabled = false;
@@ -90,32 +103,29 @@ namespace DACs.Controls
             btnAccountDeleteUser.Enabled = true;
             if (e.RowIndex < 0) return;
 
-            DataGridViewRow row = dgvUserList.Rows[e.RowIndex];
+            NhanVien selectedUser = users[e.RowIndex];
 
-            txtAccountCode.Text = row.Cells["manhanvien"].Value?.ToString();
-            txtAccountLastName.Text = row.Cells["ten"].Value?.ToString();
-            txtAccountFirstName.Text = row.Cells["ho"].Value?.ToString();
-            txtAccountEmail.Text = row.Cells["email"].Value?.ToString();
-            txtAccountAddress.Text = row.Cells["diachi"].Value?.ToString();
-            txtAccountUsername.Text = row.Cells["taikhoan"].Value?.ToString();
-            txtAccountPassword.Text = row.Cells["matkhau"].Value?.ToString();
+            txtAccountCode.Text = selectedUser.MaNhanVien.ToString();
+            txtAccountFirstName.Text = selectedUser.Ho;
+            txtAccountLastName.Text = selectedUser.Ten;
+            txtAccountEmail.Text = selectedUser.Email;
+            txtAccountAddress.Text = selectedUser.DiaChi;
+            txtAccountUsername.Text = selectedUser.TaiKhoan;
+            txtAccountPassword.Text = selectedUser.MatKhau;
+            dtpAccountBirthDate.Value = selectedUser.NgaySinh;
 
-            if (DateTime.TryParse(row.Cells["ngaysinh"].Value?.ToString(), out DateTime dob))
-                dtpAccountBirthDate.Value = dob;
+            cbAccountGender.SelectedItem = genderMap.ContainsKey(selectedUser.GioiTinh)
+                ? genderMap[selectedUser.GioiTinh]
+                : "Khác";
 
-            string gender = row.Cells["gioitinh_text"].Value?.ToString();
-            if (!string.IsNullOrEmpty(gender))
-                cbAccountGender.SelectedItem = gender;
+            cbAccountRole.SelectedItem = roleMap.ContainsKey(selectedUser.VaiTro)
+                ? roleMap[selectedUser.VaiTro]
+                : "Nhân viên";
 
-            string role = row.Cells["vaitro_text"].Value?.ToString();
-            if (!string.IsNullOrEmpty(role))
-                cbAccountRole.SelectedItem = role;
-
-            string status = row.Cells["trangthai_text"].Value?.ToString();
-            if (!string.IsNullOrEmpty(status))
-                cbAccountStatus.SelectedItem = status;
+            cbAccountStatus.SelectedItem = statusMap.ContainsKey(selectedUser.TrangThai)
+                ? statusMap[selectedUser.TrangThai]
+                : "Đã nghỉ";
         }
-
 
         private void btnAccountAddUser_Click(object sender, EventArgs e)
         {
@@ -133,107 +143,92 @@ namespace DACs.Controls
 
             string username = StringUtils.ConvertToUsername(txtAccountFirstName.Text + " " + txtAccountLastName.Text);
 
-            userService.AddUser(
-                txtAccountFirstName.Text.Trim(),
-                txtAccountLastName.Text.Trim(),
-                cbAccountRole.SelectedIndex > -1 ? cbAccountRole.SelectedIndex : (int)Role.Staff,
-                txtAccountEmail.Text.Trim(),
-                dtpAccountBirthDate.Value,
-                txtAccountAddress.Text.Trim(),
-                cbAccountGender.SelectedIndex > -1 ? cbAccountGender.SelectedIndex : (int)Gender.Other,
-                username,
-                txtAccountPassword.Text.Trim().Length < 1 ? "1" : txtAccountPassword.Text.Trim(),
-                cbAccountStatus.SelectedIndex > -1 ? cbAccountStatus.SelectedIndex : (int)UserStatus.Online
-            );
+            NhanVien newUser = new NhanVien
+            {
+                Ho = txtAccountFirstName.Text.Trim(),
+                Ten = txtAccountLastName.Text.Trim(),
+                Email = txtAccountEmail.Text.Trim(),
+                NgaySinh = dtpAccountBirthDate.Value,
+                DiaChi = txtAccountAddress.Text.Trim(),
+                GioiTinh = genderMap.FirstOrDefault(x => x.Value == cbAccountGender.SelectedItem?.ToString()).Key ?? Gender.Other.ToString(),
+                TaiKhoan = username,
+                MatKhau = string.IsNullOrWhiteSpace(txtAccountPassword.Text) ? "1" : txtAccountPassword.Text.Trim(),
+                VaiTro = roleMap.FirstOrDefault(x => x.Value == cbAccountRole.SelectedItem?.ToString()).Key ?? Role.Staff.ToString(),
+                TrangThai = statusMap.FirstOrDefault(x => x.Value == cbAccountStatus.SelectedItem?.ToString()).Key ?? UserStatus.Online.ToString()
+            };
 
-            loadUserList();
+            userService.AddUser(newUser);
+            LoadUserList();
             resetInputFields();
             MessageBox.Show("Thêm nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-
         private void btnAccountEditUser_Click(object sender, EventArgs e)
         {
-            int rows = 0;
-            if (string.IsNullOrWhiteSpace(txtAccountCode.Text))
+            if (!int.TryParse(txtAccountCode.Text, out int id))
             {
                 MessageBox.Show("Bạn quên chưa chọn người cần sửa thông tin!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            rows = userService.UpdateUser(
-                txtAccountFirstName.Text.Trim(),
-                txtAccountLastName.Text.Trim(),
-                cbAccountRole.SelectedIndex > -1 ? cbAccountRole.SelectedIndex : (int)Role.Staff,
-                txtAccountEmail.Text.Trim(),
-                dtpAccountBirthDate.Value,
-                txtAccountAddress.Text.Trim(),
-                cbAccountGender.SelectedIndex > -1 ? cbAccountGender.SelectedIndex : (int)Gender.Other,
-                txtAccountUsername.Text.Trim(),
-                txtAccountPassword.Text.Trim(),
-                cbAccountStatus.SelectedIndex > -1 ? cbAccountStatus.SelectedIndex : (int)UserStatus.Online
-                );
-            if (rows == -1)
-            {
-                MessageBox.Show("Cập nhật thông tin nhân viên thất bại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            } else
-            {
-                btnAccountAddUser.Enabled = true;
-                btnAccountDeleteUser.Enabled = false;
-                btnAccountEditUser.Enabled = false;
-                loadUserList();
-                resetInputFields();
-                MessageBox.Show("Cập nhật thông tin nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
 
+            NhanVien updatedUser = new NhanVien
+            {
+                MaNhanVien = id,
+                Ho = txtAccountFirstName.Text.Trim(),
+                Ten = txtAccountLastName.Text.Trim(),
+                Email = txtAccountEmail.Text.Trim(),
+                NgaySinh = dtpAccountBirthDate.Value,
+                DiaChi = txtAccountAddress.Text.Trim(),
+                GioiTinh = genderMap.FirstOrDefault(x => x.Value == cbAccountGender.SelectedItem?.ToString()).Key ?? Gender.Other.ToString(),
+                TaiKhoan = txtAccountUsername.Text.Trim(),
+                MatKhau = txtAccountPassword.Text.Trim(),
+                VaiTro = roleMap.FirstOrDefault(x => x.Value == cbAccountRole.SelectedItem?.ToString()).Key ?? Role.Staff.ToString(),
+                TrangThai = statusMap.FirstOrDefault(x => x.Value == cbAccountStatus.SelectedItem?.ToString()).Key ?? UserStatus.Online.ToString()
+            };
+
+            userService.UpdateUser(updatedUser);
+            LoadUserList();
+            resetInputFields();
+            btnAccountAddUser.Enabled = true;
+            btnAccountEditUser.Enabled = false;
+            btnAccountDeleteUser.Enabled = false;
+            MessageBox.Show("Cập nhật thông tin nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnAccountDeleteUser_Click(object sender, EventArgs e)
         {
-            int rows = 0;
-            if (string.IsNullOrWhiteSpace(txtAccountCode.Text))
+            if (string.IsNullOrWhiteSpace(txtAccountUsername.Text))
             {
-                MessageBox.Show("Bạn quên chưa chọn người xoáaa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Bạn quên chưa chọn người xoá!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
             DialogResult result = MessageBox.Show("Bạn có chắc muốn xoá nhân viên này không?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.No)
-            {
-                return;
-            }
-            rows = userService.DeleteUser(txtAccountUsername.Text.Trim());
-            if (rows == 0)
-            {
-                MessageBox.Show("WithMG, Xoá không thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else
-            {
-                MessageBox.Show("Xóa thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                loadUserList(); resetInputFields();
-                btnAccountAddUser.Enabled = true;
-                btnAccountDeleteUser.Enabled = false;
-                btnAccountEditUser.Enabled = false;
-            }
+            if (result == DialogResult.No) return;
 
+            userService.DeleteUser(txtAccountUsername.Text.Trim());
+            LoadUserList();
+            resetInputFields();
+            btnAccountAddUser.Enabled = true;
+            btnAccountEditUser.Enabled = false;
+            btnAccountDeleteUser.Enabled = false;
+            MessageBox.Show("Xóa thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void dgvUserList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void btnAccountResetData_Click(object sender, EventArgs e)
         {
-
+            LoadUserList();
+            MessageBox.Show("Làm mới danh sách nhân viên thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
+        private void btnAccountResetFields_Click(object sender, EventArgs e)
         {
+            resetInputFields();
+            btnAccountAddUser.Enabled = true;
+            btnAccountEditUser.Enabled = false;
+            btnAccountDeleteUser.Enabled = false;
         }
 
-        private void txtAccountFirstName_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cbAccountRole_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
+        private void dgvUserList_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
     }
 }

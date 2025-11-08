@@ -30,11 +30,11 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ucAccountControl));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.imageAccountSubOptions = new System.Windows.Forms.ImageList(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBoxWrapperUsers = new System.Windows.Forms.GroupBox();
@@ -96,7 +96,7 @@
             this.panel1.Location = new System.Drawing.Point(16, 60);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(926, 315);
-            this.panel1.TabIndex = 0;
+            this.panel1.TabIndex = 2;
             // 
             // groupBoxWrapperUsers
             // 
@@ -116,47 +116,47 @@
             // 
             this.dgvUserList.AllowUserToOrderColumns = true;
             this.dgvUserList.AllowUserToResizeRows = false;
-            dataGridViewCellStyle16.BackColor = System.Drawing.Color.IndianRed;
-            this.dgvUserList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.IndianRed;
+            this.dgvUserList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvUserList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvUserList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvUserList.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Info;
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle17.ForeColor = System.Drawing.Color.Red;
-            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvUserList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Info;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Red;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvUserList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvUserList.ColumnHeadersHeight = 30;
             this.dgvUserList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle18.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.HotTrack;
-            dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvUserList.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.HotTrack;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvUserList.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgvUserList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvUserList.EnableHeadersVisualStyles = false;
             this.dgvUserList.Location = new System.Drawing.Point(3, 25);
             this.dgvUserList.Name = "dgvUserList";
             this.dgvUserList.ReadOnly = true;
-            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle19.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle19.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvUserList.RowHeadersDefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvUserList.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dgvUserList.RowHeadersVisible = false;
-            dataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle20.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
-            dataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            this.dgvUserList.RowsDefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            this.dgvUserList.RowsDefaultCellStyle = dataGridViewCellStyle5;
             this.dgvUserList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.dgvUserList.RowTemplate.Height = 25;
             this.dgvUserList.Size = new System.Drawing.Size(920, 287);
@@ -204,10 +204,9 @@
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(649, 284);
-            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông tin chi tiết";
-            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // groupBox3
             // 
@@ -225,7 +224,7 @@
             this.btnAccountResetFields.Location = new System.Drawing.Point(608, 15);
             this.btnAccountResetFields.Name = "btnAccountResetFields";
             this.btnAccountResetFields.Size = new System.Drawing.Size(38, 38);
-            this.btnAccountResetFields.TabIndex = 0;
+            this.btnAccountResetFields.TabIndex = 11;
             this.btnAccountResetFields.UseVisualStyleBackColor = true;
             this.btnAccountResetFields.Click += new System.EventHandler(this.btnAccountResetFields_Click);
             // 
@@ -236,7 +235,7 @@
             this.dtpAccountBirthDate.Location = new System.Drawing.Point(485, 159);
             this.dtpAccountBirthDate.Name = "dtpAccountBirthDate";
             this.dtpAccountBirthDate.Size = new System.Drawing.Size(148, 29);
-            this.dtpAccountBirthDate.TabIndex = 3;
+            this.dtpAccountBirthDate.TabIndex = 7;
             // 
             // label8
             // 
@@ -260,7 +259,7 @@
             this.cbAccountStatus.Location = new System.Drawing.Point(520, 213);
             this.cbAccountStatus.Name = "cbAccountStatus";
             this.cbAccountStatus.Size = new System.Drawing.Size(113, 29);
-            this.cbAccountStatus.TabIndex = 2;
+            this.cbAccountStatus.TabIndex = 10;
             // 
             // label11
             // 
@@ -285,7 +284,7 @@
             this.cbAccountGender.Location = new System.Drawing.Point(333, 213);
             this.cbAccountGender.Name = "cbAccountGender";
             this.cbAccountGender.Size = new System.Drawing.Size(88, 29);
-            this.cbAccountGender.TabIndex = 2;
+            this.cbAccountGender.TabIndex = 9;
             // 
             // label10
             // 
@@ -310,8 +309,7 @@
             this.cbAccountRole.Location = new System.Drawing.Point(507, 109);
             this.cbAccountRole.Name = "cbAccountRole";
             this.cbAccountRole.Size = new System.Drawing.Size(126, 29);
-            this.cbAccountRole.TabIndex = 2;
-            this.cbAccountRole.SelectedIndexChanged += new System.EventHandler(this.cbAccountRole_SelectedIndexChanged);
+            this.cbAccountRole.TabIndex = 5;
             // 
             // label5
             // 
@@ -354,7 +352,7 @@
             this.label4.Location = new System.Drawing.Point(151, 65);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(66, 19);
-            this.label4.TabIndex = 1;
+            this.label4.TabIndex = 2;
             this.label4.Text = "Tài khoản";
             // 
             // label9
@@ -387,7 +385,7 @@
             this.label2.Location = new System.Drawing.Point(10, 115);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(27, 19);
-            this.label2.TabIndex = 1;
+            this.label2.TabIndex = 9;
             this.label2.Text = "Họ";
             // 
             // txtAccountPassword
@@ -396,7 +394,7 @@
             this.txtAccountPassword.Location = new System.Drawing.Point(485, 59);
             this.txtAccountPassword.Name = "txtAccountPassword";
             this.txtAccountPassword.Size = new System.Drawing.Size(148, 29);
-            this.txtAccountPassword.TabIndex = 0;
+            this.txtAccountPassword.TabIndex = 2;
             // 
             // txtAccountLastName
             // 
@@ -404,7 +402,7 @@
             this.txtAccountLastName.Location = new System.Drawing.Point(264, 109);
             this.txtAccountLastName.Name = "txtAccountLastName";
             this.txtAccountLastName.Size = new System.Drawing.Size(157, 29);
-            this.txtAccountLastName.TabIndex = 0;
+            this.txtAccountLastName.TabIndex = 4;
             // 
             // txtAccountUsername
             // 
@@ -413,7 +411,7 @@
             this.txtAccountUsername.Name = "txtAccountUsername";
             this.txtAccountUsername.ReadOnly = true;
             this.txtAccountUsername.Size = new System.Drawing.Size(162, 29);
-            this.txtAccountUsername.TabIndex = 0;
+            this.txtAccountUsername.TabIndex = 1;
             // 
             // txtAccountEmail
             // 
@@ -421,7 +419,7 @@
             this.txtAccountEmail.Location = new System.Drawing.Point(68, 213);
             this.txtAccountEmail.Name = "txtAccountEmail";
             this.txtAccountEmail.Size = new System.Drawing.Size(190, 29);
-            this.txtAccountEmail.TabIndex = 0;
+            this.txtAccountEmail.TabIndex = 8;
             // 
             // txtAccountAddress
             // 
@@ -429,7 +427,7 @@
             this.txtAccountAddress.Location = new System.Drawing.Point(68, 159);
             this.txtAccountAddress.Name = "txtAccountAddress";
             this.txtAccountAddress.Size = new System.Drawing.Size(328, 29);
-            this.txtAccountAddress.TabIndex = 0;
+            this.txtAccountAddress.TabIndex = 6;
             // 
             // txtAccountFirstName
             // 
@@ -437,8 +435,7 @@
             this.txtAccountFirstName.Location = new System.Drawing.Point(68, 109);
             this.txtAccountFirstName.Name = "txtAccountFirstName";
             this.txtAccountFirstName.Size = new System.Drawing.Size(148, 29);
-            this.txtAccountFirstName.TabIndex = 0;
-            this.txtAccountFirstName.TextChanged += new System.EventHandler(this.txtAccountFirstName_TextChanged);
+            this.txtAccountFirstName.TabIndex = 3;
             // 
             // label1
             // 
@@ -448,7 +445,7 @@
             this.label1.Location = new System.Drawing.Point(10, 65);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 19);
-            this.label1.TabIndex = 1;
+            this.label1.TabIndex = 0;
             this.label1.Text = "Mã NV";
             // 
             // txtAccountCode
@@ -479,7 +476,7 @@
             this.panel3.Location = new System.Drawing.Point(684, 381);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(258, 284);
-            this.panel3.TabIndex = 0;
+            this.panel3.TabIndex = 1;
             // 
             // groupBox2
             // 
@@ -494,7 +491,7 @@
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(258, 284);
-            this.groupBox2.TabIndex = 0;
+            this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Các chức năng";
             // 
@@ -517,7 +514,7 @@
             this.btnAccountVipFeatures.Location = new System.Drawing.Point(30, 227);
             this.btnAccountVipFeatures.Name = "btnAccountVipFeatures";
             this.btnAccountVipFeatures.Size = new System.Drawing.Size(201, 42);
-            this.btnAccountVipFeatures.TabIndex = 0;
+            this.btnAccountVipFeatures.TabIndex = 4;
             this.btnAccountVipFeatures.Text = "Nâng cao";
             this.btnAccountVipFeatures.UseVisualStyleBackColor = true;
             // 
@@ -529,7 +526,7 @@
             this.btnAccountDeleteUser.Location = new System.Drawing.Point(30, 179);
             this.btnAccountDeleteUser.Name = "btnAccountDeleteUser";
             this.btnAccountDeleteUser.Size = new System.Drawing.Size(201, 42);
-            this.btnAccountDeleteUser.TabIndex = 0;
+            this.btnAccountDeleteUser.TabIndex = 3;
             this.btnAccountDeleteUser.Text = "Xoá nhân viên";
             this.btnAccountDeleteUser.UseVisualStyleBackColor = true;
             this.btnAccountDeleteUser.Click += new System.EventHandler(this.btnAccountDeleteUser_Click);
@@ -542,7 +539,7 @@
             this.btnAccountEditUser.Location = new System.Drawing.Point(30, 131);
             this.btnAccountEditUser.Name = "btnAccountEditUser";
             this.btnAccountEditUser.Size = new System.Drawing.Size(201, 42);
-            this.btnAccountEditUser.TabIndex = 0;
+            this.btnAccountEditUser.TabIndex = 2;
             this.btnAccountEditUser.Text = "Sửa nhân viên";
             this.btnAccountEditUser.UseVisualStyleBackColor = true;
             this.btnAccountEditUser.Click += new System.EventHandler(this.btnAccountEditUser_Click);
@@ -554,7 +551,7 @@
             this.btnAccountAddUser.Location = new System.Drawing.Point(30, 83);
             this.btnAccountAddUser.Name = "btnAccountAddUser";
             this.btnAccountAddUser.Size = new System.Drawing.Size(201, 42);
-            this.btnAccountAddUser.TabIndex = 0;
+            this.btnAccountAddUser.TabIndex = 1;
             this.btnAccountAddUser.Text = "Thêm nhân viên";
             this.btnAccountAddUser.UseVisualStyleBackColor = true;
             this.btnAccountAddUser.Click += new System.EventHandler(this.btnAccountAddUser_Click);
