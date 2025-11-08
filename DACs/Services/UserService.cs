@@ -41,6 +41,44 @@ namespace DACs.Services
 
             return users;
         }
+        public List<NhanVien> GetUserByCodeOrName(string content)
+        {
+            if (string.IsNullOrWhiteSpace(content))
+                return GetAllUsers();
+
+            bool isNumber = int.TryParse(content.Trim(), out int codeValue);
+
+            string query;
+            SqlParameter[] parameters;
+
+            if (isNumber)
+            {
+                query = "SELECT * FROM nhan_vien WHERE xoataikhoan = 0 AND manhanvien = @code";
+                parameters = new SqlParameter[]
+                {
+            new SqlParameter("@code", codeValue)
+                };
+            }
+            else
+            {
+                query = "SELECT * FROM nhan_vien WHERE xoataikhoan = 0 AND ten LIKE @ten";
+                parameters = new SqlParameter[]
+                {
+            new SqlParameter("@ten", "%" + content.Trim() + "%")
+                };
+            }
+
+            DataTable dt = DbUtils.ExecuteSelectQuery(query, parameters);
+
+            List<NhanVien> users = new List<NhanVien>();
+            foreach (DataRow row in dt.Rows)
+            {
+                users.Add(MapNhanVien(row));
+            }
+
+            return users;
+        }
+
 
         // Kiểm tra email tồn tại
         public bool CheckEmailExists(string email)
@@ -114,6 +152,8 @@ namespace DACs.Services
             SqlParameter[] parameters = { new SqlParameter("@taikhoan", username) };
             DbUtils.ExecuteNonQuery(query, parameters);
         }
+
+        
 
         private NhanVien MapNhanVien(DataRow row)
         {

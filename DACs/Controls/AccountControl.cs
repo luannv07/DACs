@@ -230,5 +230,32 @@ namespace DACs.Controls
         }
 
         private void dgvUserList_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
+
+        private void btnTriggerSearching_Click(object sender, EventArgs e)
+        {
+            string keyword = txtSearching.Text.Trim();
+
+            List<NhanVien> searchResult = userService.GetUserByCodeOrName(keyword);
+
+            dgvUserList.DataSource = searchResult
+                .Select(u => new
+                {
+                    u.MaNhanVien,
+                    u.Ten,
+                    u.Email,
+                    NgaySinh = u.NgaySinh.ToString("dd/MM/yyyy"),
+                    u.DiaChi,
+                    GioiTinh = genderMap.ContainsKey(u.GioiTinh) ? genderMap[u.GioiTinh] : "Khác",
+                    u.TaiKhoan,
+                    u.MatKhau,
+                    VaiTro = roleMap.ContainsKey(u.VaiTro) ? roleMap[u.VaiTro] : "Nhân viên",
+                    TrangThai = statusMap.ContainsKey(u.TrangThai) ? statusMap[u.TrangThai] : "Đã nghỉ",
+                    NgayTao = u.NgayTao.ToString("dd/MM/yyyy")
+                })
+                .ToList();
+        }
+
+
+
     }
 }
