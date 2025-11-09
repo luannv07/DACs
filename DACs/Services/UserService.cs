@@ -53,23 +53,24 @@ namespace DACs.Services
 
             if (isNumber)
             {
-                query = "SELECT * FROM nhan_vien WHERE xoataikhoan = 0 AND manhanvien = @code";
+                query = "SELECT * FROM nhan_vien WHERE xoataikhoan = 0 AND manhanvien = @code and taikhoan != @username";
                 parameters = new SqlParameter[]
                 {
-            new SqlParameter("@code", codeValue)
+                    new SqlParameter("@code", codeValue),
+                    new SqlParameter("@username", Session.CurrentUsername)
                 };
             }
             else
             {
-                query = "SELECT * FROM nhan_vien WHERE xoataikhoan = 0 AND ten LIKE @ten";
+                query = "SELECT * FROM nhan_vien WHERE xoataikhoan = 0 AND ten LIKE @ten and taikhoan != @username";
                 parameters = new SqlParameter[]
                 {
-            new SqlParameter("@ten", "%" + content.Trim() + "%")
+            new SqlParameter("@ten", "%" + content.Trim() + "%"),
+            new SqlParameter("@username", Session.CurrentUsername)
                 };
             }
 
             DataTable dt = DbUtils.ExecuteSelectQuery(query, parameters);
-
             List<NhanVien> users = new List<NhanVien>();
             foreach (DataRow row in dt.Rows)
             {

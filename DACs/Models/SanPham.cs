@@ -13,5 +13,8 @@ namespace DACs.Models
         public int MaNCC { get; set; }
         public decimal GiamGia { get; set; }
         public DateTime NgayTao { get; set; }
+
+        public List<BienTheSanPham> BienThes { get; set; } = new List<BienTheSanPham>();
+
     }
 }

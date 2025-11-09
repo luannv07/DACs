@@ -12,7 +12,6 @@ DROP TABLE IF EXISTS SAN_PHAM;
 DROP TABLE IF EXISTS NHA_CUNG_CAP;
 DROP TABLE IF EXISTS NHAN_VIEN;
 go
-
 /*
 gộp 2 bảng nhân viên + tài khoản
 Bảng Nhân viên
@@ -131,7 +130,50 @@ CREATE TABLE BIEN_THE_SAN_PHAM (
     TrangThaiBienThe TINYINT DEFAULT 1,
     FOREIGN KEY (MaSanPham) REFERENCES SAN_PHAM(MaSanPham)
 );
-truncate table BIEN_THE_SAN_PHAM
+
+alter table bien_the_san_pham
+add xoaBienThe tinyint not null default 0
+
+
+select * from bien_the_san_pham
+
+CREATE TABLE SAN_PHAM_NCC (
+    MaSanPham INT NOT NULL,
+    MaNCC INT NOT NULL,
+    MauSac NVARCHAR(50) NOT NULL,
+    KichCo NVARCHAR(20) NOT NULL,
+    SoLuong INT NOT NULL DEFAULT 0,
+    PRIMARY KEY (MaSanPham, MaNCC, MauSac, KichCo),
+    CONSTRAINT FK_SANPHAM_NCC_SANPHAM
+        FOREIGN KEY (MaSanPham) REFERENCES SAN_PHAM(MaSanPham),
+    CONSTRAINT FK_SANPHAM_NCC_NCC
+        FOREIGN KEY (MaNCC) REFERENCES NHA_CUNG_CAP(MaNhaCungCap),
+    CONSTRAINT CHK_SANPHAM_NCC_SoLuong
+        CHECK (SoLuong >= 0)
+);
+
+INSERT INTO SAN_PHAM_NCC (MaSanPham, MaNCC, MauSac, KichCo, SoLuong)
+VALUES (2, 6, N'Xanh Lá', N'S', 20);
+
+SELECT 
+    spncc.MaSanPham,
+    sp.TenSanPham,
+    spncc.MaNCC,
+    ncc.Ten AS TenNCC,
+    spncc.MauSac,
+    spncc.KichCo,
+    spncc.SoLuong AS SoLuongNCC
+FROM SAN_PHAM_NCC spncc
+INNER JOIN SAN_PHAM sp ON spncc.MaSanPham = sp.MaSanPham
+INNER JOIN NHA_CUNG_CAP ncc ON spncc.MaNCC = ncc.MaNhaCungCap
+LEFT JOIN BIEN_THE_SAN_PHAM bts ON 
+    spncc.MaSanPham = bts.MaSanPham 
+    AND spncc.MauSac = bts.MauSac
+    AND spncc.KichCo = bts.KichCo
+WHERE bts.MaBienThe IS NULL
+ORDER BY spncc.MaSanPham, spncc.MaNCC;
+
+
 go
 create table PHIEU_NHAP (
 	MaPhieuNhap int identity(1,1) primary key,
@@ -219,7 +261,6 @@ VALUES
 go
 INSERT INTO SAN_PHAM (TenSanPham, MaNCC, GiamGia)
 VALUES
-(N'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 10, 1.1),
 (N'Quần Âu Nam', 6, 2.7),
 (N'Váy Maxi Voan', 1, 3.4),
 (N'Áo Polo Nam', 13, 1.9),
@@ -237,9 +278,9 @@ VALUES
 (1, N'Trắng', N'M', 15, 960.00),
 
 -- 2. Quần Âu Nam
-(2, N'Xanh Navy', N'31', 50, 520.00),
-(2, N'Xanh Navy', N'32', 45, 520.00),
-(2, N'Đen', N'33', 45, 530.00),
+(2, N'Xanh Navy', N'L', 50, 520.00),
+(2, N'Xanh Navy', N'M', 45, 520.00),
+(2, N'Đen', N'S', 45, 530.00),
 
 -- 3. Váy Maxi Voan
 (3, N'Trắng', N'S', 30, 460.00),
@@ -265,11 +306,7 @@ VALUES
 
 -- 8. Áo Sweater Nữ
 (8, N'Vàng Pastel', N'M', 120, 310.00),
-(8, N'Hồng', N'L', 80, 315.00),
-
--- 9. Quần Legging Thể Thao
-(9, N'Đen', N'S', 150, 140.00),
-(9, N'Xám', N'M', 200, 145.00);
+(8, N'Hồng', N'L', 80, 315.00)
 
 go
 INSERT INTO PHIEU_NHAP (NgayNhap, MaNCC, MaNV) VALUES
@@ -293,7 +330,6 @@ INSERT INTO CHI_TIET_PHIEU_NHAP (MaPhieuNhap, MaSanPham, SoLuong, DonGia) VALUES
 (2, 5, 120, 180.00),
 (3, 8, 80, 280.00),
 (3, 3, 110, 420.00),
-(4, 9, 300, 130.00),
 (4, 2, 70, 850.00),
 (5, 6, 50, 950.00),
 (5, 8, 150, 320.00),
@@ -304,7 +340,6 @@ INSERT INTO CHI_TIET_PHIEU_NHAP (MaPhieuNhap, MaSanPham, SoLuong, DonGia) VALUES
 (8, 2, 60, 840.00),
 (8, 8, 100, 275.00),
 (9, 6, 80, 960.00),
-(10, 9, 200, 135.00),
 (11, 1, 150, 140.00),
 (12, 4, 120, 300.00);
 go
@@ -345,22 +380,6 @@ INSERT INTO CHI_TIET_DON_HANG (MaDonHang, MaSanPham, SoLuong, DonGia) VALUES
 (5, 3, 1, 520.00),  -- Quần Âu Nam (DH 5) - *SP mới cho DH 5*
 (8, 5, 1, 190.00);  -- Quần Short Vải (DH 8) - *SP mới cho DH 8*
 
-
-SELECT p.[MaSanPham]
-      ,p.[TenSanPham]
-      ,p.[MaNCC]
-      ,p.[GiamGia]
-      ,p.[NgayTao]
-      ,pp.[MauSac]
-      ,pp.[KichCo]
-      ,pp.[SoLuong]
-      ,pp.[DonGia]
-      ,pp.[TrangThaiBienThe]
-FROM [YODY_LTAT_DB].[dbo].[SAN_PHAM] as p
-left join [YODY_LTAT_DB].[dbo].[BIEN_THE_SAN_PHAM] as pp on pp.MaSanPham = p.MaSanPham
-
-
-
 /*
 DELETE FROM CHI_TIET_DON_HANG;
 DELETE FROM CHI_TIET_PHIEU_NHAP;
@@ -372,3 +391,6 @@ DELETE FROM KHACH_HANG;
 DELETE FROM NHA_CUNG_CAP;
 DELETE FROM NHAN_VIEN;
 */
+
+
+select * from NHA_CUNG_CAP

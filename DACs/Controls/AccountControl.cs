@@ -79,6 +79,9 @@ namespace DACs.Controls
             dgvUserList.Columns["VaiTro"].HeaderText = "Vai trò";
             dgvUserList.Columns["TrangThai"].HeaderText = "Trạng thái";
             dgvUserList.Columns["NgayTao"].HeaderText = "Ngày tạo";
+
+            dgvUserList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvUserList.ReadOnly = true;
         }
 
         private void resetInputFields()
@@ -255,7 +258,9 @@ namespace DACs.Controls
                 .ToList();
         }
 
+        private void dtpAccountBirthDate_ValueChanged(object sender, EventArgs e)
+        {
 
-
+        }
     }
 }
