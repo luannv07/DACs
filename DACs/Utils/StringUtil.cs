@@ -28,8 +28,13 @@ namespace DACs.Utils
 
             string username = lastName + initials.ToString();
 
+            Random rnd = new Random();
+            int randomNumber = rnd.Next(1000, 10000);
+            username += randomNumber;
+
             return username;
         }
+
 
         private static string RemoveDiacritics(string text)
         {

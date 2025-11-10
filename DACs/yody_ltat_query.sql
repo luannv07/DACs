@@ -1,7 +1,9 @@
-﻿create database YODY_LTAT_DB;
-go
-use YODY_LTAT_DB;
-go
+﻿CREATE DATABASE YODY_LTAT_DB;
+GO
+USE YODY_LTAT_DB;
+GO
+
+-- Xóa bảng nếu đã tồn tại
 DROP TABLE IF EXISTS CHI_TIET_DON_HANG;
 DROP TABLE IF EXISTS DON_HANG;
 DROP TABLE IF EXISTS KHACH_HANG;
@@ -11,78 +13,9 @@ DROP TABLE IF EXISTS BIEN_THE_SAN_PHAM;
 DROP TABLE IF EXISTS SAN_PHAM;
 DROP TABLE IF EXISTS NHA_CUNG_CAP;
 DROP TABLE IF EXISTS NHAN_VIEN;
-go
-/*
-gộp 2 bảng nhân viên + tài khoản
-Bảng Nhân viên
-- Mã nhân viên (pk)
-- Họ
-- Tên
-- Email
-- Ngày sinh
-- Địa chỉ
-- Giới tính
-- Tài khoản (fk 1-1 với Tài khoản bên Bảng Tài khoản)
-- SoftDelete bằng cách thêm trường XoaTaiKhoan
+GO
 
-Bảng Tài khoản
-- Tài khoản (pk)
-- Mật khẩu
-- Vai trò (sử dụng Enum Const của C# để Định nghĩa) (nhân viên/nhân viên kho/admin) 0/1/2
-- Trạng thái (Online/Offline) ~ Vẫn hoạt động/Đã nghỉ việc ~ 1/0
-
-Bảng Sản phẩm
-- Mã sản phẩm (pk)
-- Tên sản phẩm
-- Mô tả
-- Kích cỡ
-- Số lượng sản phẩm
-- Giá sản phẩm (đơn vị nghìn đồng)
-- Nguồn cung cấp (fk *n-1 với Nhà cung cấp bên Bảng Nhà cung cấp)
-- Trạng thái sản phẩm (Đã bán/Nghỉ bán) 0/1
-- Phần trăm giảm giá
-
-Bảng Nhà cung cấp
-- Mã nhà cung cấp (pk)
-- Tên nhà cung cấp
-- Email
-
-Bảng Phiếu nhập
-- Mã phiếu nhập (pk)
-- Ngày nhập
-- Mã nhà cung cấp (fk 1-1 với Nhà cung cấp tương ứng của bảng nhà cung cấp)
-- Mã nhân viên viết phiếu nhập (fk *n-1 với Nhân viên trong bảng nhân viên)
-
-Bảng Chi tiết phiếu nhập
-- Mã phiếu nhập (pk) (fk 1-1 với Mã phiéu nhập bên bảng Phiếu nhập)
-- Mã sản phẩm
-- Số lượng
-- Đơn giá (đơn vị nghìn đồng)
-
-Bảng Đơn hàng
-- Mã đơn hàng (pk)
-- Mã sản phẩm
-- Ngày đặt hàng
-- Mã khách hàng (fk *n-1 với mã khách hàng bảng Khach hàng)
-- Tổng tiền
-- Trạng thái 0/1/2 ~ Chưa thanh toán/Đã thanh toán/Đã huỷ
-
-Bảng Đơn hàng chi tiết
-- Mã đơn hàng chi tiết (pk)
-- Mã đơn hàng (*n-1 với mã ĐƠn hàng, mỗi đơn hàng chi tiết thuộc về duy nhất 1 đơn hàng)
-- Mã sản phẩm
-- Số lượng
-- Đơn giá
-
-Bảng Khách hàng
-- Mã khách hàng (pk)
-- Tên khách hàng
-- Địa chỉ
-- Số điện thoại
-- Giới tính
-- Loại khách hàng (Khách VIP, Khách thường)
-*/
-
+-- Bảng NHAN_VIEN
 CREATE TABLE NHAN_VIEN (
     MaNhanVien INT IDENTITY(1,1) PRIMARY KEY,
     Ho NVARCHAR(50) NOT NULL,
@@ -95,302 +28,371 @@ CREATE TABLE NHAN_VIEN (
     MatKhau VARCHAR(255) NOT NULL,
     VaiTro TINYINT NOT NULL,
     TrangThai TINYINT NOT NULL DEFAULT 1,
-    NgayTao DATE NOT NULL DEFAULT GETDATE() ,
-	XoaTaiKhoan TINYINT NOT NULL DEFAULT 0
+    NgayTao DATE NOT NULL DEFAULT GETDATE(),
+    XoaTaiKhoan TINYINT NOT NULL DEFAULT 0
 );
-go
+GO
 
-create table NHA_CUNG_CAP (
-	MaNhaCungCap int identity(1,1) primary key,
-	Ten nvarchar(50) not null,
-	Email varchar(100) not null
+-- Bảng NHA_CUNG_CAP
+CREATE TABLE NHA_CUNG_CAP (
+    MaNhaCungCap INT IDENTITY(1,1) PRIMARY KEY,
+    Ten NVARCHAR(50) NOT NULL,
+    Email VARCHAR(100) NOT NULL
 );
-go
+GO
 
+-- Bảng SAN_PHAM
 CREATE TABLE SAN_PHAM (
     MaSanPham INT IDENTITY(1,1) PRIMARY KEY,
     TenSanPham NVARCHAR(255) NOT NULL,
     MaNCC INT NOT NULL,
-    GiamGia DECIMAL(5,2) NOT NULL DEFAULT 0,
     NgayTao DATETIME DEFAULT GETDATE(),
     FOREIGN KEY (MaNCC) REFERENCES NHA_CUNG_CAP(MaNhaCungCap),
-    CONSTRAINT CHK_GiamGia CHECK (GiamGia >= 0 AND GiamGia <= 100)
+    CONSTRAINT CHK_TenSanPham_Length CHECK (LEN(TenSanPham) <= 30)
 );
-alter table san_pham
-add CONSTRAINT CHK_TenSanPham_Length CHECK (LEN(TenSanPham) <= 30)
 
-go
+
+-- Bảng BIEN_THE_SAN_PHAM
 CREATE TABLE BIEN_THE_SAN_PHAM (
     MaBienThe INT IDENTITY(1,1) PRIMARY KEY,
     MaSanPham INT NOT NULL,
     MauSac NVARCHAR(50),
+    GiamGia DECIMAL(5,2) NOT NULL DEFAULT 0,
     KichCo NVARCHAR(20),
     SoLuong INT DEFAULT 0,
     DonGia DECIMAL(10,2) NOT NULL,
     TrangThaiBienThe TINYINT DEFAULT 1,
-    FOREIGN KEY (MaSanPham) REFERENCES SAN_PHAM(MaSanPham)
+    XoaBienThe TINYINT NOT NULL DEFAULT 0
+    FOREIGN KEY (MaSanPham) REFERENCES SAN_PHAM(MaSanPham),
+    CONSTRAINT CHK_GiamGia CHECK (GiamGia >= 0 AND GiamGia <= 100)
 );
 
-alter table bien_the_san_pham
-add xoaBienThe tinyint not null default 0
-
-
-select * from bien_the_san_pham
-
-CREATE TABLE SAN_PHAM_NCC (
-    MaSanPham INT NOT NULL,
+-- Bảng PHIEU_NHAP
+CREATE TABLE PHIEU_NHAP (
+    MaPhieuNhap INT IDENTITY(1,1) PRIMARY KEY,
+    NgayNhap DATETIME NOT NULL DEFAULT GETDATE(),
     MaNCC INT NOT NULL,
-    MauSac NVARCHAR(50) NOT NULL,
-    KichCo NVARCHAR(20) NOT NULL,
-    SoLuong INT NOT NULL DEFAULT 0,
-    PRIMARY KEY (MaSanPham, MaNCC, MauSac, KichCo),
-    CONSTRAINT FK_SANPHAM_NCC_SANPHAM
-        FOREIGN KEY (MaSanPham) REFERENCES SAN_PHAM(MaSanPham),
-    CONSTRAINT FK_SANPHAM_NCC_NCC
-        FOREIGN KEY (MaNCC) REFERENCES NHA_CUNG_CAP(MaNhaCungCap),
-    CONSTRAINT CHK_SANPHAM_NCC_SoLuong
-        CHECK (SoLuong >= 0)
+    MaNV INT NOT NULL,
+    FOREIGN KEY (MaNCC) REFERENCES NHA_CUNG_CAP(MaNhaCungCap),
+    FOREIGN KEY (MaNV) REFERENCES NHAN_VIEN(MaNhanVien)
 );
+GO
 
-INSERT INTO SAN_PHAM_NCC (MaSanPham, MaNCC, MauSac, KichCo, SoLuong)
-VALUES (2, 6, N'Xanh Lá', N'S', 20);
-
-SELECT 
-    spncc.MaSanPham,
-    sp.TenSanPham,
-    spncc.MaNCC,
-    ncc.Ten AS TenNCC,
-    spncc.MauSac,
-    spncc.KichCo,
-    spncc.SoLuong AS SoLuongNCC
-FROM SAN_PHAM_NCC spncc
-INNER JOIN SAN_PHAM sp ON spncc.MaSanPham = sp.MaSanPham
-INNER JOIN NHA_CUNG_CAP ncc ON spncc.MaNCC = ncc.MaNhaCungCap
-LEFT JOIN BIEN_THE_SAN_PHAM bts ON 
-    spncc.MaSanPham = bts.MaSanPham 
-    AND spncc.MauSac = bts.MauSac
-    AND spncc.KichCo = bts.KichCo
-WHERE bts.MaBienThe IS NULL
-ORDER BY spncc.MaSanPham, spncc.MaNCC;
-
-
-go
-create table PHIEU_NHAP (
-	MaPhieuNhap int identity(1,1) primary key,
-	NgayNhap datetime not null default getdate(),
-	MaNCC int not null,
-	MaNV int not null,
-	foreign key (MaNCC) references NHA_CUNG_CAP(MaNhaCungCap),
-	foreign key (MaNV) references NHAN_VIEN(MaNhanVien)
-);
-go
-
+-- Bảng CHI_TIET_PHIEU_NHAP
 CREATE TABLE CHI_TIET_PHIEU_NHAP (
     IdChiTiet INT IDENTITY(1,1) PRIMARY KEY,
     MaPhieuNhap INT NOT NULL,
-    MaSanPham INT NOT NULL,
+    MaBienThe INT NOT NULL,
     SoLuong INT NOT NULL,
     DonGia DECIMAL(6,2) NOT NULL,
     FOREIGN KEY (MaPhieuNhap) REFERENCES PHIEU_NHAP(MaPhieuNhap),
-    FOREIGN KEY (MaSanPham) REFERENCES SAN_PHAM(MaSanPham)
+    FOREIGN KEY (MaBienThe) REFERENCES BIEN_THE_SAN_PHAM(MaBienThe)  -- **Sửa chỗ này**
 );
-go
+ALTER TABLE CHI_TIET_PHIEU_NHAP
+ADD CONSTRAINT UQ_MaBt UNIQUE (mabienthe);
+GO
+alter table chi_tiet_phieu_nhap
+add ThoiGianNhap datetime default GETDATE()
 
-create table KHACH_HANG (
-	MaKhachHang int identity(1,1) primary key,
-	TenKhachHang nvarchar(100) not null,
-	DiaChi nvarchar(255) not null,
-	SoDienThoai varchar(10) not null,
-	GioiTinh tinyint,
-	LoaiKhachHang tinyint default 0
+-- Bảng KHACH_HANG
+CREATE TABLE KHACH_HANG (
+    MaKhachHang INT IDENTITY(1,1) PRIMARY KEY,
+    TenKhachHang NVARCHAR(100) NOT NULL,
+    DiaChi NVARCHAR(255) NOT NULL,
+    SoDienThoai VARCHAR(10) NOT NULL,
+    GioiTinh TINYINT,
+    LoaiKhachHang TINYINT DEFAULT 0
 );
-go
+GO
 
-create table DON_HANG (
-	MaDonHang int identity(1,1) primary key,
-	NgayDatHang datetime not null default getdate(),
-	MaKhachHang int not null,
-	TrangThai tinyint not null default 0,
-	foreign key (MaKhachHang) references KHACH_HANG(MaKhachHang)
+-- Bảng DON_HANG
+CREATE TABLE DON_HANG (
+    MaDonHang INT IDENTITY(1,1) PRIMARY KEY,
+    NgayDatHang DATETIME NOT NULL DEFAULT GETDATE(),
+    MaKhachHang INT NOT NULL,
+    TrangThai TINYINT NOT NULL DEFAULT 0,
+    FOREIGN KEY (MaKhachHang) REFERENCES KHACH_HANG(MaKhachHang)
 );
-go
+GO
 
-create table CHI_TIET_DON_HANG (
-	MaDonHangChiTiet int identity(1,1) primary key,
-	MaDonHang int not null,
-	MaSanPham int not null,
-	SoLuong int not null,
-	DonGia decimal(6,2) not null,
-	foreign key (MaDonHang) references DON_HANG(MaDonHang),
-	foreign key (MaSanPham) references SAN_PHAM(MaSanPham),
-	UNIQUE(MaDonHang, MaSanPham)
+-- Bảng CHI_TIET_DON_HANG
+CREATE TABLE CHI_TIET_DON_HANG (
+    MaDonHangChiTiet INT IDENTITY(1,1) PRIMARY KEY,
+    MaDonHang INT NOT NULL,
+    MaBienThe INT NOT NULL,  -- **Sửa từ MaSanPham → MaBienThe** để đúng logic với BIEN_THE_SAN_PHAM
+    SoLuong INT NOT NULL,
+    DonGia DECIMAL(6,2) NOT NULL,
+    FOREIGN KEY (MaDonHang) REFERENCES DON_HANG(MaDonHang),
+    FOREIGN KEY (MaBienThe) REFERENCES BIEN_THE_SAN_PHAM(MaBienThe),
+    UNIQUE(MaDonHang, MaBienThe)
 );
-go
+GO
+
+
 
 INSERT INTO NHAN_VIEN (Ho, Ten, Email, NgaySinh, DiaChi, GioiTinh, TaiKhoan, MatKhau, VaiTro)
 VALUES
-(N'Nguyễn Văn', N'Luận',  'vanluandvlp@gmail.com', '1999-03-15', N'Trên trời Hà Nội', 0, 'admin', '1', 2),
-(N'Nguyễn Đình', N'Tuấn',  'tuannd112025@gmail.com', '1999-03-15', N'Số 10, Phố Hàng Bài, Hoàn Kiếm, Hà Nội', 0, 'tuannd', '1', 1),
-(N'Trần Thị',   N'Hoa',   'hoatt112025@gmail.com',   '2001-07-22', N'Ngõ 72, phố Nguyễn Trãi, Thanh Xuân, Hà Nội', 1, 'hoatt', '1', 0),
-(N'Lê Minh',    N'Huy',    'huylm112025@gmail.com',   '2000-11-05', N'Số 5, Nguyễn Văn Cừ, Long Biên, Hà Nội', 0, 'huylm', '1', 1),
-(N'Phạm Thị',   N'Lan',    'lanpt112025@gmail.com',   '2002-02-18', N'Khu đô thị Cầu Giấy, Cầu Giấy, Hà Nội', 1, 'lanpt', '1', 1),
-(N'Vũ Đức',     N'Anh',    'anhvd112025@gmail.com',   '1998-12-09', N'Chung cư Times City, Hai Bà Trưng, Hà Nội', 0, 'anhvd', '1', 0),
-(N'Đỗ Thị',     N'Hồng',   'hongdt112025@gmail.com',  '2003-05-30', N'Số 27, Phố Hàng Gai, Hoàn Kiếm, Hà Nội', 1, 'hongdt', '1', 0),
-(N'Bùi Văn',    N'Sơn',    'sonbv112025@gmail.com',   '1999-09-12', N'Ngõ 123, Phố Bạch Mai, Hai Bà Trưng, Hà Nội', 0, 'sonbv', '1', 0),
-(N'Phan Thị',   N'Vân',    'vanpt112025@gmail.com',   '2004-06-03', N'Số 88, Đường Láng, Đống Đa, Hà Nội', 1, 'vanpt', '1', 0),
-(N'Võ Minh',    N'Quân',   'quanvm112025@gmail.com',  '2001-10-28', N'Phố Trần Hưng Đạo, Hoàn Kiếm, Hà Nội', 0, 'quanvm', '1', 1),
-(N'Hoàng Thị',  N'Ngọc',   'ngocht112025@gmail.com',  '1999-04-20', N'Tổ 5, Phường Cầu Giấy, Quận Cầu Giấy, Hà Nội', 1, 'ngocht', '1', 1);
-go
-INSERT INTO NHA_CUNG_CAP (Ten, Email)
+(N'Lê Văn', N'An', 'anlv1234@ltat.com', '1988-01-10', N'Hà Nội', 0, 'anlv1234', '1', 2), -- user admin thêm đầu
+(N'Nguyễn Văn', N'Luận', 'luannv6354@ltat.com', '1995-01-01', N'Hà Nội', 0, 'admin', '1', 2),
+(N'Trá Văn', N'Anh', 'anhvt1234@ltat.com', '1994-02-15', N'Hồ Chí Minh', 0, 'anhvt1234', '1', 1),
+(N'Lê Quang', N'Tuấn', 'tuanlq2345@ltat.com', '1996-03-20', N'Đà Nẵng', 0, 'tuanlq2345', '1', 1),
+(N'Phạm Hoàng', N'Hà', 'haph1234@ltat.com', '1997-05-05', N'Quảng Ninh', 1, 'haph1234', '1', 1),
+(N'Võ Minh', N'Hưng', 'hungvm3456@ltat.com', '1992-06-18', N'Hà Tĩnh', 0, 'hungvm3456', '1', 1),
+(N'Đặng Thị', N'Mai', 'maidt4567@ltat.com', '1998-07-22', N'Hà Nam', 1, 'maidt4567', '1', 1),
+(N'Bùi Thị', N'Lan', 'lanbt5678@ltat.com', '1995-08-08', N'Bình Dương', 1, 'lanbt5678', '1', 1),
+(N'Lê Văn', N'Long', 'longlv6789@ltat.com', '1994-09-12', N'Bắc Ninh', 0, 'longlv6789', '1', 1),
+(N'Nguyễn Hải', N'Hải', 'hainh7890@ltat.com', '1996-10-20', N'Nam Định', 0, 'hainh7890', '1', 1),
+(N'Phạm Thị', N'Thủy', 'thuypf8901@ltat.com', '1997-11-25', N'Quảng Bình', 1, 'thuypf8901', '1', 0),
+(N'Trần Văn', N'Khanh', 'khanhtv9012@ltat.com', '1993-12-30', N'Thanh Hóa', 0, 'khanhtv9012', '1', 0),
+(N'Hoàng Minh', N'Tùng', 'tunghm0123@ltat.com', '1995-01-15', N'Bắc Giang', 0, 'tunghm0123', '1', 0),
+(N'Võ Thị', N'Nga', 'ngavt1234@ltat.com', '1996-02-10', N'Bình Thuận', 1, 'ngavt1234', '1', 0),
+(N'Đặng Thị', N'Hạnh', 'hanhdt2345@ltat.com', '1994-03-05', N'Quảng Nam', 1, 'hanhdt2345', '1', 0),
+(N'Bùi Văn', N'Anh', 'anhbv3456@ltat.com', '1992-04-22', N'Hà Giang', 0, 'anhbv3456', '1', 0),
+(N'Lê Văn', N'Phong', 'phonglv4567@ltat.com', '1993-05-18', N'Lạng Sơn', 0, 'phonglv4567', '1', 0),
+(N'Nguyễn Thị', N'Vy', 'vynt5678@ltat.com', '1995-06-30', N'Quảng Trị', 1, 'vynt5678', '1', 0),
+(N'Phạm Văn', N'Dương', 'duongpv6789@ltat.com', '1996-07-12', N'Nam Định', 0, 'duongpv6789', '1', 0),
+(N'Trần Minh', N'Minh', 'minhtm7890@ltat.com', '1994-08-25', N'Hà Nội', 0, 'minhtm7890', '1', 0);
+GO
+select * from Nha_cung_cap;
+INSERT INTO NHA_CUNG_CAP (Ten, Email) VALUES
+(N'Công ty Thời Trang Vi Diệu', 'contact@vidieu-fashion.com'),
+(N'Công ty Quần Áo Huyền Ảo', 'hello@huyenao-style.com'),
+(N'Xưởng May Mặc Mộc Mạc', 'sales@mocmac-apparel.com'),
+(N'Thời Trang Ánh Ngọc', 'info@anhngoc-boutique.com'),
+(N'Nhà Máy May Sắc Màu', 'orders@sacmau-factory.com'),
+(N'Quần Áo Bản Sắc Việt', 'support@bansacviet.co'),
+(N'Vật Liệu May Mặc Kim Tuyến', 'contact@kimtuyen-supply.com'),
+(N'Thời Trang Pháp Vị', 'inbox@phapvi-fashion.com'),
+(N'Xưởng Thiết Kế Đẹp Đẽ', 'design@depde-studio.com'),
+(N'Công ty May Mặc Thời Đại Mới', 'service@thoidai-moi.com');
+GO
+
+INSERT INTO SAN_PHAM (TenSanPham, MaNCC) VALUES
+(N'Áo Thun Nam Basic', 1),
+(N'Áo Sơ Mi Nữ Công Sở', 2),
+(N'Quần Jean Nam Skinny', 3),
+(N'Váy Dài Nữ Dạo Phố', 4),
+(N'Áo Khoác Nam Hoodie', 5),
+(N'Áo Len Nữ Ấm Áp', 6),
+(N'Quần Short Nam Thể Thao', 7),
+(N'Áo Thun Nữ Họa Tiết', 8),
+(N'Đầm Dạ Hội Nữ', 9),
+(N'Áo Khoác Jean Nam', 10),
+(N'Quần Legging Nữ', 1),
+(N'Áo Polo Nam', 2),
+(N'Váy Ngắn Nữ Đi Biển', 3),
+(N'Áo Khoác Dù Nam', 4),
+(N'Áo Thun Oversize Nữ', 5);
+GO
+
+INSERT INTO BIEN_THE_SAN_PHAM (MaSanPham, MauSac, GiamGia, KichCo, SoLuong, DonGia, TrangThaiBienThe)
 VALUES
-(N'Công ty ABC', 'abc@gmail.com'),
-(N'Công ty DEF', 'def@gmail.com'),
-(N'Công ty GHI', 'ghi@gmail.com'),
-(N'Công ty JKL', 'jkl@gmail.com'),
-(N'Công ty MNO', 'mno@gmail.com'),
-(N'Công ty PQR', 'pqr@gmail.com'),
-(N'Công ty STU', 'stu@gmail.com'),
-(N'Công ty VWX', 'vwx@gmail.com'),
-(N'Công ty YZA', 'yza@gmail.com'),
-(N'Công ty BCD', 'bcd@gmail.com'),
-(N'Công ty EFG', 'efg@gmail.com'),
-(N'Công ty HIJ', 'hij@gmail.com'),
-(N'Công ty KLM', 'klm@gmail.com'),
-(N'Công ty NOP', 'nop@gmail.com'),
-(N'Công ty QRS', 'qrs@gmail.com');
-go
-INSERT INTO SAN_PHAM (TenSanPham, MaNCC, GiamGia)
+-- Biến thể cho sản phẩm 1
+(1, N'Đen', 0, N'M', 50, 150, 1),
+(1, N'Trắng', 10, N'L', 30, 170, 1),
+(1, N'Xanh', 5, N'XL', 20, 190, 1),
+
+-- Biến thể cho sản phẩm 2
+(2, N'Hồng', 0, N'S', 40, 200, 1),
+(2, N'Trắng', 0, N'M', 25, 250, 1),
+(2, N'Đen', 15, N'L', 15, 299, 1),
+
+-- Biến thể cho sản phẩm 3
+(3, N'Xanh Đậm', 5, N'S', 35, 150, 1),
+(3, N'Xanh Nhạt', 0, N'L', 20, 250, 1),
+(3, N'Đen', 0, N'XL', 15, 350, 1),
+
+-- Biến thể cho sản phẩm 4
+(4, N'Đỏ', 0, N'S', 20, 300, 1),
+(4, N'Vàng', 10, N'M', 25, 300, 1),
+
+-- Biến thể cho sản phẩm 5
+(5, N'Xám', 0, N'M', 50, 180, 1),
+(5, N'Đen', 5, N'L', 30, 280, 1),
+
+-- Biến thể cho sản phẩm 6
+(6, N'Tím', 0, N'S', 40, 220, 1),
+(6, N'Hồng', 10, N'M', 20, 220, 1),
+
+-- Biến thể cho sản phẩm 7
+(7, N'Xanh', 0, N'M', 60, 120, 1),
+(7, N'Đen', 5, N'L', 40, 120, 1),
+
+-- Biến thể cho sản phẩm 8
+(8, N'Hồng', 0, N'S', 30, 180, 1),
+(8, N'Trắng', 5, N'M', 20, 180, 1),
+
+-- Biến thể cho sản phẩm 9
+(9, N'Đỏ', 0, N'M', 15, 500, 1),
+(9, N'Đen', 10, N'L', 10, 600, 1),
+
+-- Biến thể cho sản phẩm 10
+(10, N'Xanh', 0, N'M', 25, 200, 1),
+(10, N'Đen', 0, N'L', 20, 225, 1),
+
+-- Biến thể cho sản phẩm 11
+(11, N'Hồng', 0, N'S', 30, 150, 1),
+(11, N'Đen', 5, N'M', 25, 150, 1),
+
+-- Biến thể cho sản phẩm 12
+(12, N'Trắng', 0, N'M', 40, 180, 1),
+(12, N'Xanh', 10, N'L', 30, 180, 1),
+
+-- Biến thể cho sản phẩm 13
+(13, N'Vàng', 0, N'S', 15, 220, 1),
+(13, N'Đỏ', 5, N'M', 10, 220, 1),
+
+-- Biến thể cho sản phẩm 14
+(14, N'Xanh', 0, N'M', 20, 250, 1),
+(14, N'Đen', 0, N'L', 15, 250, 1),
+
+-- Biến thể cho sản phẩm 15
+(15, N'Hồng', 0, N'S', 30, 180, 1),
+(15, N'Tím', 5, N'M', 20, 180, 1);
+GO
+
+-- PHIEU_NHAP
+INSERT INTO PHIEU_NHAP (NgayNhap, MaNCC, MaNV)
 VALUES
-(N'Quần Âu Nam', 6, 2.7),
-(N'Váy Maxi Voan', 1, 3.4),
-(N'Áo Polo Nam', 13, 1.9),
-(N'Quần Short Vải', 4, 3.1),
-(N'Áo Khoác Da', 11, 1.5),
-(N'Chân Váy Jean', 7, 2.3),
-(N'Áo Sweater Nữ', 15, 2.0),
-(N'Quần Legging Thể Thao', 2, 3.0);
-go
-INSERT INTO BIEN_THE_SAN_PHAM (MaSanPham, MauSac, KichCo, SoLuong, DonGia)
+(GETDATE(), 1, 2),
+(GETDATE(), 2, 3),
+(GETDATE(), 3, 4),
+(GETDATE(), 4, 5),
+(GETDATE(), 5, 6),
+(GETDATE(), 6, 7),
+(GETDATE(), 7, 8),
+(GETDATE(), 8, 9),
+(GETDATE(), 9, 10),
+(GETDATE(), 10, 11);
+GO
+
+-- CHI_TIET_PHIEU_NHAP
+INSERT INTO CHI_TIET_PHIEU_NHAP (MaPhieuNhap, MaBienThe, SoLuong, DonGia)
 VALUES
--- 1. Áo Vest Nữ
-(1, N'Đen', N'S', 20, 950.00),
-(1, N'Đen', N'M', 15, 950.00),
-(1, N'Trắng', N'M', 15, 960.00),
+(1, 1, 50, 150),
+(1, 2, 30, 150),
+(2, 4, 40, 200),
+(2, 5, 25, 200),
+(3, 7, 35, 250),
+(3, 8, 20, 250),
+(4, 10, 20, 300),
+(4, 11, 25, 300),
+(5, 12, 50, 180),
+(5, 13, 30, 180),
+(6, 14, 40, 220),
+(6, 15, 20, 220),
+(7, 16, 60, 120),
+(7, 17, 40, 120),
+(8, 18, 30, 180),
+(8, 19, 20, 180),
+(9, 20, 15, 500),
+(9, 21, 10, 500),
+(10, 22, 25, 200),
+(10, 23, 20, 200);
+GO
 
--- 2. Quần Âu Nam
-(2, N'Xanh Navy', N'L', 50, 520.00),
-(2, N'Xanh Navy', N'M', 45, 520.00),
-(2, N'Đen', N'S', 45, 530.00),
+-- KHACH_HANG
+INSERT INTO KHACH_HANG (TenKhachHang, DiaChi, SoDienThoai, GioiTinh, LoaiKhachHang)
+VALUES
+(N'Nguyễn Văn An', N'123 Lê Lợi, Hà Nội', '0912345678', 0, 0),
+(N'Trần Thị Bình', N'456 Nguyễn Trãi, Hà Nội', '0923456789', 1, 1),
+(N'Lê Văn Cường', N'789 Trần Phú, Hà Nội', '0934567890', 0, 0),
+(N'Phạm Thị Dung', N'12 Lý Thường Kiệt, Hà Nội', '0945678901', 1, 0),
+(N'Hoàng Văn Hùng', N'34 Hai Bà Trưng, Hà Nội', '0956789012', 0, 1),
+(N'Vũ Thị Lan', N'56 Bà Triệu, Hà Nội', '0967890123', 1, 0),
+(N'Đặng Văn Minh', N'78 Xuân Thủy, Hà Nội', '0978901234', 0, 0),
+(N'Ngô Thị Nga', N'90 Nguyễn Huệ, Hà Nội', '0989012345', 1, 1),
+(N'Bùi Văn Quang', N'11 Trần Nhân Tông, Hà Nội', '0990123456', 0, 0),
+(N'Phan Thị Hạnh', N'22 Phan Chu Trinh, Hà Nội', '0901234567', 1, 0);
+GO
 
--- 3. Váy Maxi Voan
-(3, N'Trắng', N'S', 30, 460.00),
-(3, N'Hồng', N'M', 40, 470.00),
-(3, N'Xanh Biển', N'L', 25, 480.00),
+-- DON_HANG
+INSERT INTO DON_HANG (NgayDatHang, MaKhachHang, TrangThai)
+VALUES
+(GETDATE(), 1, 0),
+(GETDATE(), 2, 1),
+(GETDATE(), 3, 0),
+(GETDATE(), 4, 1),
+(GETDATE(), 5, 0),
+(GETDATE(), 6, 1),
+(GETDATE(), 7, 0),
+(GETDATE(), 8, 1),
+(GETDATE(), 9, 0),
+(GETDATE(), 10, 1);
+GO
 
--- 4. Áo Polo Nam
-(4, N'Xám Chuột', N'M', 80, 280.00),
-(4, N'Đen', N'L', 90, 285.00),
-(4, N'Trắng', N'XL', 80, 290.00),
-
--- 5. Quần Short Vải
-(5, N'Trắng', N'S', 100, 190.00),
-(5, N'Be', N'M', 110, 195.00),
-
--- 6. Áo Khoác Da
-(6, N'Nâu Đậm', N'L', 25, 990.00),
-(6, N'Đen', N'M', 15, 995.00),
-
--- 7. Chân Váy Jean
-(7, N'Xanh Nhạt', N'S', 80, 360.00),
-(7, N'Xanh Đậm', N'M', 100, 365.00),
-
--- 8. Áo Sweater Nữ
-(8, N'Vàng Pastel', N'M', 120, 310.00),
-(8, N'Hồng', N'L', 80, 315.00)
-
-go
-INSERT INTO PHIEU_NHAP (NgayNhap, MaNCC, MaNV) VALUES
-('2025-10-25 10:30:00', 3, 1),
-('2025-10-26 14:45:00', 8, 3),
-('2025-10-27 09:15:00', 1, 2),
-('2025-10-28 11:00:00', 5, 4),
-('2025-10-29 16:20:00', 10, 5),
-('2025-10-30 08:50:00', 2, 1),
-('2025-10-31 13:35:00', 7, 3),
-('2025-11-01 17:00:00', 4, 2),
-('2025-11-01 10:05:00', 9, 4),
-('2025-11-02 11:55:00', 6, 5),
-('2025-10-20 15:10:00', 1, 1),
-('2025-10-23 09:40:00', 3, 3);
-go
-INSERT INTO CHI_TIET_PHIEU_NHAP (MaPhieuNhap, MaSanPham, SoLuong, DonGia) VALUES
-(1, 4, 150, 290.00),
-(1, 7, 200, 350.00),
-(2, 1, 100, 145.00),
-(2, 5, 120, 180.00),
-(3, 8, 80, 280.00),
-(3, 3, 110, 420.00),
-(4, 2, 70, 850.00),
-(5, 6, 50, 950.00),
-(5, 8, 150, 320.00),
-(6, 4, 180, 295.00),
-(6, 5, 250, 185.00),
-(7, 3, 90, 410.00),
-(7, 7, 130, 345.00),
-(8, 2, 60, 840.00),
-(8, 8, 100, 275.00),
-(9, 6, 80, 960.00),
-(11, 1, 150, 140.00),
-(12, 4, 120, 300.00);
-go
-INSERT INTO KHACH_HANG (TenKhachHang, DiaChi, SoDienThoai, GioiTinh, LoaiKhachHang) VALUES
-(N'Nguyễn Thị Hồng Anh', N'Số 15, Ngõ 40, P. Cầu Giấy, Hà Nội', '0987123456', 0, 1),
-(N'Trần Văn Bảo', N'Đường 3/2, Q. Ninh Kiều, Cần Thơ', '0912345678', 1, 1),
-(N'Lê Thanh Duy', N'22/5 Hẻm 12, P. Thảo Điền, TP. HCM', '0909876543', 1, 0),
-(N'Phạm Hải Yến', N'Tòa S1, KĐT Vinhomes Ocean Park, Gia Lâm', '0388990011', 0, 0),
-(N'Hoàng Minh Đức', N'56 Trần Phú, P. Hải Châu, Đà Nẵng', '0966778899', 1, 1),
-(N'Đỗ Thu Hà', N'Chung cư The Sun, Q. Thanh Xuân, Hà Nội', '0944556677', 0, 0),
-(N'Võ Tấn Lộc', N'Lô A4, KCN Biên Hòa 2, Đồng Nai', '0977889900', 1, 0),
-(N'Bùi Mai Phương', N'345 Lê Lợi, P. Bến Thành, TP. HCM', '0933221100', 0, 1),
-(N'Đinh Công Quyết', N'Khu phố 3, P. Hòa Minh, Đà Nẵng', '0868121314', 1, 0),
-(N'Cao Ngọc Diệp', N'Số 10, Đường 19/5, Q. Hà Đông, Hà Nội', '0922334455', 0, 0);
-go
-INSERT INTO DON_HANG (NgayDatHang, MaKhachHang, TrangThai) VALUES
-('2025-10-15 11:20:00', 3, 2), -- Lê Thanh Duy (Đã giao)
-('2025-10-16 15:40:00', 8, 2), -- Bùi Mai Phương (Đã giao)
-('2025-10-18 09:30:00', 1, 1), -- Nguyễn Thị Hồng Anh (Đã xác nhận)
-('2025-10-20 10:00:00', 5, 1), -- Hoàng Minh Đức (Đã xác nhận)
-('2025-10-21 17:05:00', 10, 0), -- Cao Ngọc Diệp (Chờ xác nhận)
-('2025-10-22 14:15:00', 2, 2), -- Trần Văn Bảo (Đã giao)
-('2025-10-24 16:55:00', 7, 0), -- Võ Tấn Lộc (Chờ xác nhận)
-('2025-10-25 08:45:00', 4, 1), -- Phạm Hải Yến (Đã xác nhận)
-('2025-10-27 12:25:00', 9, 2), -- Đinh Công Quyết (Đã giao)
-('2025-10-28 13:30:00', 6, 1); -- Đỗ Thu Hà (Đã xác nhận)
-go
-INSERT INTO CHI_TIET_DON_HANG (MaDonHang, MaSanPham, SoLuong, DonGia) VALUES
-(1, 6, 1, 990.00),  -- Áo Khoác Da (DH 1)
-(2, 3, 1, 520.00),  -- Quần Âu Nam (DH 2)
-(4, 7, 2, 360.00),  -- Chân Váy Jean (DH 4)
-(5, 6, 1, 990.00),  -- Áo Khoác Da (DH 5)
-(6, 1, 1, 150.00),  -- Túi Đeo Chéo (DH 6)
-(8, 2, 1, 890.00),  -- Áo Vest Nữ (DH 8)
-(9, 6, 1, 990.00),  -- Áo Khoác Da (DH 9)
-(10, 1, 1, 150.00), -- Túi Đeo Chéo (DH 10)
-(10, 2, 1, 890.00), -- Áo Vest Nữ (DH 11)
-(5, 3, 1, 520.00),  -- Quần Âu Nam (DH 5) - *SP mới cho DH 5*
-(8, 5, 1, 190.00);  -- Quần Short Vải (DH 8) - *SP mới cho DH 8*
-
-/*
-DELETE FROM CHI_TIET_DON_HANG;
-DELETE FROM CHI_TIET_PHIEU_NHAP;
-DELETE FROM BIEN_THE_SAN_PHAM;
-DELETE FROM DON_HANG;
-DELETE FROM PHIEU_NHAP;
-DELETE FROM SAN_PHAM;
-DELETE FROM KHACH_HANG;
-DELETE FROM NHA_CUNG_CAP;
-DELETE FROM NHAN_VIEN;
-*/
+-- CHI_TIET_DON_HANG
+INSERT INTO CHI_TIET_DON_HANG (MaDonHang, MaBienThe, SoLuong, DonGia)
+VALUES
+(1, 1, 2, 150),
+(1, 2, 1, 150),
+(2, 4, 3, 200),
+(2, 5, 2, 200),
+(3, 7, 1, 250),
+(3, 8, 2, 250),
+(4, 10, 1, 300),
+(4, 11, 1, 300),
+(5, 12, 2, 180),
+(5, 13, 1, 180),
+(6, 14, 1, 220),
+(6, 15, 1, 220),
+(7, 16, 3, 120),
+(7, 17, 2, 120),
+(8, 18, 1, 180),
+(8, 19, 1, 180),
+(9, 20, 2, 500),
+(9, 21, 1, 500),
+(10, 22, 1, 200),
+(10, 23, 1, 200);
+GO
 
 
-select * from NHA_CUNG_CAP
+select * from San_pham;
+select * from Bien_the_san_pham;
+delete from BIEN_THE_SAN_PHAM
+where MaBienThe = 26;
+
+select pd.mabienthe, p.masanpham, p.tensanpham, p.mancc,
+pd.mausac, pd.kichco, pd.soluong, pd.dongia, pd.giamgia,
+pd.trangthaibienthe, p.ngaytao from san_pham as p
+left join bien_the_san_pham as pd on pd.masanpham = p.masanpham
+where pd.xoabienthe = 0
+
+select pd.mabienthe, p.masanpham, p.tensanpham, p.mancc,
+pd.mausac, pd.kichco, pd.soluong, pd.dongia, pd.giamgia,
+pd.trangthaibienthe, p.ngaytao from san_pham as p
+left join bien_the_san_pham as pd on pd.masanpham = p.masanpham
+where pd.xoabienthe = 0 and p.TenSanPham like '%Áo Thun Nam Basic%'
+
+
+select * from phieu_nhap;
+select * from chi_tiet_phieu_nhap;
+
+update chi_tiet_phieu_nhap
+set thoigiannhap = GETDATE()
+where thoigiannhap is null;
+
+
+-- 1. Cập nhật tên sản phẩm (toàn bộ biến thể)
+UPDATE SAN_PHAM
+SET TenSanPham = N'Áo Thun Mới'
+WHERE MaSanPham = (
+    SELECT MaSanPham 
+    FROM BIEN_THE_SAN_PHAM 
+    WHERE MaBienThe = 5
+);
+
+-- 2. Cập nhật biến thể cụ thể
+UPDATE BIEN_THE_SAN_PHAM
+SET 
+    TrangThaiBienThe = 1,
+    DonGia = 150000,
+    GiamGia = 99
+WHERE MaBienThe = 5;
+
+
+UPDATE s
+SET s.TenSanPham = 'Ten san pham moi'
+FROM SAN_PHAM s
+JOIN BIEN_THE_SAN_PHAM b ON s.MaSanPham = b.MaSanPham
+WHERE b.MaBienThe = 3;

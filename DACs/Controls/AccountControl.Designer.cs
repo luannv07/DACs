@@ -77,6 +77,7 @@
             this.txtSearching = new System.Windows.Forms.TextBox();
             this.btnTriggerSearching = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.panel1.SuspendLayout();
             this.groupBoxWrapperUsers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUserList)).BeginInit();
@@ -440,6 +441,7 @@
             this.txtAccountFirstName.Name = "txtAccountFirstName";
             this.txtAccountFirstName.Size = new System.Drawing.Size(148, 29);
             this.txtAccountFirstName.TabIndex = 3;
+            this.txtAccountFirstName.TextChanged += new System.EventHandler(this.txtAccountFirstName_TextChanged);
             // 
             // label1
             // 
@@ -659,5 +661,6 @@
         private System.Windows.Forms.TextBox txtSearching;
         private System.Windows.Forms.Button btnTriggerSearching;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }

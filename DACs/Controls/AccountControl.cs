@@ -101,12 +101,15 @@ namespace DACs.Controls
 
         private void dgvUserList_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            btnAccountAddUser.Enabled = false;
-            btnAccountEditUser.Enabled = true;
-            btnAccountDeleteUser.Enabled = true;
             if (e.RowIndex < 0) return;
+            if (!dgvUserList.Columns.Contains("MaNhanVien")) return;
 
-            NhanVien selectedUser = users[e.RowIndex];
+            object idObj = dgvUserList.Rows[e.RowIndex].Cells["MaNhanVien"].Value;
+            if (idObj == null) return;
+
+            int id = Convert.ToInt32(idObj);
+            var selectedUser = users.FirstOrDefault(u => u.MaNhanVien == id);
+            if (selectedUser == null) return;
 
             txtAccountCode.Text = selectedUser.MaNhanVien.ToString();
             txtAccountFirstName.Text = selectedUser.Ho;
@@ -117,18 +120,15 @@ namespace DACs.Controls
             txtAccountPassword.Text = selectedUser.MatKhau;
             dtpAccountBirthDate.Value = selectedUser.NgaySinh;
 
-            cbAccountGender.SelectedItem = genderMap.ContainsKey(selectedUser.GioiTinh)
-                ? genderMap[selectedUser.GioiTinh]
-                : "Khác";
+            cbAccountGender.SelectedItem = genderMap.ContainsKey(selectedUser.GioiTinh) ? genderMap[selectedUser.GioiTinh] : "Khác";
+            cbAccountRole.SelectedItem = roleMap.ContainsKey(selectedUser.VaiTro) ? roleMap[selectedUser.VaiTro] : "Nhân viên";
+            cbAccountStatus.SelectedItem = statusMap.ContainsKey(selectedUser.TrangThai) ? statusMap[selectedUser.TrangThai] : "Đã nghỉ";
 
-            cbAccountRole.SelectedItem = roleMap.ContainsKey(selectedUser.VaiTro)
-                ? roleMap[selectedUser.VaiTro]
-                : "Nhân viên";
-
-            cbAccountStatus.SelectedItem = statusMap.ContainsKey(selectedUser.TrangThai)
-                ? statusMap[selectedUser.TrangThai]
-                : "Đã nghỉ";
+            btnAccountAddUser.Enabled = false;
+            btnAccountEditUser.Enabled = true;
+            btnAccountDeleteUser.Enabled = true;
         }
+
 
         private void btnAccountAddUser_Click(object sender, EventArgs e)
         {
@@ -244,6 +244,7 @@ namespace DACs.Controls
                 .Select(u => new
                 {
                     u.MaNhanVien,
+                    u.Ho,
                     u.Ten,
                     u.Email,
                     NgaySinh = u.NgaySinh.ToString("dd/MM/yyyy"),
@@ -259,6 +260,11 @@ namespace DACs.Controls
         }
 
         private void dtpAccountBirthDate_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtAccountFirstName_TextChanged(object sender, EventArgs e)
         {
 
         }

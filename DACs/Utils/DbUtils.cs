@@ -72,5 +72,27 @@ namespace DACs.Utils
                 return false;
             }
         }
+        public static object ExecuteScalar(string query, SqlParameter[] parameters = null)
+        {
+            object result = null;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    if (parameters != null && parameters.Length > 0)
+                        cmd.Parameters.AddRange(parameters);
+
+                    conn.Open();
+                    result = cmd.ExecuteScalar();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Lỗi DB", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return result;
+        }
+
     }
 }

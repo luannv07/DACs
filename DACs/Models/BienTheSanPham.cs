@@ -13,6 +13,7 @@ namespace DACs.Models
         public string MauSac { get; set; }
         public string KichCo { get; set; }
         public int SoLuong { get; set; }
+        public decimal GiamGia { get; set; }
         public decimal DonGia { get; set; }
         public byte TrangThaiBienThe { get; set; }
     }

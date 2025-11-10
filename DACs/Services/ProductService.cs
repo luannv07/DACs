@@ -14,13 +14,12 @@ namespace DACs.Services
         public List<SanPham> GetAllProducts()
         {
             string query = @"
-                SELECT 
-                    p.MaSanPham, p.TenSanPham, p.MaNCC, p.GiamGia, p.NgayTao,
-                    pp.MaBienThe, pp.MauSac, pp.KichCo, pp.SoLuong, pp.DonGia, pp.TrangThaiBienThe
-                FROM SAN_PHAM p
-                LEFT JOIN BIEN_THE_SAN_PHAM pp ON p.MaSanPham = pp.MaSanPham
-                where pp.xoabienthe=0                
-                ORDER BY p.MaSanPham ";
+                select pd.mabienthe, p.masanpham, p.tensanpham,
+                pd.mausac, pd.kichco, pd.soluong, pd.dongia, pd.giamgia,
+                pd.trangthaibienthe, p.ngaytao, p.mancc from san_pham as p
+                left join bien_the_san_pham as pd on pd.masanpham = p.masanpham
+                where pd.xoabienthe = 0
+            ";
 
             DataTable dt = DbUtils.ExecuteSelectQuery(query);
             List<SanPham> products = new List<SanPham>();
@@ -36,13 +35,12 @@ namespace DACs.Services
         public List<SanPham> FindByName(string name)
         {
             string query = @"
-                SELECT 
-                    p.MaSanPham, p.TenSanPham, p.MaNCC, p.GiamGia, p.NgayTao,
-                    pp.MaBienThe, pp.MauSac, pp.KichCo, pp.SoLuong, pp.DonGia, pp.TrangThaiBienThe
-                FROM SAN_PHAM p
-                LEFT JOIN BIEN_THE_SAN_PHAM pp ON p.MaSanPham = pp.MaSanPham
-                where pp.xoabienthe=0 and p.TenSanPham LIKE @name        
-                ORDER BY p.MaSanPham ";
+                select pd.mabienthe, p.masanpham, p.tensanpham,
+                pd.mausac, pd.kichco, pd.soluong, pd.dongia, pd.giamgia,
+                pd.trangthaibienthe, p.ngaytao, p.mancc from san_pham as p
+                left join bien_the_san_pham as pd on pd.masanpham = p.masanpham
+                where pd.xoabienthe = 0 and p.TenSanPham like @name  
+            ";
 
             DataTable dt = DbUtils.ExecuteSelectQuery(query, new SqlParameter[]
             {
@@ -57,16 +55,38 @@ namespace DACs.Services
 
             return products;
         }
+        public SanPham GetProductByPDId(int id)
+        {
+            string query = @"
+            select pd.mabienthe, p.masanpham, p.tensanpham, p.mancc,
+            pd.mausac, pd.kichco, pd.soluong, pd.dongia, pd.giamgia,
+            pd.trangthaibienthe, p.ngaytao from san_pham as p
+            left join bien_the_san_pham as pd on pd.masanpham = p.masanpham
+            where pd.xoabienthe = 0 and pd.mabienthe = @mabienthe
+            ";
+            SqlParameter[] paramaters = {
+                new SqlParameter("@MaBienThe", id)
+            };
 
-        // Mapper mỗi dòng -> SanPham + biến thể
+            DataTable dt = DbUtils.ExecuteSelectQuery(query, paramaters);
+
+            if (dt.Rows.Count == 0)
+            {
+                MessageBox.Show("Không tìm thấy biến thể sản phẩm.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+            SanPham sanpham = MapProductWithVariant(dt.Rows[0]);
+
+            return sanpham;
+
+        }
         private SanPham MapProductWithVariant(DataRow row)
         {
             var sp = new SanPham
             {
                 MaSanPham = row["MaSanPham"] != DBNull.Value ? Convert.ToInt32(row["MaSanPham"]) : 0,
-                TenSanPham = row["TenSanPham"]?.ToString(),
+                TenSanPham = row["TenSanPham"].ToString(),
                 MaNCC = row["MaNCC"] != DBNull.Value ? Convert.ToInt32(row["MaNCC"]) : 0,
-                GiamGia = row["GiamGia"] != DBNull.Value ? Convert.ToDecimal(row["GiamGia"]) : 0,
                 NgayTao = row["NgayTao"] != DBNull.Value ? Convert.ToDateTime(row["NgayTao"]) : DateTime.MinValue,
                 BienThes = new List<BienTheSanPham>()
             };
@@ -78,124 +98,12 @@ namespace DACs.Services
                     MaBienThe = Convert.ToInt32(row["MaBienThe"]),
                     MaSanPham = sp.MaSanPham,
                     MauSac = row["MauSac"]?.ToString(),
+                    GiamGia = row["GiamGia"] != DBNull.Value ? Convert.ToDecimal(row["GiamGia"]) : 0,
                     KichCo = row["KichCo"]?.ToString(),
                     SoLuong = row["SoLuong"] != DBNull.Value ? Convert.ToInt32(row["SoLuong"]) : 0,
                     DonGia = row["DonGia"] != DBNull.Value ? Convert.ToDecimal(row["DonGia"]) : 0,
                     TrangThaiBienThe = row["TrangThaiBienThe"] != DBNull.Value ? Convert.ToByte(row["TrangThaiBienThe"]) : (byte)0
                 });
-            }
-
-            return sp;
-        }
-
-        // Các phương thức CRUD khác giữ nguyên
-        public int AddProduct(SanPham sp)
-        {
-            string query = @"
-                INSERT INTO SAN_PHAM (TenSanPham, MaNCC, GiamGia, NgayTao)
-                VALUES (@TenSanPham, @MaNCC, @GiamGia, @NgayTao)";
-
-            SqlParameter[] param = {
-                new SqlParameter("@TenSanPham", sp.TenSanPham),
-                new SqlParameter("@MaNCC", sp.MaNCC),
-                new SqlParameter("@GiamGia", sp.GiamGia),
-                new SqlParameter("@NgayTao", sp.NgayTao)
-            };
-
-            return DbUtils.ExecuteNonQuery(query, param);
-        }
-
-        public int UpdateProduct(SanPham sp)
-        {
-            
-
-            string query = @"
-                UPDATE san_pham
-                SET GiamGia = @GiamGia
-                WHERE MaSanPham = @MaSanPham
-                ";
-
-            SqlParameter[] param = {
-                new SqlParameter("@GiamGia", sp.GiamGia),
-                new SqlParameter("@MaSanPham", sp.MaSanPham)
-            };
-
-            int rowAffected = DbUtils.ExecuteNonQuery(query, param);
-
-            if (rowAffected == 0)
-                MessageBox.Show("Không tìm thấy sản phẩm để cập nhật.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            string queryVariant = @"
-                UPDATE BIEN_THE_SAN_PHAM
-                SET DonGia = @DonGia, TrangThaiBienThe = @TrangThaiBienThe
-                WHERE MaBienThe = @MaBienThe
-                ";
-            SqlParameter[] parameters = {
-                new SqlParameter("@DonGia", sp.BienThes[0].DonGia),
-                new SqlParameter("@TrangThaiBienThe", sp.BienThes[0].TrangThaiBienThe),
-                new SqlParameter("@MaBienThe", sp.BienThes[0].MaBienThe)
-            };
-            return DbUtils.ExecuteNonQuery(queryVariant, parameters);
-        }
-
-        public int DeleteProduct(int maBienThe)
-        {
-            string query = @"
-        UPDATE BIEN_THE_SAN_PHAM
-        SET xoaBienThe = 1
-        WHERE maBienThe = @maBienThe";
-
-            SqlParameter[] param = {
-                new SqlParameter("@maBienThe", maBienThe),
-            };
-
-            int affected = DbUtils.ExecuteNonQuery(query, param);
-
-            if (affected == 0)
-                MessageBox.Show("Không tìm thấy biến thể sản phẩm để xóa.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            return affected;
-        }
-
-        public SanPham GetProductById(int maSanPham)
-        {
-            string query = @"
-                SELECT 
-                    p.MaSanPham, p.TenSanPham, p.MaNCC, p.GiamGia, p.NgayTao,
-                    pp.MaBienThe, pp.MauSac, pp.KichCo, pp.SoLuong, pp.DonGia, pp.TrangThaiBienThe
-                FROM SAN_PHAM p
-                LEFT JOIN BIEN_THE_SAN_PHAM pp ON p.MaSanPham = pp.MaSanPham
-                WHERE p.MaSanPham = @MaSanPham and pp.xoabienthe=0";
-
-            SqlParameter[] param = { new SqlParameter("@MaSanPham", maSanPham) };
-            DataTable dt = DbUtils.ExecuteSelectQuery(query, param);
-
-            if (dt.Rows.Count == 0) return null;
-
-            var sp = new SanPham
-            {
-                MaSanPham = Convert.ToInt32(dt.Rows[0]["MaSanPham"]),
-                TenSanPham = dt.Rows[0]["TenSanPham"]?.ToString(),
-                MaNCC = dt.Rows[0]["MaNCC"] != DBNull.Value ? Convert.ToInt32(dt.Rows[0]["MaNCC"]) : 0,
-                GiamGia = dt.Rows[0]["GiamGia"] != DBNull.Value ? Convert.ToDecimal(dt.Rows[0]["GiamGia"]) : 0,
-                NgayTao = dt.Rows[0]["NgayTao"] != DBNull.Value ? Convert.ToDateTime(dt.Rows[0]["NgayTao"]) : DateTime.MinValue,
-                BienThes = new List<BienTheSanPham>()
-            };
-
-            foreach (DataRow row in dt.Rows)
-            {
-                if (row["MaBienThe"] != DBNull.Value)
-                {
-                    sp.BienThes.Add(new BienTheSanPham
-                    {
-                        MaBienThe = Convert.ToInt32(row["MaBienThe"]),
-                        MaSanPham = sp.MaSanPham,
-                        MauSac = row["MauSac"]?.ToString(),
-                        KichCo = row["KichCo"]?.ToString(),
-                        SoLuong = row["SoLuong"] != DBNull.Value ? Convert.ToInt32(row["SoLuong"]) : 0,
-                        DonGia = row["DonGia"] != DBNull.Value ? Convert.ToDecimal(row["DonGia"]) : 0,
-                        TrangThaiBienThe = row["TrangThaiBienThe"] != DBNull.Value ? Convert.ToByte(row["TrangThaiBienThe"]) : (byte)0
-                    });
-                }
             }
 
             return sp;
@@ -209,7 +117,11 @@ namespace DACs.Services
 
             DataTable dt = DbUtils.ExecuteSelectQuery(query);
             foreach (DataRow row in dt.Rows)
-                sizes.Add(row["KichCo"].ToString());
+            {
+                string size = row["KichCo"].ToString();
+                if (!string.IsNullOrWhiteSpace(size))
+                    sizes.Add(size);
+            }
 
             return sizes;
         }
@@ -221,7 +133,11 @@ namespace DACs.Services
 
             DataTable dt = DbUtils.ExecuteSelectQuery(query);
             foreach (DataRow row in dt.Rows)
-                colors.Add(row["MauSac"].ToString());
+            {
+                string color = row["MauSac"].ToString();
+                if (!string.IsNullOrWhiteSpace(color))
+                    colors.Add(color);
+            }
 
             return colors;
         }
@@ -243,5 +159,127 @@ namespace DACs.Services
 
             return suppliers;
         }
+
+        public bool DeleteProductVariant(int maBt)
+        {
+            string query = @"
+            update Bien_the_san_pham
+            set xoabienthe = 1 
+            where mabienthe = @MaBienThe
+            ";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@MaBienThe", maBt)
+            };
+
+            int rowsAffected = -1;
+            try
+            {
+                rowsAffected = DbUtils.ExecuteNonQuery(query, parameters);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Lỗi trong quá trình xoá sản phẩm: " + e.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return rowsAffected > 0;
+        }
+        public bool UpdateProductVariant(int maBt, string tenSp, byte trangthai, decimal dongia, decimal giamgia)
+        {
+            int rowsAffected = 0;
+
+            //MessageBox.Show($"maBt={maBt}, tenSp={tenSp}, trangthai={trangthai}, dongia={dongia}, giamgia={giamgia}");
+
+
+            string querySanPham = @"
+                UPDATE s
+                SET 
+                    s.TenSanPham = @TenSanPham
+                FROM SAN_PHAM s
+                JOIN BIEN_THE_SAN_PHAM b ON s.MaSanPham = b.MaSanPham
+                WHERE b.MaBienThe = @MaBt;
+            ";
+
+            string queryBienThe = @"
+                UPDATE BIEN_THE_SAN_PHAM
+                SET 
+                    TrangThaiBienThe = @TrangThai,
+                    DonGia = @DonGia,
+                    GiamGia = @GiamGia
+                WHERE MaBienThe = @MaBt;
+            ";
+
+            SqlParameter[] parametersSanPham = new SqlParameter[]
+            {
+                new SqlParameter("@MaBt", maBt),
+                new SqlParameter("@TenSanPham", tenSp)
+            };
+
+            SqlParameter[] parametersBienThe = new SqlParameter[]
+            {
+                new SqlParameter("@MaBt", maBt),
+                new SqlParameter("@TrangThai", trangthai),
+                new SqlParameter("@DonGia", dongia),
+                new SqlParameter("@GiamGia", giamgia)
+            };
+
+            try
+            {
+                rowsAffected += DbUtils.ExecuteNonQuery(querySanPham, parametersSanPham);
+                rowsAffected += DbUtils.ExecuteNonQuery(queryBienThe, parametersBienThe);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Lỗi trong quá trình sửa sản phẩm: " + e.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return rowsAffected > 0;
+        }
+
+        public bool AddNewProductWithVariant(SanPham sanPham, BienTheSanPham bienThe)
+        {
+            // 1. Thêm sản phẩm và lấy ID
+            string insertSanPham = @"
+                INSERT INTO San_Pham (TenSanPham, MaNCC, NgayTao)
+                VALUES (@TenSanPham, @MaNCC, @NgayTao);
+                SELECT SCOPE_IDENTITY();";
+
+            SqlParameter[] parametersSanPham = new SqlParameter[]
+            {
+                new SqlParameter("@TenSanPham", sanPham.TenSanPham),
+                new SqlParameter("@MaNCC", sanPham.MaNCC),
+                new SqlParameter("@NgayTao", DateTime.Now)
+            };
+
+            object result = DbUtils.ExecuteScalar(insertSanPham, parametersSanPham);
+            if (result == null)
+                return false;
+
+            int newProductId = Convert.ToInt32(result);
+
+            // 2. Thêm biến thể
+            string insertBienThe = @"
+                INSERT INTO Bien_The_San_Pham 
+                    (MaSanPham, MauSac, KichCo, SoLuong, DonGia, GiamGia, TrangThaiBienThe)
+                VALUES
+                    (@MaSanPham, @MauSac, @KichCo, @SoLuong, @DonGia, @GiamGia, @TrangThaiBienThe);";
+
+            SqlParameter[] parametersBienThe = new SqlParameter[]
+            {
+                new SqlParameter("@MaSanPham", newProductId),
+                new SqlParameter("@MauSac", bienThe.MauSac),
+                new SqlParameter("@KichCo", bienThe.KichCo),
+                new SqlParameter("@SoLuong", bienThe.SoLuong),
+                new SqlParameter("@DonGia", bienThe.DonGia),
+                new SqlParameter("@GiamGia", bienThe.GiamGia),
+                new SqlParameter("@TrangThaiBienThe", bienThe.TrangThaiBienThe)
+            };
+
+            int rows = DbUtils.ExecuteNonQuery(insertBienThe, parametersBienThe);
+
+            return rows > 0;
+        }
+
+
     }
 }
