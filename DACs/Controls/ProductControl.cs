@@ -31,10 +31,16 @@ namespace DACs.Controls
             products = productService.GetAllProducts();
             cbKichCo.Items.AddRange(productService.GetAllSizes().ToArray());
             cbMauSac.Items.AddRange(productService.GetAllColors().ToArray());
-            cbNCC.Items.Clear();
-            cbNCC.Items.AddRange(productService.GetAllSuppliers().Select(ncc => ncc.MaNhaCungCap.ToString()).ToArray());
+
+            var suppliers = productService.GetAllSuppliers();
+            cbNCC.DataSource = suppliers;
+            cbNCC.DisplayMember = "TenNhaCungCap";
+            cbNCC.ValueMember = "MaNhaCungCap";
+            cbNCC.SelectedIndex = -1;
+
             LoadProductList(products);
         }
+
 
         private void LoadProductList(List<SanPham> products)
         {
@@ -100,6 +106,7 @@ namespace DACs.Controls
             cbMaSp.Enabled = false;
             btnSua.Enabled = true;
             btnXoa.Enabled = true;
+            btnThem.Enabled = false;
             cbNCC.Enabled = false;
 
             if (!dgvProductList.Columns.Contains("MaSanPham")) return;
@@ -232,16 +239,54 @@ namespace DACs.Controls
         private void btnThem_Click(object sender, EventArgs e)
         {
             SanPham sanPham = new SanPham();
-
-            sanPham.TenSanPham = txtTenSp.Text.Trim();
-            sanPham.MaNCC = int.Parse(cbNCC.Text.Trim());
             BienTheSanPham bienThe = new BienTheSanPham();
+
+            if (string.IsNullOrEmpty(txtTenSp.Text))
+            {
+                MessageBox.Show("Hãy nhập tên sản phẩm.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            sanPham.TenSanPham = txtTenSp.Text.Trim();
+
+            if (string.IsNullOrEmpty(cbNCC.Text) || cbNCC.Text == "-1")
+            {
+                MessageBox.Show("Hãy chọn Nhà cung cấp.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            sanPham.MaNCC = int.Parse(cbNCC.Text.Trim());
             bienThe.MauSac = "-1";
             bienThe.KichCo = "-1";
             bienThe.SoLuong = 0;
-            bienThe.DonGia = decimal.Parse(txtDonGia.Text.Trim());
-            bienThe.GiamGia = decimal.Parse(txtGiamGia.Text.Trim());
+            if (string.IsNullOrEmpty(txtDonGia.Text))
+            {
+                MessageBox.Show("Hãy nhập Đơn giá hợp lệ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            try
+            {
+                bienThe.DonGia = decimal.Parse(txtDonGia.Text.Trim());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đơn giá không hợp lệ. Vui lòng nhập số hợp lệ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (string.IsNullOrEmpty(txtGiamGia.Text))
+            {
+                MessageBox.Show("Hãy nhập Giảm giá hợp lệ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            try
+            {
+                bienThe.GiamGia = decimal.Parse(txtGiamGia.Text.Trim());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Giảm giá không hợp lệ. Vui lòng nhập số hợp lệ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             bienThe.TrangThaiBienThe = (byte)(cbTrangThai.Text.Trim() == productMap[ProductStatus.Active.ToString()] ? 1 : 0);
+            
             bool isAdded = productService.AddNewProductWithVariant(sanPham, bienThe);
             if (isAdded)
             {

@@ -364,7 +364,7 @@ pd.trangthaibienthe, p.ngaytao from san_pham as p
 left join bien_the_san_pham as pd on pd.masanpham = p.masanpham
 where pd.xoabienthe = 0 and p.TenSanPham like '%Áo Thun Nam Basic%'
 
-
+select * from nha_cung_cap;
 select * from phieu_nhap;
 select * from chi_tiet_phieu_nhap;
 
