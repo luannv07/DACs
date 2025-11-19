@@ -54,13 +54,19 @@
     <Compile Include="Controls\AccountControl.Designer.cs">
       <DependentUpon>AccountControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\GRNDetailsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\GRNDetailsControl.Designer.cs">
+      <DependentUpon>GRNDetailsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StoreControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\StoreControl.Designer.cs">
+      <DependentUpon>StoreControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Enums\ProductStatus.cs" />
-    <Compile Include="Forms\FormAddSale.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormAddSale.Designer.cs">
-      <DependentUpon>FormAddSale.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\HomeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -78,18 +84,6 @@
     </Compile>
     <Compile Include="Controls\ReportControl.Designer.cs">
       <DependentUpon>ReportControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SaleControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SaleControl.Designer.cs">
-      <DependentUpon>SaleControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\StoreControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\StoreControl.Designer.cs">
-      <DependentUpon>StoreControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SupplierControl.cs">
       <SubType>UserControl</SubType>
@@ -118,12 +112,6 @@
     <Compile Include="Forms\Authentication\RegisterForm.Designer.cs">
       <DependentUpon>RegisterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormAddStore.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormAddStore.Designer.cs">
-      <DependentUpon>FormAddStore.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +123,18 @@
     </Compile>
     <Compile Include="Forms\ProductForms\AllSuppliers.Designer.cs">
       <DependentUpon>AllSuppliers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\StoreForms\CreateGRN.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StoreForms\CreateGRN.Designer.cs">
+      <DependentUpon>CreateGRN.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\StoreForms\ViewGRN.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StoreForms\ViewGRN.Designer.cs">
+      <DependentUpon>ViewGRN.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\NhaCungCap.cs" />
     <Compile Include="Models\SanPham.cs" />
@@ -148,18 +148,21 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ProductService.cs" />
+    <Compile Include="Services\StoreService.cs" />
     <Compile Include="Services\SupplierService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Utils\ControlUtil.cs" />
     <Compile Include="Utils\DbUtils.cs" />
+    <Compile Include="Utils\ProductPropsUtils.cs" />
     <Compile Include="Utils\RoleUtil.cs" />
     <Compile Include="Utils\Session.cs" />
     <Compile Include="Utils\StringUtil.cs" />
+    <Compile Include="Utils\VariableUtils.cs" />
     <EmbeddedResource Include="Controls\AccountControl.resx">
       <DependentUpon>AccountControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAddSale.resx">
-      <DependentUpon>FormAddSale.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\GRNDetailsControl.resx">
+      <DependentUpon>GRNDetailsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\HomeControl.resx">
       <DependentUpon>HomeControl.cs</DependentUpon>
@@ -169,9 +172,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ReportControl.resx">
       <DependentUpon>ReportControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SaleControl.resx">
-      <DependentUpon>SaleControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\StoreControl.resx">
       <DependentUpon>StoreControl.cs</DependentUpon>
@@ -188,14 +188,17 @@
     <EmbeddedResource Include="Forms\Authentication\RegisterForm.resx">
       <DependentUpon>RegisterForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAddStore.resx">
-      <DependentUpon>FormAddStore.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProductForms\AllSuppliers.resx">
       <DependentUpon>AllSuppliers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StoreForms\CreateGRN.resx">
+      <DependentUpon>CreateGRN.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StoreForms\ViewGRN.resx">
+      <DependentUpon>ViewGRN.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -79,6 +79,21 @@ namespace DACs.Services
 
             return users;
         }
+        public NhanVien getById(int manv)
+        {
+            String query = @"select * from nhan_vien where MaNhanVien = @manv";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@manv", manv)
+            };
+            DataTable dt = DbUtils.ExecuteSelectQuery(query, parameters);
+
+            if (dt == null || dt.Rows.Count <= 0)
+            {
+                return null;
+            }
+            return MapNhanVien(dt.Rows[0]);
+        }
 
 
         // Kiểm tra email tồn tại

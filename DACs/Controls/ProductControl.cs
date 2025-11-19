@@ -29,8 +29,8 @@ namespace DACs.Controls
         private void ucProductControl_Load(object sender, EventArgs e)
         {
             products = productService.GetAllProducts();
-            cbKichCo.Items.AddRange(productService.GetAllSizes().ToArray());
-            cbMauSac.Items.AddRange(productService.GetAllColors().ToArray());
+            cbKichCo.Items.AddRange(ProductPropsUtils.CommonSizes);
+            cbMauSac.Items.AddRange(ProductPropsUtils.CommonColors);
 
             var suppliers = productService.GetAllSuppliers();
             cbNCC.DataSource = suppliers;
@@ -173,10 +173,13 @@ namespace DACs.Controls
         {
             MessageBox.Show("Đã tải lại dữ liệu từ database.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             LoadProductList(productService.GetAllProducts());
-            cbKichCo.Items.AddRange(productService.GetAllSizes().ToArray());
-            cbMauSac.Items.AddRange(productService.GetAllColors().ToArray());
-            cbNCC.Items.Clear();
-            cbNCC.Items.AddRange(productService.GetAllSuppliers().Select(ncc => ncc.MaNhaCungCap.ToString()).ToArray());
+            var suppliers = productService.GetAllSuppliers();
+            cbNCC.DataSource = suppliers;
+            cbNCC.DisplayMember = "TenNhaCungCap";
+            cbNCC.ValueMember = "MaNhaCungCap";
+            cbNCC.SelectedIndex = -1;
+
+            ResetProductFields();
         }
 
         private void ResetProductFields()
@@ -226,11 +229,13 @@ namespace DACs.Controls
             bienthe.TrangThaiBienThe = (byte)(cbTrangThai.Text.Trim() == productMap[ProductStatus.Active.ToString()] ? 1 : 0);
             bienthe.DonGia = decimal.Parse(txtDonGia.Text.Trim());
             bienthe.GiamGia = decimal.Parse(txtGiamGia.Text.Trim());
+            bienthe.MauSac = cbMauSac.Text.Trim();
+            bienthe.KichCo = cbKichCo.Text.Trim();
 
-            bool isUpdated = productService.UpdateProductVariant(maBt, sanpham.TenSanPham, bienthe.TrangThaiBienThe, bienthe.DonGia, bienthe.GiamGia);
+            bool isUpdated = productService.UpdateProductVariant(maBt, sanpham.TenSanPham, bienthe.TrangThaiBienThe, bienthe.DonGia, bienthe.GiamGia, bienthe.MauSac, bienthe.KichCo);
             if (isUpdated)
             {
-                MessageBox.Show("Cập nhật sản phẩm thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Cập nhật sản phẩm thành công 1111.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadProductList(productService.GetAllProducts());
                 ResetProductFields();
             }
@@ -254,8 +259,18 @@ namespace DACs.Controls
                 return;
             }
             sanPham.MaNCC = int.Parse(cbNCC.Text.Trim());
-            bienThe.MauSac = "-1";
-            bienThe.KichCo = "-1";
+            if (string.IsNullOrEmpty(cbMauSac.Text))
+            {
+                MessageBox.Show("Hãy chọn Màu sắc.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            bienThe.MauSac = cbMauSac.Text.Trim();
+            if (string.IsNullOrEmpty(cbKichCo.Text))
+            {
+                MessageBox.Show("Hãy chọn Kích cỡ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            bienThe.KichCo = cbKichCo.Text.Trim();
             bienThe.SoLuong = 0;
             if (string.IsNullOrEmpty(txtDonGia.Text))
             {
@@ -268,7 +283,7 @@ namespace DACs.Controls
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Đơn giá không hợp lệ. Vui lòng nhập số hợp lệ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Đơn giá không hợp lệ. Vui lòng nhập số hợp lệ: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             if (string.IsNullOrEmpty(txtGiamGia.Text))
@@ -282,7 +297,7 @@ namespace DACs.Controls
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Giảm giá không hợp lệ. Vui lòng nhập số hợp lệ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Giảm giá không hợp lệ. Vui lòng nhập số hợp lệ: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             bienThe.TrangThaiBienThe = (byte)(cbTrangThai.Text.Trim() == productMap[ProductStatus.Active.ToString()] ? 1 : 0);
@@ -307,6 +322,16 @@ namespace DACs.Controls
         }
 
         private void dgvProductList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void cbTrangThai_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbMauSac_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

@@ -31,7 +31,38 @@ namespace DACs.Services
 
             return products;
         }
-
+        public List<SanPham> getOnlyProductFromSpecSupplier(int ncc)
+        {
+            string query = @"select distinct pd.mabienthe, p.masanpham, p.tensanpham,
+                pd.mausac, pd.kichco, pd.soluong, pd.dongia, pd.giamgia,
+                pd.trangthaibienthe, p.ngaytao, p.mancc from san_pham as p
+                left join bien_the_san_pham as pd on pd.masanpham = p.masanpham
+                where pd.xoabienthe = 0 and p.mancc=@ncc";
+            DataTable dt = DbUtils.ExecuteSelectQuery(query, new SqlParameter[]
+            {
+                new SqlParameter("@ncc", ncc)
+            });
+            List<SanPham> products = new List<SanPham>();
+            foreach (DataRow row in dt.Rows)
+            {
+                products.Add(MapProductWithVariant(row));
+            }
+            return products;
+        }
+        public List<SanPham> getOnlyProductNameFromSpecSupplier(int ncc)
+        {
+            string query = @"select s.masanpham, s.tensanpham from san_pham as s where s.mancc=@ncc";
+            DataTable dt = DbUtils.ExecuteSelectQuery(query, new SqlParameter[]
+            {
+                new SqlParameter("@ncc", ncc)
+            });
+            List<SanPham> products = new List<SanPham>();
+            foreach (DataRow row in dt.Rows)
+            {
+                products.Add(MapProductWithVariant(row));
+            }
+            return products;
+        }
         public List<SanPham> FindByName(string name)
         {
             string query = @"
@@ -84,38 +115,86 @@ namespace DACs.Services
         {
             var sp = new SanPham
             {
-                MaSanPham = row["MaSanPham"] != DBNull.Value ? Convert.ToInt32(row["MaSanPham"]) : 0,
-                TenSanPham = row["TenSanPham"].ToString(),
-                MaNCC = row["MaNCC"] != DBNull.Value ? Convert.ToInt32(row["MaNCC"]) : 0,
-                NgayTao = row["NgayTao"] != DBNull.Value ? Convert.ToDateTime(row["NgayTao"]) : DateTime.MinValue,
+                MaSanPham = row.Table.Columns.Contains("MaSanPham") && row["MaSanPham"] != DBNull.Value
+                    ? Convert.ToInt32(row["MaSanPham"]) : 0,
+
+                TenSanPham = row.Table.Columns.Contains("TenSanPham")
+                    ? row["TenSanPham"]?.ToString() : string.Empty,
+
+                MaNCC = row.Table.Columns.Contains("MaNCC") && row["MaNCC"] != DBNull.Value
+                    ? Convert.ToInt32(row["MaNCC"]) : 0,
+
+                NgayTao = row.Table.Columns.Contains("NgayTao") && row["NgayTao"] != DBNull.Value
+                    ? Convert.ToDateTime(row["NgayTao"]) : DateTime.MinValue,
+
                 BienThes = new List<BienTheSanPham>()
             };
 
-            if (row["MaBienThe"] != DBNull.Value)
+            if (row.Table.Columns.Contains("MaBienThe") && row["MaBienThe"] != DBNull.Value)
             {
                 sp.BienThes.Add(new BienTheSanPham
                 {
                     MaBienThe = Convert.ToInt32(row["MaBienThe"]),
                     MaSanPham = sp.MaSanPham,
-                    MauSac = row["MauSac"]?.ToString(),
-                    GiamGia = row["GiamGia"] != DBNull.Value ? Convert.ToDecimal(row["GiamGia"]) : 0,
-                    KichCo = row["KichCo"]?.ToString(),
-                    SoLuong = row["SoLuong"] != DBNull.Value ? Convert.ToInt32(row["SoLuong"]) : 0,
-                    DonGia = row["DonGia"] != DBNull.Value ? Convert.ToDecimal(row["DonGia"]) : 0,
-                    TrangThaiBienThe = row["TrangThaiBienThe"] != DBNull.Value ? Convert.ToByte(row["TrangThaiBienThe"]) : (byte)0
+
+                    MauSac = row.Table.Columns.Contains("MauSac")
+                        ? row["MauSac"]?.ToString() : null,
+
+                    GiamGia = row.Table.Columns.Contains("GiamGia") && row["GiamGia"] != DBNull.Value
+                        ? Convert.ToDecimal(row["GiamGia"]) : 0,
+
+                    KichCo = row.Table.Columns.Contains("KichCo")
+                        ? row["KichCo"]?.ToString() : null,
+
+                    SoLuong = row.Table.Columns.Contains("SoLuong") && row["SoLuong"] != DBNull.Value
+                        ? Convert.ToInt32(row["SoLuong"]) : 0,
+
+                    DonGia = row.Table.Columns.Contains("DonGia") && row["DonGia"] != DBNull.Value
+                        ? Convert.ToDecimal(row["DonGia"]) : 0,
+
+                    TrangThaiBienThe = row.Table.Columns.Contains("TrangThaiBienThe") && row["TrangThaiBienThe"] != DBNull.Value
+                        ? Convert.ToByte(row["TrangThaiBienThe"]) : (byte)0
                 });
             }
 
             return sp;
         }
 
-        public List<string> GetAllSizes()
+        public List<string> GetAllColorByProductId(int id)
         {
+            var colors = new List<string>();
+            string query = "select b.mausac from san_pham p\r\nleft join bien_the_san_pham b on b.masanpham = p.masanpham\r\nwhere p.masanpham = @id and b.xoabienthe=0";
 
+            DataTable dt = DbUtils.ExecuteSelectQuery(query, new SqlParameter[]
+            {
+                new SqlParameter("@id", id)
+            });
+            foreach (DataRow row in dt.Rows)
+            {
+                string color = row["MauSac"].ToString();
+                if (!string.IsNullOrWhiteSpace(color))
+                    colors.Add(color);
+            }
+
+            return colors;
+        }
+
+        public List<string> GetAllSizeByProductIdAndColor(int id, string color)
+        {
             var sizes = new List<string>();
-            string query = "SELECT DISTINCT KichCo FROM Bien_The_San_Pham ORDER BY KichCo";
+            string query = @"
+                SELECT b.KichCo 
+                FROM San_Pham p
+                LEFT JOIN Bien_The_San_Pham b ON b.MaSanPham = p.MaSanPham
+                WHERE p.MaSanPham = @id AND b.MauSac LIKE @color AND b.XoaBienThe = 0
+            ";
 
-            DataTable dt = DbUtils.ExecuteSelectQuery(query);
+            DataTable dt = DbUtils.ExecuteSelectQuery(query, new SqlParameter[]
+            {
+                new SqlParameter("@id", id),
+                new SqlParameter("@color", "%" + color + "%")
+            });
+
             foreach (DataRow row in dt.Rows)
             {
                 string size = row["KichCo"].ToString();
@@ -126,20 +205,28 @@ namespace DACs.Services
             return sizes;
         }
 
-        public List<string> GetAllColors()
+        public decimal getPriceByProductIdAndColorAndSize(int id, string color, string size)
         {
-            var colors = new List<string>();
-            string query = "SELECT DISTINCT MauSac FROM Bien_The_San_Pham ORDER BY MauSac";
+            decimal price = 0;
+            string query = @"
+                select b.dongia from san_pham p
+                left join bien_the_san_pham b on b.masanpham = p.masanpham
+                where p.masanpham = @id and b.MauSac like @color and b.kichco like @size and b.xoabienthe=0
+            ";
 
-            DataTable dt = DbUtils.ExecuteSelectQuery(query);
+            DataTable dt = DbUtils.ExecuteSelectQuery(query, new SqlParameter[]
+            {
+                new SqlParameter("@id", id),
+                new SqlParameter("@color", "%" + color + "%"),
+                new SqlParameter("@size", "%" + size + "%")
+            });
+
             foreach (DataRow row in dt.Rows)
             {
-                string color = row["MauSac"].ToString();
-                if (!string.IsNullOrWhiteSpace(color))
-                    colors.Add(color);
+                price = Convert.ToDecimal(row["DonGia"].ToString());
             }
 
-            return colors;
+            return price;
         }
 
         public List<NhaCungCap> GetAllSuppliers()
@@ -180,11 +267,12 @@ namespace DACs.Services
             catch (Exception e)
             {
                 MessageBox.Show("Lỗi trong quá trình xoá sản phẩm: " + e.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
 
             return rowsAffected > 0;
         }
-        public bool UpdateProductVariant(int maBt, string tenSp, byte trangthai, decimal dongia, decimal giamgia)
+        public bool UpdateProductVariant(int maBt, string tenSp, byte trangthai, decimal dongia, decimal giamgia, string mausac, string kichco)
         {
             int rowsAffected = 0;
 
@@ -197,7 +285,7 @@ namespace DACs.Services
                     s.TenSanPham = @TenSanPham
                 FROM SAN_PHAM s
                 JOIN BIEN_THE_SAN_PHAM b ON s.MaSanPham = b.MaSanPham
-                WHERE b.MaBienThe = @MaBt;
+                WHERE b.MaBienThe = @MaBt and b.xoabienthe = 0;
             ";
 
             string queryBienThe = @"
@@ -205,8 +293,10 @@ namespace DACs.Services
                 SET 
                     TrangThaiBienThe = @TrangThai,
                     DonGia = @DonGia,
-                    GiamGia = @GiamGia
-                WHERE MaBienThe = @MaBt;
+                    GiamGia = @GiamGia,
+                    mausac = @mausac,
+                    kichco = @kichco
+                WHERE MaBienThe = @MaBt and xoabienthe = 0;
             ";
 
             SqlParameter[] parametersSanPham = new SqlParameter[]
@@ -220,7 +310,9 @@ namespace DACs.Services
                 new SqlParameter("@MaBt", maBt),
                 new SqlParameter("@TrangThai", trangthai),
                 new SqlParameter("@DonGia", dongia),
-                new SqlParameter("@GiamGia", giamgia)
+                new SqlParameter("@GiamGia", giamgia),
+                new SqlParameter("@mausac", mausac),
+                new SqlParameter("@kichco", kichco)
             };
 
             try
@@ -231,6 +323,7 @@ namespace DACs.Services
             catch (Exception e)
             {
                 MessageBox.Show("Lỗi trong quá trình sửa sản phẩm: " + e.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
 
             return rowsAffected > 0;
@@ -275,10 +368,37 @@ namespace DACs.Services
                 new SqlParameter("@TrangThaiBienThe", bienThe.TrangThaiBienThe)
             };
 
-            int rows = DbUtils.ExecuteNonQuery(insertBienThe, parametersBienThe);
+            int rows = -1;
+            try
+            {
+                rows = DbUtils.ExecuteNonQuery(insertBienThe, parametersBienThe);
+            } catch (Exception e)
+            {
+                MessageBox.Show("Lỗi trong quá trình thêm sản phẩm: " + e.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);  
+            }
 
             return rows > 0;
         }
+
+
+        public List<SanPham> GetDistinctProductNamesBySupplier(int nccId)
+        {
+            var products = getOnlyProductFromSpecSupplier(nccId);
+
+            var distinctProducts = new List<SanPham>();
+            var seenNames = new HashSet<string>();
+
+            foreach (var p in products)
+            {
+                if (!seenNames.Contains(p.TenSanPham))
+                {
+                    distinctProducts.Add(p);
+                    seenNames.Add(p.TenSanPham);
+                }
+            }
+            return distinctProducts;
+        }
+
 
 
     }

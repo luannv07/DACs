@@ -23,7 +23,8 @@ namespace DACs.Services
             List<NhaCungCap> suppliers = new List<NhaCungCap>();
             if (dt.Rows.Count == 0)
             {
-                MessageBox.Show("Chưa có nhà cung cấp nào trong hệ thống!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information); 
+                MessageBox.Show("Chưa có nhà cung cấp nào trong hệ thống!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return null;
             }
             foreach (DataRow row in dt.Rows)
             {
@@ -41,10 +42,10 @@ namespace DACs.Services
         public bool IsSupplierExists(string ten, string email)
         {
             string query = @"
-        SELECT COUNT(*) 
-        FROM Nha_Cung_Cap 
-        WHERE Ten = @Ten OR Email = @Email
-    ";
+                SELECT COUNT(*) 
+                FROM Nha_Cung_Cap 
+                WHERE Ten = @Ten OR Email = @Email
+            ";
 
             SqlParameter[] parameters = new SqlParameter[]
             {

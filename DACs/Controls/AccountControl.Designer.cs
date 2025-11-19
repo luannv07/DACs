@@ -569,6 +569,7 @@
             this.txtSearching.Name = "txtSearching";
             this.txtSearching.Size = new System.Drawing.Size(418, 29);
             this.txtSearching.TabIndex = 3;
+            this.txtSearching.TextChanged += new System.EventHandler(this.txtSearching_TextChanged);
             // 
             // btnTriggerSearching
             // 

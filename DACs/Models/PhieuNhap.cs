@@ -12,5 +12,9 @@ namespace DACs.Models
         public DateTime NgayNhap { get; set; }
         public int MaNCC { get; set; }
         public int MaNV { get; set; }
+
+        public List<ChiTietPhieuNhap> ChiTiets { get; set; }
+        public string TenNCC {  get; set; }
+        public string GhiChu { get; set; }
     }
 }

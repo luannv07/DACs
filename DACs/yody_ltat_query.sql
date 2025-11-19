@@ -66,7 +66,8 @@ CREATE TABLE BIEN_THE_SAN_PHAM (
     FOREIGN KEY (MaSanPham) REFERENCES SAN_PHAM(MaSanPham),
     CONSTRAINT CHK_GiamGia CHECK (GiamGia >= 0 AND GiamGia <= 100)
 );
-
+ALTER TABLE Bien_The_San_Pham
+ADD CONSTRAINT UQ_ProductVariant UNIQUE(MaSanPham, MauSac, KichCo);
 -- Bảng PHIEU_NHAP
 CREATE TABLE PHIEU_NHAP (
     MaPhieuNhap INT IDENTITY(1,1) PRIMARY KEY,
@@ -76,7 +77,11 @@ CREATE TABLE PHIEU_NHAP (
     FOREIGN KEY (MaNCC) REFERENCES NHA_CUNG_CAP(MaNhaCungCap),
     FOREIGN KEY (MaNV) REFERENCES NHAN_VIEN(MaNhanVien)
 );
+alter table phieu_nhap
+add xoaPhieuNhap tinyint default 0
 GO
+alter table phieu_nhap
+add ghichu text default '_blank'
 
 -- Bảng CHI_TIET_PHIEU_NHAP
 CREATE TABLE CHI_TIET_PHIEU_NHAP (
@@ -347,10 +352,11 @@ VALUES
 GO
 
 
+
 select * from San_pham;
 select * from Bien_the_san_pham;
 delete from BIEN_THE_SAN_PHAM
-where MaBienThe = 26;
+where MauSac = '-1'
 
 select pd.mabienthe, p.masanpham, p.tensanpham, p.mancc,
 pd.mausac, pd.kichco, pd.soluong, pd.dongia, pd.giamgia,
@@ -373,26 +379,19 @@ set thoigiannhap = GETDATE()
 where thoigiannhap is null;
 
 
--- 1. Cập nhật tên sản phẩm (toàn bộ biến thể)
-UPDATE SAN_PHAM
-SET TenSanPham = N'Áo Thun Mới'
-WHERE MaSanPham = (
-    SELECT MaSanPham 
-    FROM BIEN_THE_SAN_PHAM 
-    WHERE MaBienThe = 5
-);
-
--- 2. Cập nhật biến thể cụ thể
-UPDATE BIEN_THE_SAN_PHAM
-SET 
-    TrangThaiBienThe = 1,
-    DonGia = 150000,
-    GiamGia = 99
-WHERE MaBienThe = 5;
+select tensanpham from san_pham
 
 
-UPDATE s
-SET s.TenSanPham = 'Ten san pham moi'
-FROM SAN_PHAM s
-JOIN BIEN_THE_SAN_PHAM b ON s.MaSanPham = b.MaSanPham
-WHERE b.MaBienThe = 3;
+select pd.mabienthe, p.masanpham, p.tensanpham,
+                pd.mausac, pd.kichco, pd.soluong, pd.dongia, pd.giamgia,
+                pd.trangthaibienthe, p.ngaytao, p.mancc from san_pham as p
+                left join bien_the_san_pham as pd on pd.masanpham = p.masanpham
+                where pd.xoabienthe = 0
+
+select * from san_pham as s
+left join bien_the_san_pham as bt on s.masanpham = bt.masanpham
+where bt.xoabienthe = 0
+
+select b.dongia from san_pham p
+left join bien_the_san_pham b on b.masanpham = p.masanpham
+where p.masanpham = 10 and b.MauSac = 'Xanh' and b.kichco = 'M'

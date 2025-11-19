@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace DACs.Utils
 {
     public static class Session
-    {
+    { 
         public static Role CurrentRole { get; set; }
-        public static string CurrentUsername { get; set; }
+        public static string CurrentUsername { get; set; } = "Anonymous";
     }
 }

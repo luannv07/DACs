@@ -48,6 +48,7 @@
             this.cbMaSp = new System.Windows.Forms.ComboBox();
             this.dtpNgayThem = new System.Windows.Forms.DateTimePicker();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnOpenSuppilers = new System.Windows.Forms.Button();
             this.btnAccountResetFields = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.cbNCC = new System.Windows.Forms.ComboBox();
@@ -73,7 +74,6 @@
             this.btnTriggerSearching = new System.Windows.Forms.Button();
             this.txtSearching = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.btnOpenSuppilers = new System.Windows.Forms.Button();
             this.panel3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -254,6 +254,18 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "groupBox3";
             // 
+            // btnOpenSuppilers
+            // 
+            this.btnOpenSuppilers.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.btnOpenSuppilers.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnOpenSuppilers.Location = new System.Drawing.Point(239, 334);
+            this.btnOpenSuppilers.Name = "btnOpenSuppilers";
+            this.btnOpenSuppilers.Size = new System.Drawing.Size(80, 32);
+            this.btnOpenSuppilers.TabIndex = 0;
+            this.btnOpenSuppilers.Text = "Tra cứu NCC";
+            this.btnOpenSuppilers.UseVisualStyleBackColor = true;
+            this.btnOpenSuppilers.Click += new System.EventHandler(this.btnOpenSuppilers_Click);
+            // 
             // btnAccountResetFields
             // 
             this.btnAccountResetFields.Image = ((System.Drawing.Image)(resources.GetObject("btnAccountResetFields.Image")));
@@ -293,7 +305,6 @@
             // cbKichCo
             // 
             this.cbKichCo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbKichCo.Enabled = false;
             this.cbKichCo.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.cbKichCo.FormattingEnabled = true;
             this.cbKichCo.Location = new System.Drawing.Point(100, 253);
@@ -304,7 +315,6 @@
             // cbMauSac
             // 
             this.cbMauSac.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbMauSac.Enabled = false;
             this.cbMauSac.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.cbMauSac.FormattingEnabled = true;
             this.cbMauSac.Items.AddRange(new object[] {
@@ -313,6 +323,7 @@
             this.cbMauSac.Name = "cbMauSac";
             this.cbMauSac.Size = new System.Drawing.Size(136, 29);
             this.cbMauSac.TabIndex = 2;
+            this.cbMauSac.SelectedIndexChanged += new System.EventHandler(this.cbMauSac_SelectedIndexChanged);
             // 
             // cbTrangThai
             // 
@@ -326,6 +337,7 @@
             this.cbTrangThai.Name = "cbTrangThai";
             this.cbTrangThai.Size = new System.Drawing.Size(136, 29);
             this.cbTrangThai.TabIndex = 2;
+            this.cbTrangThai.SelectedIndexChanged += new System.EventHandler(this.cbTrangThai_SelectedIndexChanged);
             // 
             // label5
             // 
@@ -567,18 +579,6 @@
             this.label11.Size = new System.Drawing.Size(187, 20);
             this.label11.TabIndex = 7;
             this.label11.Text = "Tìm theo tên sản phẩm....";
-            // 
-            // btnOpenSuppilers
-            // 
-            this.btnOpenSuppilers.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
-            this.btnOpenSuppilers.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnOpenSuppilers.Location = new System.Drawing.Point(239, 334);
-            this.btnOpenSuppilers.Name = "btnOpenSuppilers";
-            this.btnOpenSuppilers.Size = new System.Drawing.Size(80, 32);
-            this.btnOpenSuppilers.TabIndex = 0;
-            this.btnOpenSuppilers.Text = "Tra cứu NCC";
-            this.btnOpenSuppilers.UseVisualStyleBackColor = true;
-            this.btnOpenSuppilers.Click += new System.EventHandler(this.btnOpenSuppilers_Click);
             // 
             // ucProductControl
             // 

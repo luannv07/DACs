@@ -24,5 +24,13 @@ namespace DACs.Utils
 
             newForm.FormClosed += (s, e) => currentForm.Close();
         }
+        public static void LoadFormWithoutClose(Form currentForm, Form newForm)
+        {
+            newForm.StartPosition = FormStartPosition.CenterScreen;
+            newForm.Show();
+            currentForm.Enabled = false;
+
+            newForm.FormClosed += (s, e) => currentForm.Enabled = true;
+        }
     }
 }

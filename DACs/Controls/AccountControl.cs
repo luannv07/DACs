@@ -268,5 +268,10 @@ namespace DACs.Controls
         {
 
         }
+
+        private void txtSearching_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

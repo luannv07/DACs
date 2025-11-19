@@ -8,13 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DACs.Controls
+namespace DACs.Forms.StoreForms
 {
-    public partial class FormAddSale : Form
+    public partial class ViewGRN : Form
     {
-        public FormAddSale()
+        public ViewGRN()
         {
             InitializeComponent();
+        }
+
+        private void ViewGRN_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
