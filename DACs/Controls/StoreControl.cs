@@ -90,7 +90,8 @@ namespace DACs.Controls
 
         private void btnStoreDetails_Click(object sender, EventArgs e)
         {
-            ControlUtil.LoadFormWithoutClose(Form.ActiveForm, new ViewGRN());
+            //MessageBox.Show(txtMaPNDisabled.Text);
+            ControlUtil.LoadFormWithoutClose(Form.ActiveForm, new ViewGRN(txtMaPNDisabled.Text));
         }
 
         private void dgvPhieuNhap_CellContentClick(object sender, DataGridViewCellEventArgs e)

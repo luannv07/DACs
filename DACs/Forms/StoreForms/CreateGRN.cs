@@ -90,7 +90,8 @@ namespace DACs.Forms.StoreForms
             var phieuNhap = new PhieuNhap
             {
                 MaNCC = Convert.ToInt32(cbSuppliers.SelectedValue),
-                MaNV = Session.currentUser.MaNhanVien
+                MaNV = Session.currentUser.MaNhanVien,
+                GhiChu = txtNote.Text.Trim(),
             };
 
             // 2. Thu thập CHI TIẾT từ tất cả GRNDetailsControl

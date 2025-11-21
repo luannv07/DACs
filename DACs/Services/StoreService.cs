@@ -62,11 +62,12 @@ namespace DACs.Services
 
         public bool addPhieuNhap(PhieuNhap phieuNhap, List<ChiTietPhieuNhap> chiTietPhieuNhap)
         {
-            string query = @"insert into phieu_nhap (ngaynhap, mancc, manv) values (getdate(), @mancc, @manv)";
+            string query = @"insert into phieu_nhap (ngaynhap, mancc, manv, ghichu) values (getdate(), @mancc, @manv, @ghichu)";
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@mancc", phieuNhap.MaNCC),
-                new SqlParameter("@manv", phieuNhap.MaNV)
+                new SqlParameter("@manv", phieuNhap.MaNV),
+                new SqlParameter("@ghichu", phieuNhap.GhiChu)
             };
             int rowAffected = DbUtils.ExecuteNonQuery(query, parameters);
 
@@ -100,5 +101,59 @@ namespace DACs.Services
             }
             return true;
         }
+
+        public PhieuNhap getById(int MaPhieuNhap)
+        {
+            string query = @"
+                select 
+                    p.MaPhieuNhap, p.NgayNhap, p.MaNCC, p.MaNV, 
+                    n.Ten, p.GhiChu,
+                    pd.mabienthe, pd.soluong, pd.dongia
+                from PHIEU_NHAP as p
+                join NHA_CUNG_CAP as n on n.MaNhaCungCap = p.MaNCC
+                join CHI_TIET_PHIEU_NHAP as pd on pd.MaPhieuNhap = p.MaPhieuNhap
+                where xoaPhieunhap = 0 and p.MaPhieuNhap = @maphieunhap
+            ";
+
+            DataTable dt = DbUtils.ExecuteSelectQuery(query, new SqlParameter[]
+            {
+                new SqlParameter("@maphieunhap", MaPhieuNhap)
+            });
+
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                MessageBox.Show("Không tìm thấy phiếu nhập.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return null;
+            }
+
+            DataRow first = dt.Rows[0];
+
+            PhieuNhap phieuNhap = new PhieuNhap
+            {
+                MaPhieuNhap = Convert.ToInt32(first["MaPhieuNhap"]),
+                NgayNhap = Convert.ToDateTime(first["NgayNhap"]),
+                MaNCC = Convert.ToInt32(first["MaNCC"]),
+                MaNV = Convert.ToInt32(first["MaNV"]),
+                TenNCC = first["Ten"].ToString(),
+                GhiChu = first["GhiChu"].ToString(),
+                ChiTiets = new List<ChiTietPhieuNhap>()
+            };
+
+            foreach (DataRow row in dt.Rows)
+            {
+                ChiTietPhieuNhap ct = new ChiTietPhieuNhap
+                {
+                    MaPhieuNhap = phieuNhap.MaPhieuNhap,
+                    MaBienThe = Convert.ToInt32(row["mabienthe"]),
+                    SoLuong = Convert.ToInt32(row["soluong"]),
+                    DonGia = Convert.ToDecimal(row["dongia"])
+                };
+
+                phieuNhap.ChiTiets.Add(ct);
+            }
+
+            return phieuNhap;
+        }
+
     }
 }

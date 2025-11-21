@@ -202,6 +202,7 @@
             // 
             this.txtNote.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.txtNote.Location = new System.Drawing.Point(97, 132);
+            this.txtNote.MaxLength = 255;
             this.txtNote.Multiline = true;
             this.txtNote.Name = "txtNote";
             this.txtNote.Size = new System.Drawing.Size(660, 73);

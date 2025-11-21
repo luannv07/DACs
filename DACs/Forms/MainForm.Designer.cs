@@ -37,8 +37,6 @@
             this.btnMenuReport = new System.Windows.Forms.Button();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.btnMenuSupplier = new System.Windows.Forms.Button();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.btnMenuStore = new System.Windows.Forms.Button();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.btnMenuProduct = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -77,8 +75,6 @@
             this.panelMenu.Controls.Add(this.btnMenuReport);
             this.panelMenu.Controls.Add(this.textBox5);
             this.panelMenu.Controls.Add(this.btnMenuSupplier);
-            this.panelMenu.Controls.Add(this.textBox4);
-            this.panelMenu.Controls.Add(this.btnMenuStore);
             this.panelMenu.Controls.Add(this.textBox3);
             this.panelMenu.Controls.Add(this.btnMenuProduct);
             this.panelMenu.Controls.Add(this.textBox2);
@@ -98,7 +94,7 @@
             this.textBox7.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox7.Dock = System.Windows.Forms.DockStyle.Top;
             this.textBox7.Enabled = false;
-            this.textBox7.Location = new System.Drawing.Point(15, 490);
+            this.textBox7.Location = new System.Drawing.Point(15, 420);
             this.textBox7.Margin = new System.Windows.Forms.Padding(0);
             this.textBox7.Name = "textBox7";
             this.textBox7.ReadOnly = true;
@@ -118,7 +114,7 @@
             this.btnMenuAccount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.btnMenuAccount.Image = ((System.Drawing.Image)(resources.GetObject("btnMenuAccount.Image")));
             this.btnMenuAccount.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMenuAccount.Location = new System.Drawing.Point(15, 435);
+            this.btnMenuAccount.Location = new System.Drawing.Point(15, 365);
             this.btnMenuAccount.Name = "btnMenuAccount";
             this.btnMenuAccount.Size = new System.Drawing.Size(194, 55);
             this.btnMenuAccount.TabIndex = 12;
@@ -132,7 +128,7 @@
             this.textBox6.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox6.Dock = System.Windows.Forms.DockStyle.Top;
             this.textBox6.Enabled = false;
-            this.textBox6.Location = new System.Drawing.Point(15, 420);
+            this.textBox6.Location = new System.Drawing.Point(15, 350);
             this.textBox6.Margin = new System.Windows.Forms.Padding(0);
             this.textBox6.Name = "textBox6";
             this.textBox6.ReadOnly = true;
@@ -152,7 +148,7 @@
             this.btnMenuReport.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.btnMenuReport.Image = ((System.Drawing.Image)(resources.GetObject("btnMenuReport.Image")));
             this.btnMenuReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMenuReport.Location = new System.Drawing.Point(15, 365);
+            this.btnMenuReport.Location = new System.Drawing.Point(15, 295);
             this.btnMenuReport.Name = "btnMenuReport";
             this.btnMenuReport.Size = new System.Drawing.Size(194, 55);
             this.btnMenuReport.TabIndex = 10;
@@ -166,7 +162,7 @@
             this.textBox5.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox5.Dock = System.Windows.Forms.DockStyle.Top;
             this.textBox5.Enabled = false;
-            this.textBox5.Location = new System.Drawing.Point(15, 350);
+            this.textBox5.Location = new System.Drawing.Point(15, 280);
             this.textBox5.Margin = new System.Windows.Forms.Padding(0);
             this.textBox5.Name = "textBox5";
             this.textBox5.ReadOnly = true;
@@ -187,47 +183,13 @@
             this.btnMenuSupplier.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.btnMenuSupplier.Image = ((System.Drawing.Image)(resources.GetObject("btnMenuSupplier.Image")));
             this.btnMenuSupplier.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMenuSupplier.Location = new System.Drawing.Point(15, 295);
+            this.btnMenuSupplier.Location = new System.Drawing.Point(15, 225);
             this.btnMenuSupplier.Name = "btnMenuSupplier";
             this.btnMenuSupplier.Size = new System.Drawing.Size(194, 55);
             this.btnMenuSupplier.TabIndex = 8;
             this.btnMenuSupplier.Text = "Mua hàng";
             this.btnMenuSupplier.UseVisualStyleBackColor = false;
             this.btnMenuSupplier.Click += new System.EventHandler(this.btnMenuSupplier_Click);
-            // 
-            // textBox4
-            // 
-            this.textBox4.BackColor = System.Drawing.Color.Teal;
-            this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBox4.Enabled = false;
-            this.textBox4.Location = new System.Drawing.Point(15, 280);
-            this.textBox4.Margin = new System.Windows.Forms.Padding(0);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.ReadOnly = true;
-            this.textBox4.ShortcutsEnabled = false;
-            this.textBox4.Size = new System.Drawing.Size(194, 15);
-            this.textBox4.TabIndex = 7;
-            this.textBox4.TabStop = false;
-            // 
-            // btnMenuStore
-            // 
-            this.btnMenuStore.BackColor = System.Drawing.Color.LightYellow;
-            this.btnMenuStore.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnMenuStore.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnMenuStore.FlatAppearance.BorderColor = System.Drawing.Color.LightGray;
-            this.btnMenuStore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenuStore.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMenuStore.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.btnMenuStore.Image = ((System.Drawing.Image)(resources.GetObject("btnMenuStore.Image")));
-            this.btnMenuStore.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMenuStore.Location = new System.Drawing.Point(15, 225);
-            this.btnMenuStore.Name = "btnMenuStore";
-            this.btnMenuStore.Size = new System.Drawing.Size(194, 55);
-            this.btnMenuStore.TabIndex = 6;
-            this.btnMenuStore.Text = "Kho";
-            this.btnMenuStore.UseVisualStyleBackColor = false;
-            this.btnMenuStore.Click += new System.EventHandler(this.btnMenuCustomer_Click);
             // 
             // textBox3
             // 
@@ -419,8 +381,6 @@
         private System.Windows.Forms.Button btnMenuReport;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Button btnMenuSupplier;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Button btnMenuStore;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Button btnMenuProduct;
         private System.Windows.Forms.TextBox textBox2;

@@ -118,7 +118,8 @@
             // 
             // dgvUserList
             // 
-            this.dgvUserList.AllowUserToOrderColumns = true;
+            this.dgvUserList.AllowUserToAddRows = false;
+            this.dgvUserList.AllowUserToDeleteRows = false;
             this.dgvUserList.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.IndianRed;
             this.dgvUserList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;

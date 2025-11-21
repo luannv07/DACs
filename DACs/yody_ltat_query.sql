@@ -1,4 +1,4 @@
-﻿--CREATE DATABASE YODY_LTAT_DB;
+﻿CREATE DATABASE YODY_LTAT_DB;
 GO
 USE YODY_LTAT_DB;
 GO
@@ -74,14 +74,13 @@ CREATE TABLE PHIEU_NHAP (
     NgayNhap DATETIME NOT NULL DEFAULT GETDATE(),
     MaNCC INT NOT NULL,
     MaNV INT NOT NULL,
+    GhiChu NVARCHAR(MAX) default '_blank',
+    xoaPhieuNhap tinyint default 0,
     FOREIGN KEY (MaNCC) REFERENCES NHA_CUNG_CAP(MaNhaCungCap),
     FOREIGN KEY (MaNV) REFERENCES NHAN_VIEN(MaNhanVien)
 );
-alter table phieu_nhap
-add xoaPhieuNhap tinyint default 0
 GO
-alter table phieu_nhap
-add ghichu text default '_blank'
+
 
 -- Bảng CHI_TIET_PHIEU_NHAP
 CREATE TABLE CHI_TIET_PHIEU_NHAP (
@@ -90,19 +89,14 @@ CREATE TABLE CHI_TIET_PHIEU_NHAP (
     MaBienThe INT NOT NULL,
     SoLuong INT NOT NULL,
     DonGia DECIMAL(6,2) NOT NULL,
+
     FOREIGN KEY (MaPhieuNhap) REFERENCES PHIEU_NHAP(MaPhieuNhap),
     FOREIGN KEY (MaBienThe) REFERENCES BIEN_THE_SAN_PHAM(MaBienThe)  -- **Sửa chỗ này**
 );
 -- SQL Server
 ALTER TABLE CHI_TIET_PHIEU_NHAP
-DROP CONSTRAINT UQ_MaBt;
-
-ALTER TABLE CHI_TIET_PHIEU_NHAP
 ADD CONSTRAINT UQ_Phieu_BienThe UNIQUE(MaPhieuNhap, MaBienThe);
-
 GO
-alter table chi_tiet_phieu_nhap
-add ThoiGianNhap datetime default GETDATE()
 
 -- Bảng KHACH_HANG
 CREATE TABLE KHACH_HANG (
@@ -355,5 +349,11 @@ VALUES
 (10, 23, 1, 200);
 GO
 
-
-select * from chi_tiet_phieu_nhap
+select 
+    p.MaPhieuNhap, p.NgayNhap, p.MaNCC, p.MaNV, 
+    n.Ten, p.GhiChu,
+    pd.mabienthe, pd.soluong, pd.dongia
+from PHIEU_NHAP as p
+join NHA_CUNG_CAP as n on n.MaNhaCungCap = p.MaNCC
+join CHI_TIET_PHIEU_NHAP as pd on pd.MaPhieuNhap = p.MaPhieuNhap
+where xoaPhieunhap = 0 and p.MaPhieuNhap = 10

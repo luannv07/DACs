@@ -148,6 +148,7 @@
     <Compile Include="Models\NhanVien.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ProductDetailsService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\StoreService.cs" />
     <Compile Include="Services\SupplierService.cs" />
