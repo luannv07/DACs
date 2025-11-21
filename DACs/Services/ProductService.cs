@@ -17,7 +17,7 @@ namespace DACs.Services
                 select pd.mabienthe, p.masanpham, p.tensanpham,
                 pd.mausac, pd.kichco, pd.soluong, pd.dongia, pd.giamgia,
                 pd.trangthaibienthe, p.ngaytao, p.mancc from san_pham as p
-                left join bien_the_san_pham as pd on pd.masanpham = p.masanpham
+                inner join bien_the_san_pham as pd on pd.masanpham = p.masanpham
                 where pd.xoabienthe = 0
             ";
 
@@ -51,7 +51,9 @@ namespace DACs.Services
         }
         public List<SanPham> getOnlyProductNameFromSpecSupplier(int ncc)
         {
-            string query = @"select s.masanpham, s.tensanpham from san_pham as s where s.mancc=@ncc";
+            string query = @"select distinct s.masanpham, s.tensanpham from san_pham as s
+                join bien_the_san_pham as b on b.masanpham=s.masanpham 
+                where s.mancc= @ncc and b.xoabienthe=0";
             DataTable dt = DbUtils.ExecuteSelectQuery(query, new SqlParameter[]
             {
                 new SqlParameter("@ncc", ncc)
@@ -398,10 +400,49 @@ namespace DACs.Services
             try
             {
                 rows = DbUtils.ExecuteNonQuery(insertBienThe, parametersBienThe);
-            } catch (Exception e)
-            {
-                MessageBox.Show("Lỗi trong quá trình thêm sản phẩm: " + e.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);  
             }
+            catch (SqlException ex)
+            {
+                // Lỗi trùng dữ liệu (ví dụ: biến thể đã tồn tại)
+                if (ex.Number == 2627 || ex.Number == 2601)
+                {
+                    MessageBox.Show(
+                        "Biến thể sản phẩm đã tồn tại.",
+                        "Lỗi trùng dữ liệu",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                }
+                // Lỗi khóa ngoại (ví dụ: MaNCC, MaSanPham không tồn tại)
+                else if (ex.Number == 547)
+                {
+                    MessageBox.Show(
+                        "Dữ liệu không hợp lệ.\nVui lòng kiểm tra lại.",
+                        "Lỗi ràng buộc",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Lỗi SQL: " + ex.Message,
+                        "Lỗi cơ sở dữ liệu",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Lỗi không xác định: " + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+
 
             return rows > 0;
         }

@@ -66,6 +66,8 @@ CREATE TABLE BIEN_THE_SAN_PHAM (
     FOREIGN KEY (MaSanPham) REFERENCES SAN_PHAM(MaSanPham),
     CONSTRAINT CHK_GiamGia CHECK (GiamGia >= 0 AND GiamGia <= 100)
 );
+select * from SAN_PHAM
+select * from BIEN_THE_SAN_PHAM
 ALTER TABLE Bien_The_San_Pham
 ADD CONSTRAINT UQ_ProductVariant UNIQUE(MaSanPham, MauSac, KichCo);
 -- Bảng PHIEU_NHAP
@@ -349,11 +351,12 @@ VALUES
 (10, 23, 1, 200);
 GO
 
-select 
-    p.MaPhieuNhap, p.NgayNhap, p.MaNCC, p.MaNV, 
-    n.Ten, p.GhiChu,
-    pd.mabienthe, pd.soluong, pd.dongia
-from PHIEU_NHAP as p
-join NHA_CUNG_CAP as n on n.MaNhaCungCap = p.MaNCC
-join CHI_TIET_PHIEU_NHAP as pd on pd.MaPhieuNhap = p.MaPhieuNhap
-where xoaPhieunhap = 0 and p.MaPhieuNhap = 10
+select * from SAN_PHAM
+
+insert into SAN_PHAM (TenSanPham, MaNCC) values (N'Demo Ao', 1);
+
+select pd.mabienthe, p.masanpham, p.tensanpham,
+                pd.mausac, pd.kichco, pd.soluong, pd.dongia, pd.giamgia,
+                pd.trangthaibienthe, p.ngaytao, p.mancc from san_pham as p
+                inner join bien_the_san_pham as pd on pd.masanpham = p.masanpham
+                where pd.xoabienthe = 0
