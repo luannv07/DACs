@@ -26,7 +26,7 @@ namespace DACs.Services
 
             foreach (DataRow row in dt.Rows)
             {
-                products.Add(MapProductWithVariant(row));
+                products.Add(MapProductWithVariant(row, false));
             }
 
             return products;
@@ -45,7 +45,7 @@ namespace DACs.Services
             List<SanPham> products = new List<SanPham>();
             foreach (DataRow row in dt.Rows)
             {
-                products.Add(MapProductWithVariant(row));
+                products.Add(MapProductWithVariant(row, false));
             }
             return products;
         }
@@ -59,7 +59,7 @@ namespace DACs.Services
             List<SanPham> products = new List<SanPham>();
             foreach (DataRow row in dt.Rows)
             {
-                products.Add(MapProductWithVariant(row));
+                products.Add(MapProductWithVariant(row, true));
             }
             return products;
         }
@@ -81,7 +81,7 @@ namespace DACs.Services
 
             foreach (DataRow row in dt.Rows)
             {
-                products.Add(MapProductWithVariant(row));
+                products.Add(MapProductWithVariant(row, false));
             }
 
             return products;
@@ -106,12 +106,12 @@ namespace DACs.Services
                 MessageBox.Show("Không tìm thấy biến thể sản phẩm.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
-            SanPham sanpham = MapProductWithVariant(dt.Rows[0]);
+            SanPham sanpham = MapProductWithVariant(dt.Rows[0], false);
 
             return sanpham;
 
         }
-        private SanPham MapProductWithVariant(DataRow row)
+        private SanPham MapProductWithVariant(DataRow row, bool needProductId)
         {
             var sp = new SanPham
             {
@@ -119,7 +119,7 @@ namespace DACs.Services
                     ? Convert.ToInt32(row["MaSanPham"]) : 0,
 
                 TenSanPham = row.Table.Columns.Contains("TenSanPham")
-                    ? row["TenSanPham"]?.ToString() : string.Empty,
+                    ? (needProductId ? row["TenSanPham"]?.ToString() + " (" + Convert.ToInt32(row["MaSanPham"]) + ")" : row["TenSanPham"]?.ToString()) : string.Empty,
 
                 MaNCC = row.Table.Columns.Contains("MaNCC") && row["MaNCC"] != DBNull.Value
                     ? Convert.ToInt32(row["MaNCC"]) : 0,
@@ -320,6 +320,32 @@ namespace DACs.Services
                 rowsAffected += DbUtils.ExecuteNonQuery(querySanPham, parametersSanPham);
                 rowsAffected += DbUtils.ExecuteNonQuery(queryBienThe, parametersBienThe);
             }
+            catch (SqlException ex)
+            {
+                string message = "Đã xảy ra lỗi không xác định.";
+
+                switch (ex.Number)
+                {
+                    case 2627: // Violate UNIQUE KEY
+                    case 2601: // Duplicate index
+                        message = "Dữ liệu bị trùng. Vui lòng kiểm tra lại.";
+                        break;
+
+                    case 547: // Foreign key
+                        message = "Không thể xóa hoặc cập nhật do dữ liệu đang được sử dụng ở bảng khác.";
+                        break;
+
+                    case 515: // Cannot insert NULL
+                        message = "Một trường bắt buộc đang bị thiếu dữ liệu.";
+                        break;
+
+                    default:
+                        message = "Lỗi SQL: " + ex.Message;
+                        break;
+                }
+                MessageBox.Show(message, "Lỗi xử lý dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
             catch (Exception e)
             {
                 MessageBox.Show("Lỗi trong quá trình sửa sản phẩm: " + e.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -381,24 +407,56 @@ namespace DACs.Services
         }
 
 
-        public List<SanPham> GetDistinctProductNamesBySupplier(int nccId)
+        public BienTheSanPham GetBienTheSanPhamByUniqueFieldsGroup(int masp, string mausac, string kichco)
         {
-            var products = getOnlyProductFromSpecSupplier(nccId);
-
-            var distinctProducts = new List<SanPham>();
-            var seenNames = new HashSet<string>();
-
-            foreach (var p in products)
+           string query = @"
+                select mabienthe, masanpham, mausac, kichco, soluong, dongia, giamgia, trangthaibienthe 
+                from bien_the_san_pham 
+                where xoabienthe = 0 and masanpham = @masp and mausac = @mausac and kichco = @kichco
+            ";
+            DataTable dt = DbUtils.ExecuteSelectQuery(query, new SqlParameter[]
             {
-                if (!seenNames.Contains(p.TenSanPham))
-                {
-                    distinctProducts.Add(p);
-                    seenNames.Add(p.TenSanPham);
-                }
+                new SqlParameter("@masp", masp),
+                new SqlParameter("@mausac", mausac),
+                new SqlParameter("@kichco", kichco)
+            });
+            if (dt.Rows.Count == 0)
+            {
+                return null;
             }
-            return distinctProducts;
+            DataRow row = dt.Rows[0];
+            BienTheSanPham bienThe = new BienTheSanPham
+            {
+                MaBienThe = Convert.ToInt32(row["MaBienThe"]),
+                MaSanPham = Convert.ToInt32(row["MaSanPham"]),
+                MauSac = row["MauSac"].ToString(),
+                KichCo = row["KichCo"].ToString(),
+                SoLuong = Convert.ToInt32(row["SoLuong"]),
+                DonGia = Convert.ToDecimal(row["DonGia"]),
+                GiamGia = Convert.ToDecimal(row["GiamGia"]),
+                TrangThaiBienThe = Convert.ToByte(row["TrangThaiBienThe"])
+            };
+            return bienThe;
         }
 
+        public void UpdateProductVariantQuantity(List<ChiTietPhieuNhap> chiTietPhieuNhaps)
+        {
+            string query = @"
+                UPDATE Bien_The_San_Pham
+                SET SoLuong = SoLuong + @SoLuongNhap
+                WHERE MaBienThe = @MaBienThe AND XoaBienThe = 0";
+
+            foreach (var chiTiet in chiTietPhieuNhaps)
+            {
+                SqlParameter[] sqlParameter = new SqlParameter[]
+                {
+                    new SqlParameter("@SoLuongNhap", chiTiet.SoLuong),
+                    new SqlParameter("@MaBienThe", chiTiet.MaBienThe)
+                };
+
+                DbUtils.ExecuteNonQuery(query, sqlParameter);
+            }
+        }
 
 
     }

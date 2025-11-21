@@ -137,6 +137,7 @@
       <DependentUpon>ViewGRN.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\NhaCungCap.cs" />
+    <Compile Include="Models\ProductCombination.cs" />
     <Compile Include="Models\SanPham.cs" />
     <Compile Include="Models\BienTheSanPham.cs" />
     <Compile Include="Models\PhieuNhap.cs" />

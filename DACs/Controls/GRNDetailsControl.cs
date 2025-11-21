@@ -24,27 +24,32 @@ namespace DACs.Controls
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            VariableUtils.currentPN--;
-            Control ctrl = (Control)sender;
-
-            while (ctrl != null && !(ctrl is GRNDetailsControl))
+            // Remove old combination BEFORE disposing control
+            if (selectedProductId.HasValue
+                && !string.IsNullOrEmpty(selectedColor)
+                && !string.IsNullOrEmpty(selectedSize))
             {
-                ctrl = ctrl.Parent;
+                RemoveCombination(selectedProductId.Value, selectedColor, selectedSize);
             }
+
+            VariableUtils.currentPN--;
+
+            var ctrl = (sender as Control);
+            while (ctrl != null && !(ctrl is GRNDetailsControl))
+                ctrl = ctrl.Parent;
 
             if (ctrl == null) return;
 
             var row = ctrl as GRNDetailsControl;
-            var panel = row.Parent;
-            if (panel == null) return;
+            var parent = row.Parent;
 
-            var parentForm = this.FindForm() as CreateGRN;
-
-            panel.Controls.Remove(row);
+            parent.Controls.Remove(row);
             row.Dispose();
 
+            var parentForm = this.FindForm() as CreateGRN;
             parentForm?.UpdateTotalCost();
         }
+
 
         private bool isLoading = false;
 
@@ -77,7 +82,8 @@ namespace DACs.Controls
         }
 
         private void fillColors(List<string> colors)
-        {            
+        {
+            cbMauSac.Items.Clear();
             cbMauSac.Items.AddRange(colors.ToArray());
         }
 
@@ -91,12 +97,14 @@ namespace DACs.Controls
 
         private void fillSizes(List<string> sizes)
         {
+            cbKichCo.Items.Clear();
             cbKichCo.Items.AddRange(sizes.ToArray());
         }
 
         private void cbSP_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (isLoading) return;
+            RemoveOldCombinationIfExists();
             if (cbSP == null || cbSP.SelectedValue == null) return;
             resetFields();
             Control ctrl = (Control)sender;
@@ -116,11 +124,14 @@ namespace DACs.Controls
 
             List<string> colors = productService.GetAllColorByProductId(Convert.ToInt32(cbSP.SelectedValue));
             fillColors(colors);
+
+
         }
 
         private void cbKichCo_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (isLoading) return;
+            RemoveOldCombinationIfExists();
             if (cbSP == null || cbSP.SelectedValue == null) return;
             if (cbMauSac == null || string.IsNullOrEmpty(cbMauSac.Text)) return;
             if (cbKichCo == null || string.IsNullOrEmpty(cbKichCo.Text)) return;
@@ -131,11 +142,13 @@ namespace DACs.Controls
 
             txtDonGia.Text = productService.getPriceByProductIdAndColorAndSize(productId, color, size).ToString();
             updateThanhTien();
+
         }
 
         private void cbMauSac_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (isLoading) return;
+            RemoveOldCombinationIfExists();
             if (cbSP == null || cbSP.SelectedValue == null) return;
             if (cbMauSac == null || string.IsNullOrEmpty(cbMauSac.Text)) return;
 
@@ -144,6 +157,7 @@ namespace DACs.Controls
 
             List<string> sizes = productService.GetAllSizeByProductIdAndColor(productId, color);
             fillSizes(sizes);
+
         }
 
         private void txtDonGia_TextChanged(object sender, EventArgs e)
@@ -151,34 +165,131 @@ namespace DACs.Controls
 
         }
         public event EventHandler TongTienChanged;
-        private void txtThanhTien_TextChanged(object sender, EventArgs e)
-        {
-            //MessageBox.Show("pass");
-            //TongTienChanged?.Invoke(this, EventArgs.Empty);
-        }
 
         private void nudSoLuong_ValueChanged(object sender, EventArgs e)
         {
             updateThanhTien();
-            
+
+        }
+        private int? selectedProductId = null;
+        private string selectedColor = null;
+        private string selectedSize = null;
+        private void RemoveOldCombinationIfExists()
+        {
+            if (selectedProductId.HasValue
+                && !string.IsNullOrEmpty(selectedColor)
+                && !string.IsNullOrEmpty(selectedSize))
+            {
+                RemoveCombination(selectedProductId.Value, selectedColor, selectedSize);
+            }
+
+            // reset để updateThanhTien() hiểu là combo rỗng
+            selectedProductId = null;
+            selectedColor = null;
+            selectedSize = null;
         }
 
-        
+
         private void updateThanhTien()
         {
             if (isLoading) return;
-            if (cbSP == null || cbSP.SelectedValue == null) return;
-            if (cbMauSac == null || string.IsNullOrEmpty(cbMauSac.Text)) return;
-            if (cbKichCo == null || string.IsNullOrEmpty(cbKichCo.Text)) return;
-            if (string.IsNullOrEmpty(txtDonGia.Text)) return;
+            if (cbSP.SelectedValue == null
+                || string.IsNullOrEmpty(cbMauSac.Text)
+                || string.IsNullOrEmpty(cbKichCo.Text)
+                || string.IsNullOrEmpty(txtDonGia.Text))
+                return;
+
+            int productId = Convert.ToInt32(cbSP.SelectedValue);
+            string color = cbMauSac.Text;
+            string size = cbKichCo.Text;
+
+            // Nếu user chọn lại đúng bộ cũ -> KHÔNG CHECK TRÙNG
+            if (selectedProductId != productId || selectedColor != color || selectedSize != size)
+            {
+                // Nếu đổi sang bộ mới -> phải check mới
+                if (!AddCombination(productId, color, size))
+                {
+                    MessageBox.Show("Biến thể sản phẩm này đã được thêm rồi!", "Lỗi");
+
+                    // Reset UI về trạng thái chọn lại
+                    cbSP.SelectedIndex = 0;
+                    cbMauSac.SelectedItem = null;
+                    cbKichCo.SelectedItem = null;
+                    txtDonGia.Text = "";
+                    return;
+                }
+
+                // Nếu thêm mới thành công, update tracking values
+                selectedProductId = productId;
+                selectedColor = color;
+                selectedSize = size;
+            }
+
+            // Tính tiền
             txtThanhTien.Text = (Convert.ToDecimal(txtDonGia.Text) * nudSoLuong.Value).ToString();
             TongTienChanged?.Invoke(this, EventArgs.Empty);
         }
+
 
         public decimal getTxtThanhTien()
         {
             if (string.IsNullOrEmpty(txtThanhTien.Text)) return Convert.ToDecimal(0);
             return Convert.ToDecimal(txtThanhTien.Text);
         }
+
+        private bool AddCombination(int ProductId, string Color, string Size)
+        {
+            if (VariableUtils.SelectedCombinations.Any(c => c.ProductId == ProductId && c.Color == Color && c.Size == Size))
+            {
+                return false;
+            }
+            VariableUtils.SelectedCombinations.Add(new ProductCombination(ProductId, Color, Size));
+            return true;
+        }
+
+        private bool RemoveCombination(int ProductId, string Color, string Size)
+        {
+            var combination = VariableUtils.SelectedCombinations.FirstOrDefault(c => c.ProductId == ProductId && c.Color == Color && c.Size == Size);
+            if (combination != default)
+            {
+                VariableUtils.SelectedCombinations.Remove(combination);
+                return true;
+            }
+            return false;
+
+        }
+
+        public ChiTietPhieuNhap GetChiTiet()
+        {
+            int productId = 0;
+            if (cbSP.SelectedValue != null && int.TryParse(cbSP.SelectedValue.ToString(), out int pid))
+                productId = pid;
+
+            if (productId <= 0)
+                return new ChiTietPhieuNhap { MaBienThe = 0, SoLuong = 0, DonGia = 0 };
+
+            string color = string.IsNullOrWhiteSpace(cbMauSac.Text) ? null : cbMauSac.Text;
+            string size = string.IsNullOrWhiteSpace(cbKichCo.Text) ? null : cbKichCo.Text;
+
+            if (color == null || size == null)
+                return new ChiTietPhieuNhap { MaBienThe = 0, SoLuong = 0, DonGia = 0 };
+
+            int maBienThe =
+                productService.GetBienTheSanPhamByUniqueFieldsGroup(productId, color, size)?.MaBienThe ?? 0;
+
+            decimal donGia = 0;
+            if (!string.IsNullOrWhiteSpace(txtDonGia.Text))
+                decimal.TryParse(txtDonGia.Text, out donGia);
+
+            int soLuong = Convert.ToInt32(nudSoLuong.Value);
+
+            return new ChiTietPhieuNhap
+            {
+                MaBienThe = maBienThe,
+                SoLuong = soLuong,
+                DonGia = donGia
+            };
+        }
+
     }
 }

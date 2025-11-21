@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DACs.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,6 @@ namespace DACs.Utils
     {
         public static int currentPN = 1;
         public const int maxPN = 10;
-        public static List<(int ProductId, string Color, string Size)> SelectedCombinations = new List<(int, string, string)>();
+        public static List<ProductCombination> SelectedCombinations = new List<ProductCombination>();
     }
 }

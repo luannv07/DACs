@@ -235,7 +235,7 @@ namespace DACs.Controls
             bool isUpdated = productService.UpdateProductVariant(maBt, sanpham.TenSanPham, bienthe.TrangThaiBienThe, bienthe.DonGia, bienthe.GiamGia, bienthe.MauSac, bienthe.KichCo);
             if (isUpdated)
             {
-                MessageBox.Show("Cập nhật sản phẩm thành công 1111.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Cập nhật sản phẩm thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadProductList(productService.GetAllProducts());
                 ResetProductFields();
             }
@@ -297,7 +297,7 @@ namespace DACs.Controls
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Giảm giá không hợp lệ. Vui lòng nhập số hợp lệ: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Giá trị giảm giá sai. Vui lòng nhập số hợp lệ: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             bienThe.TrangThaiBienThe = (byte)(cbTrangThai.Text.Trim() == productMap[ProductStatus.Active.ToString()] ? 1 : 0);

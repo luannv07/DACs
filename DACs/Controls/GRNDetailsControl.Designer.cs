@@ -124,7 +124,6 @@
             this.txtThanhTien.ReadOnly = true;
             this.txtThanhTien.Size = new System.Drawing.Size(52, 29);
             this.txtThanhTien.TabIndex = 5;
-            this.txtThanhTien.TextChanged += new System.EventHandler(this.txtThanhTien_TextChanged);
             // 
             // btnRemove
             // 

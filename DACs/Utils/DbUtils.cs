@@ -30,7 +30,8 @@ namespace DACs.Utils
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Lỗi DB", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show(ex.Message, "Lỗi DB", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
             }
             return dt;
         }
@@ -52,7 +53,8 @@ namespace DACs.Utils
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Lỗi DB", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show(ex.Message, "Lỗi DB", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
             }
             return affectedRows;
         }
@@ -89,7 +91,8 @@ namespace DACs.Utils
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Lỗi DB", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show(ex.Message, "Lỗi DB", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
             }
             return result;
         }

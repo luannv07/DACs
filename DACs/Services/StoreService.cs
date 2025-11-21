@@ -59,5 +59,46 @@ namespace DACs.Services
             }
             return phieuNhap;
         }
+
+        public bool addPhieuNhap(PhieuNhap phieuNhap, List<ChiTietPhieuNhap> chiTietPhieuNhap)
+        {
+            string query = @"insert into phieu_nhap (ngaynhap, mancc, manv) values (getdate(), @mancc, @manv)";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@mancc", phieuNhap.MaNCC),
+                new SqlParameter("@manv", phieuNhap.MaNV)
+            };
+            int rowAffected = DbUtils.ExecuteNonQuery(query, parameters);
+
+            if (rowAffected <= 0)
+            {
+                MessageBox.Show("Thêm phiếu nhập thất bại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            var firstRow = DbUtils.ExecuteSelectQuery(@"select top 1 maphieunhap from phieu_nhap order by maphieunhap desc");
+
+            int maPhieuNhap = Convert.ToInt32(firstRow.Rows[0]["maphieunhap"]);
+
+            foreach (var chiTiet in chiTietPhieuNhap)
+            {
+                string detailQuery = @"insert into chi_tiet_phieu_nhap (maphieunhap, mabienthe, soluong, dongia) 
+                                       values (@maphieunhap, @mabienthe, @soluong, @dongia)";
+                SqlParameter[] detailParameters = new SqlParameter[]
+                {
+                    new SqlParameter("@maphieunhap", maPhieuNhap),
+                    new SqlParameter("@mabienthe", chiTiet.MaBienThe),
+                    new SqlParameter("@soluong", chiTiet.SoLuong),
+                    new SqlParameter("@dongia", chiTiet.DonGia)
+                };
+                int detailRowAffected = DbUtils.ExecuteNonQuery(detailQuery, detailParameters);
+                if (detailRowAffected <= 0)
+                {
+                    MessageBox.Show("Thêm chi tiết phiếu nhập thất bại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

@@ -36,7 +36,7 @@ namespace DACs.Controls
                     u.MaPhieuNhap,
                     u.MaNCC,
                     MaNV = userService.getById(u.MaNV)?.TaiKhoan,
-                    NgayNhap = u.NgayNhap.ToString("dd/MM/yyyy hh:mm:ss"),
+                    NgayNhap = u.NgayNhap.ToString("dd/MM/yyyy HH:mm:ss"),
                     u.TenNCC,
                     u.GhiChu,
                     u.ChiTiets
@@ -64,6 +64,7 @@ namespace DACs.Controls
         private void btnStoreAdd_Click(object sender, EventArgs e)
         {
             ControlUtil.LoadFormWithoutClose(Form.ActiveForm, new CreateGRN());
+            VariableUtils.SelectedCombinations.Clear();
         }
 
         private void btnStoreDelete_Click(object sender, EventArgs e)

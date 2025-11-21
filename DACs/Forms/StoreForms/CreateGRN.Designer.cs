@@ -86,7 +86,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(785, 297);
             this.panel1.TabIndex = 0;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // txtCurrentPN
             // 
@@ -114,7 +113,6 @@
             this.label12.Size = new System.Drawing.Size(74, 19);
             this.label12.TabIndex = 10;
             this.label12.Text = "Thành tiền";
-            this.label12.Click += new System.EventHandler(this.label7_Click);
             // 
             // label11
             // 
@@ -126,7 +124,6 @@
             this.label11.Size = new System.Drawing.Size(57, 19);
             this.label11.TabIndex = 10;
             this.label11.Text = "Đơn giá";
-            this.label11.Click += new System.EventHandler(this.label7_Click);
             // 
             // label10
             // 
@@ -138,7 +135,6 @@
             this.label10.Size = new System.Drawing.Size(63, 19);
             this.label10.TabIndex = 10;
             this.label10.Text = "Số lượng";
-            this.label10.Click += new System.EventHandler(this.label7_Click);
             // 
             // label9
             // 
@@ -150,7 +146,6 @@
             this.label9.Size = new System.Drawing.Size(52, 19);
             this.label9.TabIndex = 10;
             this.label9.Text = "Kích cỡ";
-            this.label9.Click += new System.EventHandler(this.label7_Click);
             // 
             // label8
             // 
@@ -162,7 +157,6 @@
             this.label8.Size = new System.Drawing.Size(60, 19);
             this.label8.TabIndex = 10;
             this.label8.Text = "Màu sắc";
-            this.label8.Click += new System.EventHandler(this.label7_Click);
             // 
             // label7
             // 
@@ -174,7 +168,6 @@
             this.label7.Size = new System.Drawing.Size(94, 19);
             this.label7.TabIndex = 10;
             this.label7.Text = "Tên sản phẩm";
-            this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
             // btnCreateGRNI
             // 

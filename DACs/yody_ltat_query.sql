@@ -1,4 +1,4 @@
-﻿CREATE DATABASE YODY_LTAT_DB;
+﻿--CREATE DATABASE YODY_LTAT_DB;
 GO
 USE YODY_LTAT_DB;
 GO
@@ -93,8 +93,13 @@ CREATE TABLE CHI_TIET_PHIEU_NHAP (
     FOREIGN KEY (MaPhieuNhap) REFERENCES PHIEU_NHAP(MaPhieuNhap),
     FOREIGN KEY (MaBienThe) REFERENCES BIEN_THE_SAN_PHAM(MaBienThe)  -- **Sửa chỗ này**
 );
+-- SQL Server
 ALTER TABLE CHI_TIET_PHIEU_NHAP
-ADD CONSTRAINT UQ_MaBt UNIQUE (mabienthe);
+DROP CONSTRAINT UQ_MaBt;
+
+ALTER TABLE CHI_TIET_PHIEU_NHAP
+ADD CONSTRAINT UQ_Phieu_BienThe UNIQUE(MaPhieuNhap, MaBienThe);
+
 GO
 alter table chi_tiet_phieu_nhap
 add ThoiGianNhap datetime default GETDATE()
@@ -158,7 +163,6 @@ VALUES
 (N'Phạm Văn', N'Dương', 'duongpv6789@ltat.com', '1996-07-12', N'Nam Định', 0, 'duongpv6789', '1', 0),
 (N'Trần Minh', N'Minh', 'minhtm7890@ltat.com', '1994-08-25', N'Hà Nội', 0, 'minhtm7890', '1', 0);
 GO
-select * from Nha_cung_cap;
 INSERT INTO NHA_CUNG_CAP (Ten, Email) VALUES
 (N'Công ty Thời Trang Vi Diệu', 'contact@vidieu-fashion.com'),
 (N'Công ty Quần Áo Huyền Ảo', 'hello@huyenao-style.com'),
@@ -352,46 +356,4 @@ VALUES
 GO
 
 
-
-select * from San_pham;
-select * from Bien_the_san_pham;
-delete from BIEN_THE_SAN_PHAM
-where MauSac = '-1'
-
-select pd.mabienthe, p.masanpham, p.tensanpham, p.mancc,
-pd.mausac, pd.kichco, pd.soluong, pd.dongia, pd.giamgia,
-pd.trangthaibienthe, p.ngaytao from san_pham as p
-left join bien_the_san_pham as pd on pd.masanpham = p.masanpham
-where pd.xoabienthe = 0
-
-select pd.mabienthe, p.masanpham, p.tensanpham, p.mancc,
-pd.mausac, pd.kichco, pd.soluong, pd.dongia, pd.giamgia,
-pd.trangthaibienthe, p.ngaytao from san_pham as p
-left join bien_the_san_pham as pd on pd.masanpham = p.masanpham
-where pd.xoabienthe = 0 and p.TenSanPham like '%Áo Thun Nam Basic%'
-
-select * from nha_cung_cap;
-select * from phieu_nhap;
-select * from chi_tiet_phieu_nhap;
-
-update chi_tiet_phieu_nhap
-set thoigiannhap = GETDATE()
-where thoigiannhap is null;
-
-
-select tensanpham from san_pham
-
-
-select pd.mabienthe, p.masanpham, p.tensanpham,
-                pd.mausac, pd.kichco, pd.soluong, pd.dongia, pd.giamgia,
-                pd.trangthaibienthe, p.ngaytao, p.mancc from san_pham as p
-                left join bien_the_san_pham as pd on pd.masanpham = p.masanpham
-                where pd.xoabienthe = 0
-
-select * from san_pham as s
-left join bien_the_san_pham as bt on s.masanpham = bt.masanpham
-where bt.xoabienthe = 0
-
-select b.dongia from san_pham p
-left join bien_the_san_pham b on b.masanpham = p.masanpham
-where p.masanpham = 10 and b.MauSac = 'Xanh' and b.kichco = 'M'
+select * from chi_tiet_phieu_nhap

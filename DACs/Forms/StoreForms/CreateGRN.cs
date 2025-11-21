@@ -13,6 +13,7 @@ namespace DACs.Forms.StoreForms
     public partial class CreateGRN : Form
     {
         private readonly ProductService productService = new ProductService();
+        private readonly StoreService storeService = new StoreService();
         private bool isLoadingForm = true;
         private List<SanPham> products = new List<SanPham>();
 
@@ -85,9 +86,50 @@ namespace DACs.Forms.StoreForms
 
         private void btnSaveChange_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Thanh toán thành công (Chức năng đang phát triển)", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            btnCancel_Click(sender, e);
+            // 1. Tạo phiếu nhập
+            var phieuNhap = new PhieuNhap
+            {
+                MaNCC = Convert.ToInt32(cbSuppliers.SelectedValue),
+                MaNV = Session.currentUser.MaNhanVien
+            };
+
+            // 2. Thu thập CHI TIẾT từ tất cả GRNDetailsControl
+            List<ChiTietPhieuNhap> chiTietPhieuNhaps = new List<ChiTietPhieuNhap>();
+
+            foreach (Control ctrl in panel2.Controls)
+            {
+                if (ctrl is GRNDetailsControl row)
+                {
+                    var chiTiet = row.GetChiTiet();
+
+                    // Bỏ các dòng rỗng (user chưa chọn gì)
+                    if (chiTiet.MaBienThe == 0 || chiTiet.SoLuong <= 0)
+                        continue;
+
+                    chiTietPhieuNhaps.Add(chiTiet);
+                }
+            }
+
+            // 3. Validate: phải có ít nhất 1 chi tiết
+            if (chiTietPhieuNhaps.Count == 0)
+            {
+                MessageBox.Show("Phiếu nhập phải có ít nhất 1 dòng hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // 4. Gọi service để lưu vào DB
+            bool success = storeService.addPhieuNhap(phieuNhap, chiTietPhieuNhaps);
+
+            if (success)
+            {
+                MessageBox.Show("Thanh toán thành công!", "Thông báo");
+                btnCancel_Click(sender, e);
+                MessageBox.Show("Bạn đã tạo thành công phiếu nhập! Vui lòng tải lại để xem phiếu mới nhất.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);    
+                productService.UpdateProductVariantQuantity(chiTietPhieuNhaps);
+
+            }
         }
+
 
         private void btnCreateGRNI_Click(object sender, EventArgs e)
         {
@@ -102,16 +144,6 @@ namespace DACs.Forms.StoreForms
             grnDetailsControl.TongTienChanged += (s, _) => UpdateTotalCost();
             panel2.Controls.Add(grnDetailsControl);
             VariableUtils.currentPN++;
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-
         }
 
 
