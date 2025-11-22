@@ -11,7 +11,7 @@ namespace DACs.Services
     internal class ProductService
     {
         // Trả về danh sách "flat", mỗi dòng là 1 sản phẩm + 1 biến thể
-        public List<SanPham> GetAllProducts()
+        public List<SanPham> GetAllProducts(bool needProductID = false)
         {
             string query = @"
                 select pd.mabienthe, p.masanpham, p.tensanpham,
@@ -26,7 +26,7 @@ namespace DACs.Services
 
             foreach (DataRow row in dt.Rows)
             {
-                products.Add(MapProductWithVariant(row, false));
+                products.Add(MapProductWithVariant(row, needProductID));
             }
 
             return products;
@@ -121,7 +121,7 @@ namespace DACs.Services
                     ? Convert.ToInt32(row["MaSanPham"]) : 0,
 
                 TenSanPham = row.Table.Columns.Contains("TenSanPham")
-                    ? (needProductId ? row["TenSanPham"]?.ToString() + " (" + Convert.ToInt32(row["MaSanPham"]) + ")" : row["TenSanPham"]?.ToString()) : string.Empty,
+                    ? (needProductId ? row["TenSanPham"]?.ToString() + " (M" + Convert.ToInt32(row["MaSanPham"]) + ")" : row["TenSanPham"]?.ToString()) : string.Empty,
 
                 MaNCC = row.Table.Columns.Contains("MaNCC") && row["MaNCC"] != DBNull.Value
                     ? Convert.ToInt32(row["MaNCC"]) : 0,
@@ -356,6 +356,55 @@ namespace DACs.Services
 
             return rowsAffected > 0;
         }
+        public bool AddProductVariantForNewProduct(int productId, BienTheSanPham bienThe)
+        {
+            string insertBienThe = @"
+        INSERT INTO Bien_The_San_Pham 
+            (MaSanPham, MauSac, KichCo, SoLuong, DonGia, GiamGia, TrangThaiBienThe)
+        VALUES
+            (@MaSanPham, @MauSac, @KichCo, @SoLuong, @DonGia, @GiamGia, @TrangThaiBienThe);";
+
+            SqlParameter[] parametersBienThe = new SqlParameter[]
+            {
+                new SqlParameter("@MaSanPham", productId),
+                new SqlParameter("@MauSac", bienThe.MauSac),
+                new SqlParameter("@KichCo", bienThe.KichCo),
+                new SqlParameter("@SoLuong", bienThe.SoLuong),
+                new SqlParameter("@DonGia", bienThe.DonGia),
+                new SqlParameter("@GiamGia", bienThe.GiamGia),
+                new SqlParameter("@TrangThaiBienThe", bienThe.TrangThaiBienThe)
+            };
+
+            try
+            {
+                return DbUtils.ExecuteNonQuery(insertBienThe, parametersBienThe) > 0;
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627 || ex.Number == 2601)
+                {
+                    MessageBox.Show("Biến thể sản phẩm đã tồn tại.",
+                        "Lỗi trùng dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                else if (ex.Number == 547)
+                {
+                    MessageBox.Show("Dữ liệu không hợp lệ.\nVui lòng kiểm tra lại.",
+                        "Lỗi ràng buộc", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Lỗi SQL: " + ex.Message,
+                        "Lỗi cơ sở dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi không xác định: " + ex.Message,
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return false;
+        }
 
         public bool AddNewProductWithVariant(SanPham sanPham, BienTheSanPham bienThe)
         {
@@ -378,73 +427,8 @@ namespace DACs.Services
 
             int newProductId = Convert.ToInt32(result);
 
-            // 2. Thêm biến thể
-            string insertBienThe = @"
-                INSERT INTO Bien_The_San_Pham 
-                    (MaSanPham, MauSac, KichCo, SoLuong, DonGia, GiamGia, TrangThaiBienThe)
-                VALUES
-                    (@MaSanPham, @MauSac, @KichCo, @SoLuong, @DonGia, @GiamGia, @TrangThaiBienThe);";
-
-            SqlParameter[] parametersBienThe = new SqlParameter[]
-            {
-                new SqlParameter("@MaSanPham", newProductId),
-                new SqlParameter("@MauSac", bienThe.MauSac),
-                new SqlParameter("@KichCo", bienThe.KichCo),
-                new SqlParameter("@SoLuong", bienThe.SoLuong),
-                new SqlParameter("@DonGia", bienThe.DonGia),
-                new SqlParameter("@GiamGia", bienThe.GiamGia),
-                new SqlParameter("@TrangThaiBienThe", bienThe.TrangThaiBienThe)
-            };
-
-            int rows = -1;
-            try
-            {
-                rows = DbUtils.ExecuteNonQuery(insertBienThe, parametersBienThe);
-            }
-            catch (SqlException ex)
-            {
-                // Lỗi trùng dữ liệu (ví dụ: biến thể đã tồn tại)
-                if (ex.Number == 2627 || ex.Number == 2601)
-                {
-                    MessageBox.Show(
-                        "Biến thể sản phẩm đã tồn tại.",
-                        "Lỗi trùng dữ liệu",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning
-                    );
-                }
-                // Lỗi khóa ngoại (ví dụ: MaNCC, MaSanPham không tồn tại)
-                else if (ex.Number == 547)
-                {
-                    MessageBox.Show(
-                        "Dữ liệu không hợp lệ.\nVui lòng kiểm tra lại.",
-                        "Lỗi ràng buộc",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                    );
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Lỗi SQL: " + ex.Message,
-                        "Lỗi cơ sở dữ liệu",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                    );
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Lỗi không xác định: " + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
-            }
-
-
-            return rows > 0;
+            // 2. Gọi hàm mới để thêm biến thể
+            return AddProductVariantForNewProduct(newProductId, bienThe);
         }
 
 

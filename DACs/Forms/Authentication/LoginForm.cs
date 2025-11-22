@@ -85,5 +85,10 @@ namespace DACs.Forms.Authentication
             if (vaiTro == Enums.Role.StoreStaff.ToString()) return Enums.Role.StoreStaff;
             return Enums.Role.Staff;
         }
+
+        private void btnForgot_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Vui lòng liên hệ quản trị viên!");
+        }
     }
 }

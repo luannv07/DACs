@@ -87,6 +87,7 @@
             this.btnForgot.TabIndex = 4;
             this.btnForgot.Text = "Quên tài khoản";
             this.btnForgot.UseVisualStyleBackColor = false;
+            this.btnForgot.Click += new System.EventHandler(this.btnForgot_Click);
             // 
             // btnLogin
             // 

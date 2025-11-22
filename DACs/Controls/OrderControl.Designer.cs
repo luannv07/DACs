@@ -1,6 +1,6 @@
 ﻿namespace DACs.Controls
 {
-    partial class ucReportControl
+    partial class ucOrderControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,38 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.labelUsers = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // labelUsers
-            // 
-            this.labelUsers.AutoSize = true;
-            this.labelUsers.BackColor = System.Drawing.Color.Transparent;
-            this.labelUsers.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
-            this.labelUsers.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.labelUsers.Location = new System.Drawing.Point(412, 21);
-            this.labelUsers.Name = "labelUsers";
-            this.labelUsers.Size = new System.Drawing.Size(136, 37);
-            this.labelUsers.TabIndex = 2;
-            this.labelUsers.Text = "Thống kê";
-            this.labelUsers.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // ucReportControl
+            // ucOrderControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.labelUsers);
             this.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "ucReportControl";
+            this.Name = "ucOrderControl";
             this.Size = new System.Drawing.Size(960, 681);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label labelUsers;
     }
 }

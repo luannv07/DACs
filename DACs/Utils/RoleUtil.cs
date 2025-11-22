@@ -22,12 +22,14 @@ namespace DACs.Utils
                 "btnMenuStore",
                 "btnMenuSupplier",
                 "btnMenuReport",
-                "btnMenuAccount"} },
+                "btnMenuAccount",
+                "btnMenuCustomer"} },
             { Role.Staff, new List<string> {
                 "btnMenuHome",
                 "btnMenuSale",
                 "btnMenuSupplier",
                 "btnMenuProduct",
+                "btnMenuCustomer"
             } },
             { Role.StoreStaff, new List<string> { 
                 "btnMenuHome",

@@ -240,12 +240,16 @@ namespace DACs.Controls
                 ResetProductFields();
             }
         }
-
         private void btnThem_Click(object sender, EventArgs e)
+        {
+            ControlUtil.LoadFormWithoutClose(Form.ActiveForm, new AddProduct());
+        }
+        private void btnThem_Click1()
         {
             SanPham sanPham = new SanPham();
             BienTheSanPham bienThe = new BienTheSanPham();
 
+            // Kiểm tra dữ liệu đầu vào
             if (string.IsNullOrEmpty(txtTenSp.Text))
             {
                 MessageBox.Show("Hãy nhập tên sản phẩm.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -259,24 +263,27 @@ namespace DACs.Controls
                 return;
             }
             sanPham.MaNCC = int.Parse(cbNCC.Text.Trim());
+
             if (string.IsNullOrEmpty(cbMauSac.Text))
             {
                 MessageBox.Show("Hãy chọn Màu sắc.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             bienThe.MauSac = cbMauSac.Text.Trim();
+
             if (string.IsNullOrEmpty(cbKichCo.Text))
             {
                 MessageBox.Show("Hãy chọn Kích cỡ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             bienThe.KichCo = cbKichCo.Text.Trim();
-            bienThe.SoLuong = 0;
+            bienThe.SoLuong = 0;  // default value
             if (string.IsNullOrEmpty(txtDonGia.Text))
             {
                 MessageBox.Show("Hãy nhập Đơn giá hợp lệ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+
             try
             {
                 bienThe.DonGia = decimal.Parse(txtDonGia.Text.Trim());
@@ -286,11 +293,14 @@ namespace DACs.Controls
                 MessageBox.Show("Đơn giá không hợp lệ. Vui lòng nhập số hợp lệ: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+
+            // Handle Giảm giá
             if (string.IsNullOrEmpty(txtGiamGia.Text))
             {
                 MessageBox.Show("Hãy nhập Giảm giá hợp lệ.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+
             try
             {
                 bienThe.GiamGia = decimal.Parse(txtGiamGia.Text.Trim());
@@ -300,8 +310,10 @@ namespace DACs.Controls
                 MessageBox.Show("Giá trị giảm giá sai. Vui lòng nhập số hợp lệ: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+
+            // Handle Trạng thái
             bienThe.TrangThaiBienThe = (byte)(cbTrangThai.Text.Trim() == productMap[ProductStatus.Active.ToString()] ? 1 : 0);
-            
+
             bool isAdded = productService.AddNewProductWithVariant(sanPham, bienThe);
             if (isAdded)
             {
@@ -314,6 +326,7 @@ namespace DACs.Controls
                 MessageBox.Show("Thêm sản phẩm thất bại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void btnOpenSuppilers_Click(object sender, EventArgs e)
         {
             Form currentForm = Form.ActiveForm;

@@ -1,4 +1,5 @@
 ﻿using DACs.Forms.Authentication;
+using DACs.Forms.ProductForms;
 using DACs.Forms.StoreForms;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace DACs
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(new LoginForm());
         }
         // Test commit cho Anh sync code
         // Test commit cho Anh sync code 2

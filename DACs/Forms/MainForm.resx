@@ -118,6 +118,29 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="btnMenuCustomer.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABGdBTUEAALGPC/xhBQAABBZJREFUaEPt
+        mEtME1EUhmfhxp1REzUhkdYCl5XEEl+oMTERjQaJrnShRIMJRgUWJmpcsDUuJNEVIFSJyEukgSL4pFVB
+        1Olgy9MSJYaHGBRS8bEx15yhI9Nzh77mTmHBn3wJKTPn/0/n3HvbCsKSlrSkuKk2U7Q4TncXtuR57A/P
+        eX1thT1UDbzmyO1+UGZ1nqhI60zE9y+4mnI8BMLj4FrUHX5Ly9Jds1hdFYumIUee9w4OOx/Nue9p+dYX
+        c40EKE13Xcd14yb7iZ4MZXy8VSP0m2+GdlwbYsK35Hlo08luWpP1hmkguBmnVJL2Kg37GCpooi3f++Pp
+        pT464fFTRUOtX+XQ9w50UVvGSyZsWKzOqbg147rct05pwj/y+38TkwMztDqriw0XLVbnVFzWzcNzHjeM
+        jH90ronemlE2kA5gzLAvV9mPS/nQBIyQoq7ij0wQHpSmO4uwPze1nvd+gUYUjYvTTABuyCP2fAXOoFuO
+        XE8ONAFr4/vQT3l9VGV2sgE4UrrJVYBz6FbLGW+7eluFnQkbc8fq/IRz6FLT0Xer1Yfa3cxO2nysjDXW
+        iVZNrjtY5c5XRyr3dAQZUHeqzGTjXvrh5ikqFl2QgzRkVzFhMHANXAv3wL1QQ6mHr+U6XrCDYAPFOBQQ
+        cKw6W0YdNhTYp8zqsuE8MevWlmcv1cXh3cQBePHo1I2gRsAb54lZtu2PJ9TFYRxwAF4Mlx9lngrOE7PU
+        RZ1nrzLmvAEPwxq5vaNVXpzY1CjACzy5NEKlpDQqkrax6kOUukkA1tQYZv1kb5E0QxacLyJRiSSyxRUD
+        /Bpv5vGQSPRnChVTi5lC4Yy4EKK2mFqMc4YVdZN2plAkZroJVZu045xhRd3ExhaKxEwvoWqT6A9HKpEc
+        ttACI5EcnDMiUZEUMcVCvmO80PAQif4vWvHfehVmfXGemBV64RtNDAt8PmmPmDH8fUfo+KMk6rNvoAMN
+        ZvrJYbmI88Qs+YTXMOUNNDHssMgNKAw+SNiM8+hSPMZr4klSUBMfGk2dOIduUYnsxsY8+dWREtQE0Fu3
+        fj/OwUVGPRUYKWVNGPo0FAU+DU/jIHrQWhd99Wb/kD3Bgv25iueJ/+d1CtOEPFL31x/DvoYo9CfjyMAL
+        W6G/wVSC/QwVFVMLcLhIgXMCNwB4akxXsE9cJI9ZlGtGa3cabDD7fXZzHq4fVwW+STbiwPOBn0Z/vanN
+        8IUdjWbPGWIL94Q+t1jkXan/vqnW15yYiessKlEpOVv+fCZvCnD2kHb5b5EUTbvMR/D1S+Ko5YIgrAyQ
+        rME2BP4/oNy/DBc3UmsFQdgoCMIuQRAOGgTUBo812JyX0jVMjQY8uQvGCH7t26dhyBvwAC/wNFRgsEo1
+        52CqXgs4GEZ9Ldyr1IGaMYX/Bxk/gHmhsQgAAAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="btnMenuAccount.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABGdBTUEAALGPC/xhBQAABH9JREFUaEPt

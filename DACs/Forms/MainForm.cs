@@ -55,7 +55,7 @@ namespace DACs
         private void btnMenuSale_Click(object sender, EventArgs e)
         {
             activateButton(btnMenuSale);
-            //ControlUtil.LoadContentControl(new ucSaleControl(), panelContent);
+            ControlUtil.LoadContentControl(new ucOrderControl(), panelContent);
         }
 
         private void btnMenuProduct_Click(object sender, EventArgs e)
@@ -73,6 +73,7 @@ namespace DACs
         private void btnMenuReport_Click(object sender, EventArgs e)
         {
             activateButton(btnMenuReport);
+            ControlUtil.LoadContentControl(new ucReportControl(), panelContent);
         }
 
         private void btnMenuAccount_Click(object sender, EventArgs e)
@@ -88,8 +89,7 @@ namespace DACs
             RoleUtil.ApplyRole(Session.CurrentRole, panelMenu);
             txtHelloUser.Text = "Xin chào, " + Session.CurrentUsername;
             activateButton(btnMenuHome);
-            //ControlUtil.LoadContentControl(new ucHomeControl(), panelContent);
-            ControlUtil.LoadContentControl(new ucStoreControl(), panelContent);
+            ControlUtil.LoadContentControl(new ucHomeControl(), panelContent);
         }
 
         private void MainForm_Resize(object sender, EventArgs e)
@@ -112,6 +112,12 @@ namespace DACs
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
+        }
+
+        private void btnMenuCustomer_Click(object sender, EventArgs e)
+        {
+            activateButton(btnMenuCustomer);
+            ControlUtil.LoadContentControl(new ucCustomerControl(), panelContent);
         }
     }
 }

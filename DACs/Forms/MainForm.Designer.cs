@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.panelSidebar = new System.Windows.Forms.Panel();
             this.panelMenu = new System.Windows.Forms.Panel();
+            this.btnMenuCustomer = new System.Windows.Forms.Button();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.btnMenuAccount = new System.Windows.Forms.Button();
             this.textBox6 = new System.Windows.Forms.TextBox();
@@ -69,6 +70,7 @@
             // panelMenu
             // 
             this.panelMenu.BackColor = System.Drawing.Color.DarkCyan;
+            this.panelMenu.Controls.Add(this.btnMenuCustomer);
             this.panelMenu.Controls.Add(this.textBox7);
             this.panelMenu.Controls.Add(this.btnMenuAccount);
             this.panelMenu.Controls.Add(this.textBox6);
@@ -87,6 +89,26 @@
             this.panelMenu.Padding = new System.Windows.Forms.Padding(15);
             this.panelMenu.Size = new System.Drawing.Size(224, 508);
             this.panelMenu.TabIndex = 4;
+            // 
+            // btnMenuCustomer
+            // 
+            this.btnMenuCustomer.BackColor = System.Drawing.Color.LightYellow;
+            this.btnMenuCustomer.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMenuCustomer.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnMenuCustomer.Enabled = false;
+            this.btnMenuCustomer.FlatAppearance.BorderColor = System.Drawing.Color.LightGray;
+            this.btnMenuCustomer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuCustomer.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuCustomer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.btnMenuCustomer.Image = ((System.Drawing.Image)(resources.GetObject("btnMenuCustomer.Image")));
+            this.btnMenuCustomer.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnMenuCustomer.Location = new System.Drawing.Point(15, 435);
+            this.btnMenuCustomer.Name = "btnMenuCustomer";
+            this.btnMenuCustomer.Size = new System.Drawing.Size(194, 55);
+            this.btnMenuCustomer.TabIndex = 14;
+            this.btnMenuCustomer.Text = "Khách hàng";
+            this.btnMenuCustomer.UseVisualStyleBackColor = false;
+            this.btnMenuCustomer.Click += new System.EventHandler(this.btnMenuCustomer_Click);
             // 
             // textBox7
             // 
@@ -385,6 +407,7 @@
         private System.Windows.Forms.Button btnMenuProduct;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button btnMenuSale;
+        private System.Windows.Forms.Button btnMenuCustomer;
     }
 }
 
