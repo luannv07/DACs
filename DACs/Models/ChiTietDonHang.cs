@@ -10,7 +10,7 @@ namespace DACs.Models
     {
         public int MaDonHangChiTiet { get; set; }
         public int MaDonHang { get; set; }
-        public int MaSanPham { get; set; }
+        public int MaBienThe { get; set; }
         public int SoLuong { get; set; }
         public decimal DonGia { get; set; }
     }

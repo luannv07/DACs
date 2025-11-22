@@ -225,6 +225,7 @@ namespace DACs.Forms.ProductForms
                 ResetProductFields();
 
                getDistinctProduct();
+            Close();
             }
 
         private void SaveNewProduct()

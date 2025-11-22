@@ -95,6 +95,22 @@ namespace DACs.Services
             return MapNhanVien(dt.Rows[0]);
         }
 
+        public NhanVien getByUsername(string username)
+        {
+            String query = @"select * from nhan_vien where taikhoan = @username";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@taikhoan", username)
+            };
+            DataTable dt = DbUtils.ExecuteSelectQuery(query, parameters);
+
+            if (dt == null || dt.Rows.Count <= 0)
+            {
+                return null;
+            }
+            return MapNhanVien(dt.Rows[0]);
+        }
+
 
         // Kiểm tra email tồn tại
         public bool CheckEmailExists(string email)
@@ -189,7 +205,7 @@ namespace DACs.Services
                 NgayTao = Convert.ToDateTime(row["ngaytao"])
             };
         }
-
+        
 
         private Role ParseRole(int value)
         {

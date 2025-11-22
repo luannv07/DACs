@@ -47,5 +47,11 @@ namespace DACs.Utils
             }
             return sb.ToString().Normalize(NormalizationForm.FormC);
         }
+
+        public static string FormatNumber(decimal number)
+        {
+            return string.Format(new CultureInfo("vi-VN"), "{0:N0}", number);
+        }
+
     }
 }

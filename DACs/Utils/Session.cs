@@ -13,11 +13,6 @@ namespace DACs.Utils
         public static Role CurrentRole { get; set; }
         public static string CurrentUsername { get; set; } = "Anonymous";
 
-        public static NhanVien currentUser { get; set; } = new NhanVien
-        {
-            MaNhanVien = 1,
-            Ho = "Anonymous",
-            Ten = "User",
-        };
+        public static NhanVien currentUser { get; set; }
     }
 }

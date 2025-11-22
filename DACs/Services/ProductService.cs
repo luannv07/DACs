@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace DACs.Services
@@ -483,6 +484,98 @@ namespace DACs.Services
             }
         }
 
+        public List<SanPham> GetProductVariantsSummary()
+        {
+            string query = @"
+                select pd.mabienthe, p.masanpham, p.tensanpham,
+                pd.mausac, pd.kichco, pd.soluong, pd.dongia, pd.giamgia,
+                pd.trangthaibienthe, p.ngaytao, p.mancc 
+                from san_pham as p
+                inner join bien_the_san_pham as pd on pd.masanpham = p.masanpham
+                where pd.xoabienthe = 0 and pd.soluong > 0
+            ";
+
+            DataTable dt = DbUtils.ExecuteSelectQuery(query);
+            List<SanPham> products = new List<SanPham>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                int maSP = Convert.ToInt32(row["masanpham"]);
+
+                // Kiểm tra sản phẩm đã tồn tại chưa
+                var product = products.FirstOrDefault(x => x.MaSanPham == maSP);
+                if (product == null)
+                {
+                    product = new SanPham
+                    {
+                        MaSanPham = maSP,
+                        TenSanPham = row["tensanpham"].ToString(),
+                        NgayTao = Convert.ToDateTime(row["ngaytao"]),
+                        MaNCC = Convert.ToInt32(row["mancc"]),
+                        BienThes = new List<BienTheSanPham>()
+                    };
+
+                    products.Add(product);
+                }
+
+                // Thêm biến thể vào đúng sản phẩm
+                product.BienThes.Add(new BienTheSanPham
+                {
+                    MaBienThe = Convert.ToInt32(row["mabienthe"]),
+                    MauSac = row["mausac"].ToString(),
+                    KichCo = row["kichco"].ToString(),
+                    SoLuong = Convert.ToInt32(row["soluong"]),
+                    DonGia = Convert.ToDecimal(row["dongia"]),
+                    GiamGia = Convert.ToInt32(row["giamgia"]),
+                    TrangThaiBienThe = Convert.ToByte(row["trangthaibienthe"].ToString())
+                });
+            }
+
+            return products;
+        }
+
+        public List<BienTheSanPham> GetAllVariantsFlat()
+        {
+            string query = @"
+                select mabienthe, masanpham, mausac, kichco, soluong, dongia, giamgia
+                from bien_the_san_pham
+                where xoabienthe = 0
+            ";
+
+            DataTable dt = DbUtils.ExecuteSelectQuery(query);
+            List<BienTheSanPham> list = new List<BienTheSanPham>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                list.Add(new BienTheSanPham
+                {
+                    MaBienThe = Convert.ToInt32(row["MaBienThe"]),
+                    MaSanPham = Convert.ToInt32(row["MaSanPham"]),
+                    MauSac = row["MauSac"].ToString(),
+                    KichCo = row["KichCo"].ToString(),
+                    SoLuong = Convert.ToInt32(row["SoLuong"]),
+                    DonGia = Convert.ToDecimal(row["DonGia"]),
+                    GiamGia = Convert.ToDecimal(row["GiamGia"])
+                });
+            }
+
+            return list;
+        }
+        public void UpdateVariantStock(int maBienThe, int soLuongGiam)
+        {
+            string query = @"
+                UPDATE bien_the_san_pham
+                SET SoLuong = SoLuong + @sl
+                WHERE MaBienThe = @id
+            ";
+
+            SqlParameter[] p = {
+                new SqlParameter("@sl", soLuongGiam),
+                new SqlParameter("@id", maBienThe)
+            };
+
+            DbUtils.ExecuteNonQuery(query, p);
+        }
 
     }
 }

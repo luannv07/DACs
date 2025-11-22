@@ -10,5 +10,6 @@ namespace DACs.Enums
     {
         Success = 0,
         Cancel = 1,
+        Pending = 2
     }
 }

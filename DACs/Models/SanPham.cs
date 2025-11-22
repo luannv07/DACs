@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DACs.Models
 {
-    public class SanPham
+    public class    SanPham
     {
         public int MaSanPham { get; set; }
         public string TenSanPham { get; set; }

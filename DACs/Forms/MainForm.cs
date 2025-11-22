@@ -87,7 +87,7 @@ namespace DACs
         private void MainForm_Load(object sender, EventArgs e)
         {
             RoleUtil.ApplyRole(Session.CurrentRole, panelMenu);
-            txtHelloUser.Text = "Xin chào, " + Session.CurrentUsername;
+            txtHelloUser.Text = "Xin chào, " + Session.currentUser.Ten;
             activateButton(btnMenuHome);
             ControlUtil.LoadContentControl(new ucHomeControl(), panelContent);
         }

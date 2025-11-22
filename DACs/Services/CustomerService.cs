@@ -44,25 +44,25 @@ namespace DACs.Services
         // ================================
         //  ADD
         // ================================
-        public bool AddCustomer(KhachHang kh)
+        public int AddCustomer(KhachHang kh)
         {
             string query = @"
-                INSERT INTO KHACH_HANG 
-                (TenKhachHang, DiaChi, SoDienThoai, GioiTinh, LoaiKhachHang)
-                VALUES (@Ten, @DiaChi, @SDT, @GioiTinh, @Loai)
+                INSERT INTO khach_hang (TenKhachHang, DiaChi, SoDienThoai, GioiTinh, LoaiKhachHang)
+                VALUES (@ten, @dc, @sdt, @gt, @loai);
+                SELECT SCOPE_IDENTITY();
             ";
 
-            SqlParameter[] p =
-            {
-                new SqlParameter("@Ten", kh.TenKhachHang),
-                new SqlParameter("@DiaChi", kh.DiaChi),
-                new SqlParameter("@SDT", kh.SoDienThoai),
-                new SqlParameter("@GioiTinh", kh.GioiTinh),
-                new SqlParameter("@Loai", kh.LoaiKhachHang)
+            SqlParameter[] p = {
+                new SqlParameter("@ten", kh.TenKhachHang),
+                new SqlParameter("@dc", kh.DiaChi),
+                new SqlParameter("@sdt", kh.SoDienThoai),
+                new SqlParameter("@gt", kh.GioiTinh),
+                new SqlParameter("@loai", kh.LoaiKhachHang)
             };
 
-            return DbUtils.ExecuteNonQuery(query, p) > 0;
+            return Convert.ToInt32(DbUtils.ExecuteScalar(query, p));
         }
+
 
         // ================================
         //  UPDATE
@@ -173,5 +173,33 @@ namespace DACs.Services
                 LoaiKhachHang = Convert.ToByte(row["LoaiKhachHang"])
             };
         }
+        public KhachHang GetByPhone(string sdt)
+        {
+            string query = @"SELECT * FROM khach_hang WHERE SoDienThoai = @sdt";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@sdt", sdt)
+            };
+
+            var re = DbUtils.ExecuteSelectQuery(query, parameters);
+
+            if (re.Rows.Count == 0)
+                return null;   // Không tìm thấy khách hàng
+
+            DataRow row = re.Rows[0];
+
+            return new KhachHang
+            {
+                MaKhachHang = Convert.ToInt32(row["MaKhachHang"]),
+                TenKhachHang = row["TenKhachHang"].ToString(),
+                DiaChi = row["DiaChi"].ToString(),
+                SoDienThoai = row["SoDienThoai"].ToString(),
+                GioiTinh = Convert.ToByte(row["GioiTinh"]),
+                LoaiKhachHang = Convert.ToByte(row["LoaiKhachHang"])
+            };
+        }
+
+
     }
 }

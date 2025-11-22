@@ -43,6 +43,7 @@ namespace DACs.Forms.Authentication
             // Lưu thông tin session
             Session.CurrentRole = ParseRole(user.VaiTro);
             Session.CurrentUsername = user.TaiKhoan;
+            Session.currentUser = user;
 
             ControlUtil.LoadForm(this, new MainForm());
 
