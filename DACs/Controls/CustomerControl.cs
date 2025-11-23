@@ -1,6 +1,7 @@
 ﻿using DACs.Enums;
 using DACs.Models;
 using DACs.Services;
+using DACs.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -24,6 +25,7 @@ namespace DACs.Controls
             { CustomerType.VIP, "VIP" }
         };
         private readonly CustomerService _service = new CustomerService();
+        private readonly LogService logService = new LogService();
         private List<KhachHang> _currentList = new List<KhachHang>();
 
         public ucCustomerControl()
@@ -169,7 +171,6 @@ namespace DACs.Controls
 
         private void btnAppliesEdit_Click(object sender, EventArgs e)
         {
-            // ===== VALIDATION =====
             if (string.IsNullOrWhiteSpace(txtTenKH.Text))
             {
                 MessageBox.Show("Tên khách hàng không được để trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -194,7 +195,6 @@ namespace DACs.Controls
                 return;
             }
 
-            // ===== TẠO OBJECT UPDATE =====
             KhachHang kh = new KhachHang
             {
                 MaKhachHang = int.Parse(txtMaKH.Text),
@@ -204,7 +204,6 @@ namespace DACs.Controls
                 DiaChi = txtDiaChi.Text.Trim()
             };
 
-            // ===== UPDATE DB =====
             bool updated = _service.UpdateCustomer(kh);
 
             if (updated)
@@ -212,6 +211,7 @@ namespace DACs.Controls
                 MessageBox.Show("Cập nhật thông tin khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 LoadCustomers();
+                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.UpdateCustomer, $"Cập nhật thông tin khách hàng customer#{kh.MaKhachHang} bởi user#{Session.currentUser.MaNhanVien}");
                 panel2.Visible = false;
             }
             else

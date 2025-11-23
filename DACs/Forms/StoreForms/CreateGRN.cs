@@ -1,4 +1,5 @@
 ﻿using DACs.Controls;
+using DACs.Enums;
 using DACs.Models;
 using DACs.Services;
 using DACs.Utils;
@@ -14,6 +15,7 @@ namespace DACs.Forms.StoreForms
     {
         private readonly ProductService productService = new ProductService();
         private readonly StoreService storeService = new StoreService();
+        private readonly LogService logService = new LogService();
         private bool isLoadingForm = true;
         private List<SanPham> products = new List<SanPham>();
 
@@ -125,7 +127,8 @@ namespace DACs.Forms.StoreForms
             {
                 MessageBox.Show("Thanh toán thành công!", "Thông báo");
                 btnCancel_Click(sender, e);
-                MessageBox.Show("Bạn đã tạo thành công phiếu nhập! Vui lòng tải lại để xem phiếu mới nhất.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);    
+                MessageBox.Show("Bạn đã tạo thành công phiếu nhập! Vui lòng tải lại để xem phiếu mới nhất.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateProduct, $"user#{Session.currentUser.MaNhanVien} vừa tạo phiếu nhập mới từ NCC: {cbSuppliers.SelectedValue}");
                 productService.UpdateProductVariantQuantity(chiTietPhieuNhaps);
 
             }

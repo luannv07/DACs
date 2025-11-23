@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DACs.Models;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -53,5 +54,11 @@ namespace DACs.Utils
             return string.Format(new CultureInfo("vi-VN"), "{0:N0}", number);
         }
 
+        public static string FormatLog(LogHeThong log)
+        {
+            return $"[{log.ThoiGian:dd/MM/yyyy HH:mm:ss}] " +
+                   $"({log.MaNhanVien}) " +
+                   $"{log.HanhDong} - {log.NoiDung}";
+        }
     }
 }

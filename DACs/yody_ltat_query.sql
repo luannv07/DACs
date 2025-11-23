@@ -164,6 +164,14 @@ BEGIN
 END;
 GO
 
+CREATE TABLE Log_He_Thong (
+    MaLog INT IDENTITY(1,1) PRIMARY KEY,
+    MaNhanVien INT NOT NULL,
+    HanhDong NVARCHAR(50) NOT NULL,
+    NoiDung NVARCHAR(MAX) NOT NULL,
+    ThoiGian DATETIME NOT NULL DEFAULT GETDATE()
+);
+
 
 INSERT INTO NHAN_VIEN (Ho, Ten, Email, NgaySinh, DiaChi, GioiTinh, TaiKhoan, MatKhau, VaiTro)
 VALUES

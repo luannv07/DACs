@@ -156,6 +156,26 @@ namespace DACs.Services
             DbUtils.ExecuteNonQuery(query, p);
         }
 
+        public (int soDonMoi, decimal tongDoanhThu) GetTodayOrdersAndRevenue()
+        {
+            string query = @"
+                SELECT 
+                    COUNT(DISTINCT dh.MaDonHang) AS SoDonMoi,
+                    ISNULL(SUM(ct.SoLuong * ct.DonGia), 0) AS TongDoanhThu
+                FROM don_hang dh
+                LEFT JOIN chi_tiet_don_hang ct ON dh.MaDonHang = ct.MaDonHang
+                WHERE CAST(dh.NgayDatHang AS DATE) = CAST(GETDATE() AS DATE);
+            ";
+
+            DataTable dt = DbUtils.ExecuteSelectQuery(query);
+
+            int soDonMoi = Convert.ToInt32(dt.Rows[0]["SoDonMoi"]);
+            decimal tongDoanhThu = Convert.ToDecimal(dt.Rows[0]["TongDoanhThu"]);
+
+            return (soDonMoi, tongDoanhThu);
+        }
+
+
 
 
     }

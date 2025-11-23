@@ -12,6 +12,7 @@ namespace DACs.Controls
     public partial class ucAccountControl : UserControl
     {
         private readonly UserService userService = new UserService();
+        private readonly LogService logService = new LogService();
         private List<NhanVien> users = new List<NhanVien>();
 
         private readonly Dictionary<string, string> genderMap = new Dictionary<string, string>
@@ -164,6 +165,8 @@ namespace DACs.Controls
             LoadUserList();
             resetInputFields();
             MessageBox.Show("Thêm nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateUser, $"Tạo tài khoản mới bởi user#{Session.currentUser.MaNhanVien}");
+
         }
 
         private void btnAccountEditUser_Click(object sender, EventArgs e)
@@ -195,6 +198,7 @@ namespace DACs.Controls
             btnAccountAddUser.Enabled = true;
             btnAccountEditUser.Enabled = false;
             btnAccountDeleteUser.Enabled = false;
+            logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.UpdateUser, $"Cập nhật thông tin cho user#{updatedUser.MaNhanVien} bởi user#{Session.currentUser.MaNhanVien}");
             MessageBox.Show("Cập nhật thông tin nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -216,6 +220,7 @@ namespace DACs.Controls
             btnAccountEditUser.Enabled = false;
             btnAccountDeleteUser.Enabled = false;
             MessageBox.Show("Xóa thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.DeleteUser, $"Xoá user#{txtAccountUsername.Text} bởi user#{Session.currentUser.MaNhanVien}");
         }
 
         private void btnAccountResetData_Click(object sender, EventArgs e)

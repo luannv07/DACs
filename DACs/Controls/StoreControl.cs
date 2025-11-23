@@ -1,4 +1,5 @@
-﻿using DACs.Forms.StoreForms;
+﻿using DACs.Enums;
+using DACs.Forms.StoreForms;
 using DACs.Models;
 using DACs.Services;
 using DACs.Utils;
@@ -18,6 +19,7 @@ namespace DACs.Controls
     {
         private readonly StoreService storeService = new StoreService();
         private readonly UserService userService = new UserService();
+        private readonly LogService logService = new LogService();
 
         private List<PhieuNhap> phieuNhap = new List<PhieuNhap>(); 
 
@@ -79,6 +81,7 @@ namespace DACs.Controls
             bool executed = storeService.deleteById(Convert.ToInt32(txtMaPNDisabled.Text));
             if (executed)
             {
+                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.DeleteGRN, $"Xoá phiếu nhập GRN#{txtMaPNDisabled.Text} bởi user#{Session.currentUser.MaNhanVien}");
                 MessageBox.Show("Xoá thành công phiếu nhập có mã: " + txtMaPNDisabled.Text, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             } else
             {

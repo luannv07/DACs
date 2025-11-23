@@ -13,6 +13,7 @@ namespace DACs.Controls
     public partial class ucProductControl : UserControl
     {
         private readonly ProductService productService = new ProductService();
+        private readonly LogService logService = new LogService();
         private List<SanPham> products = new List<SanPham>();
 
         private readonly Dictionary<string, string> productMap = new Dictionary<string, string>
@@ -161,6 +162,7 @@ namespace DACs.Controls
                 {
                     MessageBox.Show("Xóa sản phẩm thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadProductList(productService.GetAllProducts());
+                    logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.DeleteProduct, $"Xoá biến thể sản phẩm productDetails#{maBt} bởi user#{Session.currentUser.MaNhanVien}");
                     ResetProductFields();
                 }
                 else
@@ -235,7 +237,8 @@ namespace DACs.Controls
             bool isUpdated = productService.UpdateProductVariant(maBt, sanpham.TenSanPham, bienthe.TrangThaiBienThe, bienthe.DonGia, bienthe.GiamGia, bienthe.MauSac, bienthe.KichCo);
             if (isUpdated)
             {
-                MessageBox.Show("Cập nhật sản phẩm thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Cập nhật thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.UpdateProduct, $"Sửa thông tin biến thể sản phẩm productDetails#{maBt} bởi user#{Session.currentUser.MaNhanVien}");
                 LoadProductList(productService.GetAllProducts());
                 ResetProductFields();
             }

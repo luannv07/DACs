@@ -1,5 +1,7 @@
-﻿using DACs.Models;
+﻿using DACs.Enums;
+using DACs.Models;
 using DACs.Services;
+using DACs.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +18,7 @@ namespace DACs.Forms.ProductForms
     {
         private List<NhaCungCap> suppliers = new List<NhaCungCap>();
         private readonly SupplierService supplierService = new SupplierService();
+        private readonly LogService logService = new LogService();
         public AllSuppliers()
         {
             InitializeComponent();
@@ -81,6 +84,7 @@ namespace DACs.Forms.ProductForms
                 // Clear textbox
                 txtSupplierName.Clear();
                 txtSupplierEmail.Clear();
+                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateSupplier, $"user#{Session.currentUser.MaNhanVien} vừa thêm NCC: {ten} vào hệ thống");
             }
             else
             {

@@ -26,6 +26,7 @@ namespace DACs.Forms.OrderForms
         private readonly CustomerService customerService = new CustomerService();
         private readonly OrderService orderService = new OrderService();
         private readonly UserService userService = new UserService();
+        private readonly LogService logService = new LogService();
 
         private readonly Dictionary<string, string> genderMap = new Dictionary<string, string>
         {
@@ -494,9 +495,11 @@ namespace DACs.Forms.OrderForms
                     MessageBox.Show("Lỗi tạo khách hàng!");
                     return;
                 }
+
+                logService.WriteLog(-1, LogAction.CreateCustomer, $"Khách hàng customer#{kh.MaKhachHang} ({kh.SoDienThoai}) đăng ký hệ thống");
             }
 
-            
+
             // ---- 5. Tạo đơn hàng ----
             DonHang dh = new DonHang
             {
@@ -540,7 +543,7 @@ namespace DACs.Forms.OrderForms
                 // ---- 7. Trừ tồn kho ----
                 productService.UpdateVariantStock(c.MaBienThe, -c.SoLuong);
             }
-
+            logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateOrder, $"Tạo đơn hàng cho khách hàng có SĐT: {kh.SoDienThoai} bởi user#{Session.currentUser.MaNhanVien}");
             MessageBox.Show("Tạo đơn hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             this.Close();

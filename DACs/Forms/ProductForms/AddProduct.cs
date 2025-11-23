@@ -17,6 +17,7 @@ namespace DACs.Forms.ProductForms
     public partial class AddProduct : Form
     {
         private readonly ProductService productService = new ProductService();
+        private readonly LogService logService = new LogService();
 
         private readonly Dictionary<string, string> productMap = new Dictionary<string, string>
         {
@@ -183,6 +184,7 @@ namespace DACs.Forms.ProductForms
                     return;
                 }
                 // Lưu sản phẩm mới
+                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateProduct, $"user#{Session.currentUser.MaNhanVien} vừa thêm sản phẩm mới vào hệ thống");
                 SaveNewProduct();
             }
             // Nếu người dùng chọn "Thêm biến thể sản phẩm"
@@ -218,6 +220,7 @@ namespace DACs.Forms.ProductForms
                     return;
                 }
                 // Lưu biến thể sản phẩm
+                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateProduct, $"user#{Session.currentUser.MaNhanVien} vừa thêm biến thể sản phẩm mới vào hệ thống");
                 SaveProductVariant();
                 }
 

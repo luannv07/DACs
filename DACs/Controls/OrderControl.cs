@@ -15,6 +15,7 @@ namespace DACs.Controls
         private readonly OrderService orderService = new OrderService();
         private readonly CustomerService customerService = new CustomerService();
         private readonly UserService userService = new UserService();
+        private readonly LogService logService = new LogService();
 
         private List<DonHang> orders = new List<DonHang>();
 
@@ -180,6 +181,7 @@ namespace DACs.Controls
 
             if (isDeleted)
             {
+                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.DeleteOrder, $"Xoá thông tin đơn hàng order#{maDonHang} bởi user#{Session.currentUser.MaNhanVien}");
                 MessageBox.Show("Xoá đơn hàng thành công!", "Hoàn tất", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 RefreshGrid();
             }
@@ -187,6 +189,7 @@ namespace DACs.Controls
             {
                 MessageBox.Show("Xoá đơn hàng thất bại. Vui lòng thử lại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
         }
 
         private void btnAccountVipFeatures_Click(object sender, EventArgs e)

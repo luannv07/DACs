@@ -10,6 +10,7 @@ namespace DACs.Forms.Authentication
     public partial class LoginForm : Form
     {
         private readonly UserService userService = new UserService();
+        private readonly LogService logService = new LogService();
 
         public LoginForm()
         {
@@ -46,6 +47,7 @@ namespace DACs.Forms.Authentication
             Session.currentUser = user;
 
             ControlUtil.LoadForm(this, new MainForm());
+            logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.Login, $"user#{Session.currentUser.MaNhanVien} dăng nhập hệ thống.");
 
             // Remember me
             if (chkRememberMe.Checked)
