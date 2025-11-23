@@ -577,5 +577,26 @@ namespace DACs.Services
             DbUtils.ExecuteNonQuery(query, p);
         }
 
+        public List<dynamic> GetBestSell()
+        {
+            string query = @"select top 5 s.masanpham, s.tensanpham, sum(c.SoLuong) soluong from SAN_PHAM s
+            join BIEN_THE_SAN_PHAM b on b.MaSanPham = s.MaSanPham
+            join CHI_TIET_DON_HANG c on c.MaBienThe = b.MaBienThe
+            group by s.TenSanPham, s.masanpham
+            order by soluong desc";
+
+            DataTable dt = DbUtils.ExecuteSelectQuery(query);
+            List<dynamic> data = new List<dynamic>();
+
+            foreach (DataRow row in dt.Rows)
+                data.Add(new
+                {
+                    MaSanPham = row["MaSanPham"],
+                    TenSanPham = row["TenSanPham"],
+                    SoLuong = row["SoLuong"]
+                });
+            return data;
+        }
+
     }
 }

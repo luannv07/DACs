@@ -175,7 +175,66 @@ namespace DACs.Services
             return (soDonMoi, tongDoanhThu);
         }
 
+        public int GetTotalOrders()
+        {
+            string query = "SELECT COUNT(*) FROM DON_HANG";
 
+            object result = DbUtils.ExecuteScalar(query);
+            return result == DBNull.Value ? 0 : Convert.ToInt32(result);
+        }
+
+        public decimal GetTotalRevenue()
+        {
+            string query = @"
+                SELECT ISNULL(SUM(SoLuong * DonGia), 0) 
+                FROM CHI_TIET_DON_HANG
+            ";
+
+            object result = DbUtils.ExecuteScalar(query);
+            return result == DBNull.Value ? 0 : Convert.ToDecimal(result);
+        }
+        public List<(DateTime Ngay, decimal DoanhThu)> GetRevenueByDate(DateTime fromDate)
+        {
+            string query = @"
+            SELECT 
+                CAST(dh.NgayDatHang AS DATE) AS Ngay,
+                SUM(ct.SoLuong * ct.DonGia) AS DoanhThu
+            FROM don_hang dh
+            JOIN chi_tiet_don_hang ct ON ct.MaDonHang = dh.MaDonHang
+            WHERE dh.NgayDatHang >= @from
+            GROUP BY CAST(dh.NgayDatHang AS DATE)
+            ORDER BY Ngay ASC";
+
+            SqlParameter[] pr =
+                    {
+                new SqlParameter("@from", fromDate)
+            };
+
+            DataTable dt = DbUtils.ExecuteSelectQuery(query, pr);
+
+            List<(DateTime, decimal)> list = new List<(DateTime, decimal)>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                list.Add((
+                    Convert.ToDateTime(row["Ngay"]),
+                    Convert.ToDecimal(row["DoanhThu"])
+                ));
+            }
+
+            return list;
+        }
+        public DateTime GetFirstOrderDate()
+        {
+            string query = @"SELECT MIN(NgayDatHang) FROM DON_HANG";
+
+            object result = DbUtils.ExecuteScalar(query);
+
+            if (result == DBNull.Value)
+                return DateTime.Today;   // nếu chưa có đơn nào
+
+            return Convert.ToDateTime(result);
+        }
 
 
     }

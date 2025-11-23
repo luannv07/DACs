@@ -115,40 +115,13 @@ namespace DACs.Controls
 
         private void AppendLogColored(LogHeThong log)
         {
-            Color color;
-
-            switch (log.HanhDong)
-            {
-                case "CreateOrder":
-                case "CreateProduct":
-                case "CreateCustomer":
-                    color = Color.Green;
-                    break;
-
-                case "UpdateProduct":
-                case "UpdateCustomer":
-                    color = Color.Orange;
-                    break;
-
-                case "DeleteOrder":
-                case "DeleteProduct":
-                    color = Color.Red;
-                    break;
-
-                case "ImportStock":
-                    color = Color.Blue;
-                    break;
-
-                default:
-                    color = Color.Black;
-                    break;
-            }
-
-            rtbRecentActivities.SelectionColor = color;
             rtbRecentActivities.AppendText(StringUtils.FormatLog(log) + "\n");
-
             rtbRecentActivities.SelectionColor = Color.Black;
         }
 
+        private void btnAccountResetData_Click(object sender, EventArgs e)
+        {
+            LoadRecentLogs();
+        }
     }
 }

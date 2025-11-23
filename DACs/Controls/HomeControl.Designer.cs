@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ucHomeControl));
             this.labelUsers = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -47,6 +48,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.rtbRecentActivities = new System.Windows.Forms.RichTextBox();
+            this.btnAccountResetData = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -229,15 +231,27 @@
             this.rtbRecentActivities.Location = new System.Drawing.Point(135, 414);
             this.rtbRecentActivities.Name = "rtbRecentActivities";
             this.rtbRecentActivities.ReadOnly = true;
-            this.rtbRecentActivities.Size = new System.Drawing.Size(681, 96);
+            this.rtbRecentActivities.Size = new System.Drawing.Size(681, 198);
             this.rtbRecentActivities.TabIndex = 6;
             this.rtbRecentActivities.Text = "";
+            // 
+            // btnAccountResetData
+            // 
+            this.btnAccountResetData.Image = ((System.Drawing.Image)(resources.GetObject("btnAccountResetData.Image")));
+            this.btnAccountResetData.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnAccountResetData.Location = new System.Drawing.Point(774, 369);
+            this.btnAccountResetData.Name = "btnAccountResetData";
+            this.btnAccountResetData.Size = new System.Drawing.Size(42, 42);
+            this.btnAccountResetData.TabIndex = 7;
+            this.btnAccountResetData.UseVisualStyleBackColor = true;
+            this.btnAccountResetData.Click += new System.EventHandler(this.btnAccountResetData_Click);
             // 
             // ucHomeControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.Controls.Add(this.btnAccountResetData);
             this.Controls.Add(this.rtbRecentActivities);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
@@ -285,5 +299,6 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label txtTodayOrder;
         private System.Windows.Forms.RichTextBox rtbRecentActivities;
+        private System.Windows.Forms.Button btnAccountResetData;
     }
 }

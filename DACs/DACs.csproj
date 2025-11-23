@@ -259,6 +259,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DemoExportCSV\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>

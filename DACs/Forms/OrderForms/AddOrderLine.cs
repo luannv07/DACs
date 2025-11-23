@@ -447,9 +447,9 @@ namespace DACs.Forms.OrderForms
             string address = txtDiaChiKH.Text.Trim();
             byte gender = (byte)cbGioiTinh.SelectedIndex; // 0-Nam,1-Nữ,2-Khác
 
-            if (phone.Length < 9 || phone.Length > 11)
+            if (phone.Length != 10)
             {
-                MessageBox.Show("Số điện thoại không hợp lệ!");
+                MessageBox.Show("Số điện thoại không hợp lệ! (phải đủ 10 số)");
                 return;
             }
             if (string.IsNullOrEmpty(name))
@@ -470,16 +470,19 @@ namespace DACs.Forms.OrderForms
 
             // 3. Kiểm tra khách hàng
             KhachHang kh = customerService.GetByPhone(phone);
+            KhachHang newKH;
             int maKH = 0;
+            string sdt = "";
 
             if (kh != null)
             {
                 maKH = kh.MaKhachHang;
+                sdt = kh.SoDienThoai;
             }
             else
             {
                 // 4. Tạo khách hàng mới
-                KhachHang newKH = new KhachHang
+                newKH = new KhachHang
                 {
                     TenKhachHang = name,
                     DiaChi = address,
@@ -487,6 +490,7 @@ namespace DACs.Forms.OrderForms
                     GioiTinh = gender,
                     LoaiKhachHang = 0 // mặc định thường
                 };
+                sdt = phone;
 
                 maKH = customerService.AddCustomer(newKH);
 
@@ -496,7 +500,9 @@ namespace DACs.Forms.OrderForms
                     return;
                 }
 
-                logService.WriteLog(-1, LogAction.CreateCustomer, $"Khách hàng customer#{kh.MaKhachHang} ({kh.SoDienThoai}) đăng ký hệ thống");
+                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateCustomer,
+                    $"Tạo khách hàng mới: {newKH.TenKhachHang} ({newKH.SoDienThoai})");
+
             }
 
 
@@ -543,7 +549,7 @@ namespace DACs.Forms.OrderForms
                 // ---- 7. Trừ tồn kho ----
                 productService.UpdateVariantStock(c.MaBienThe, -c.SoLuong);
             }
-            logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateOrder, $"Tạo đơn hàng cho khách hàng có SĐT: {kh.SoDienThoai} bởi user#{Session.currentUser.MaNhanVien}");
+            logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateOrder, $"Tạo đơn hàng cho khách hàng có SĐT: {sdt} bởi user#{Session.currentUser.MaNhanVien}");
             MessageBox.Show("Tạo đơn hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             this.Close();

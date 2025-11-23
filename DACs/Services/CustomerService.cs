@@ -21,6 +21,27 @@ namespace DACs.Services
             return ConvertToList(dt);
         }
 
+        public List<dynamic> GetTopCustomers()
+        {
+            string query = @"select top 5 k.makhachhang, k.tenkhachhang, count(o.madonhang) as tongdonhang from khach_hang k
+            join DON_HANG o on o.MaKhachHang = k.MaKhachHang
+            group by k.TenKhachHang, k.makhachhang
+            order by tongdonhang desc";
+
+            DataTable dt = DbUtils.ExecuteSelectQuery(query);
+
+            List<dynamic> data = new List<dynamic>();
+
+            foreach (DataRow row in dt.Rows)
+                data.Add(new
+                {
+                    MaKhachHang = row["MaKhachHang"].ToString(),
+                    TenKhachHang = row["TenKhachHang"].ToString(),
+                    TongDon = row["tongdonhang"].ToString()
+                });
+            return data;
+        }
+
         // ================================
         //  GET BY ID
         // ================================
