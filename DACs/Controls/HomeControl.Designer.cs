@@ -228,18 +228,19 @@
             // 
             this.rtbRecentActivities.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rtbRecentActivities.Cursor = System.Windows.Forms.Cursors.Default;
-            this.rtbRecentActivities.Location = new System.Drawing.Point(135, 414);
+            this.rtbRecentActivities.Location = new System.Drawing.Point(49, 414);
             this.rtbRecentActivities.Name = "rtbRecentActivities";
             this.rtbRecentActivities.ReadOnly = true;
-            this.rtbRecentActivities.Size = new System.Drawing.Size(681, 198);
+            this.rtbRecentActivities.Size = new System.Drawing.Size(862, 198);
             this.rtbRecentActivities.TabIndex = 6;
             this.rtbRecentActivities.Text = "";
+            this.rtbRecentActivities.TextChanged += new System.EventHandler(this.rtbRecentActivities_TextChanged);
             // 
             // btnAccountResetData
             // 
             this.btnAccountResetData.Image = ((System.Drawing.Image)(resources.GetObject("btnAccountResetData.Image")));
             this.btnAccountResetData.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAccountResetData.Location = new System.Drawing.Point(774, 369);
+            this.btnAccountResetData.Location = new System.Drawing.Point(774, 12);
             this.btnAccountResetData.Name = "btnAccountResetData";
             this.btnAccountResetData.Size = new System.Drawing.Size(42, 42);
             this.btnAccountResetData.TabIndex = 7;

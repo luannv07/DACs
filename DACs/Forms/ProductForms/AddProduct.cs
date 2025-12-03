@@ -184,7 +184,7 @@ namespace DACs.Forms.ProductForms
                     return;
                 }
                 // Lưu sản phẩm mới
-                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateProduct, $"user#{Session.currentUser.MaNhanVien} vừa thêm sản phẩm mới vào hệ thống");
+                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateProduct, $"Thêm sản phẩm mới productName#{txtTenSp.Text} (supplierID: {txtNCCTU.Text}) vào hệ thống");
                 SaveNewProduct();
             }
             // Nếu người dùng chọn "Thêm biến thể sản phẩm"
@@ -220,7 +220,7 @@ namespace DACs.Forms.ProductForms
                     return;
                 }
                 // Lưu biến thể sản phẩm
-                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateProduct, $"user#{Session.currentUser.MaNhanVien} vừa thêm biến thể sản phẩm mới vào hệ thống");
+                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateProduct, $"Thêm biến thể sản phẩm mới productName#{txtTenSp.Text} (màu: {cbMauSac.SelectedItem.ToString()}, cỡ: {cbKichCo.SelectedItem.ToString()}) vào hệ thống");
                 SaveProductVariant();
                 }
 

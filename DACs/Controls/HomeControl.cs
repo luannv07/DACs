@@ -122,6 +122,13 @@ namespace DACs.Controls
         private void btnAccountResetData_Click(object sender, EventArgs e)
         {
             LoadRecentLogs();
+            setDynamicData();
+            MessageBox.Show("Làm mới dữ liệu thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void rtbRecentActivities_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -46,7 +46,7 @@ namespace DACs.Forms.Authentication
             Session.CurrentUsername = user.TaiKhoan;
             Session.currentUser = user;
 
-            logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.Login, $"user#{Session.currentUser.MaNhanVien} đăng nhập hệ thống.");
+            logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.Login, $"Đăng nhập hệ thống.");
             ControlUtil.LoadForm(this, new MainForm());
 
             // Remember me

@@ -162,7 +162,7 @@ namespace DACs.Controls
                 {
                     MessageBox.Show("Xóa sản phẩm thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadProductList(productService.GetAllProducts());
-                    logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.DeleteProduct, $"Xoá biến thể sản phẩm productDetails#{maBt} bởi user#{Session.currentUser.MaNhanVien}");
+                    logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.DeleteProduct, $"Xoá biến thể sản phẩm productDetailsID#{maBt}");
                     ResetProductFields();
                 }
                 else
@@ -238,7 +238,7 @@ namespace DACs.Controls
             if (isUpdated)
             {
                 MessageBox.Show("Cập nhật thành công.", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.UpdateProduct, $"Sửa thông tin biến thể sản phẩm productDetails#{maBt} bởi user#{Session.currentUser.MaNhanVien}");
+                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.UpdateProduct, $"Sửa thông tin biến thể sản phẩm productDetailsID#{maBt}");
                 LoadProductList(productService.GetAllProducts());
                 ResetProductFields();
             }

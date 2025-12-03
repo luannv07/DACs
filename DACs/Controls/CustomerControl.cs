@@ -211,7 +211,7 @@ namespace DACs.Controls
                 MessageBox.Show("Cập nhật thông tin khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 LoadCustomers();
-                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.UpdateCustomer, $"Cập nhật thông tin khách hàng customer#{kh.MaKhachHang} bởi user#{Session.currentUser.MaNhanVien}");
+                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.UpdateCustomer, $"Cập nhật thông tin khách hàng customerID#{kh.MaKhachHang}");
                 panel2.Visible = false;
             }
             else

@@ -28,7 +28,9 @@ namespace DACs.Enums
         CreateUser,
         DeleteUser,
 
-        DeleteGRN
+        DeleteGRN,
+
+        ExportCSV
     }
 }
 

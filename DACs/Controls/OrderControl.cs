@@ -181,7 +181,7 @@ namespace DACs.Controls
 
             if (isDeleted)
             {
-                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.DeleteOrder, $"Xoá thông tin đơn hàng order#{maDonHang} bởi user#{Session.currentUser.MaNhanVien}");
+                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.DeleteOrder, $"Xoá thông tin đơn hàng orderID#{maDonHang}");
                 MessageBox.Show("Xoá đơn hàng thành công!", "Hoàn tất", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 RefreshGrid();
             }

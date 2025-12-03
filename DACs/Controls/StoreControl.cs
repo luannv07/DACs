@@ -81,7 +81,7 @@ namespace DACs.Controls
             bool executed = storeService.deleteById(Convert.ToInt32(txtMaPNDisabled.Text));
             if (executed)
             {
-                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.DeleteGRN, $"Xoá phiếu nhập GRN#{txtMaPNDisabled.Text} bởi user#{Session.currentUser.MaNhanVien}");
+                logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.DeleteGRN, $"Xoá phiếu nhập GRN_ID#{txtMaPNDisabled.Text}");
                 MessageBox.Show("Xoá thành công phiếu nhập có mã: " + txtMaPNDisabled.Text, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             } else
             {

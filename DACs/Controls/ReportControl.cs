@@ -19,6 +19,7 @@ namespace DACs.Controls
         private readonly CustomerService customerService = new CustomerService();
         private readonly OrderService orderService = new OrderService();
         private readonly ProductService productService = new ProductService();
+        private readonly LogService logService = new LogService();
 
         public ucReportControl()
         {
@@ -156,6 +157,7 @@ namespace DACs.Controls
 
             MessageBox.Show("Đã xuất CSV tại:\n" + filePath,
                 "Xuất CSV Thành côngggg!!!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            logService.WriteLog(Session.currentUser?.MaNhanVien, Enums.LogAction.ExportCSV, "Xuất báo cáo doanh thu ra file CSV.");
         }
         private void ExportRevenueToCSV(string filePath)
         {
@@ -185,7 +187,7 @@ namespace DACs.Controls
 
             List<string> lines = new List<string>();
             lines.Add("Ngay,DoanhThu");
-            lines.Add($"{DateTime.Today.ToString("dd-MM-yyyy")},TuiNhoBan");
+            //lines.Add($"{DateTime.Today.ToString("dd-MM-yyyy")},TuiNhoBan");
             foreach (var item in data)
             {
                 string line = $"{item.Ngay:dd-MM-yyyy},{item.DoanhThu}";

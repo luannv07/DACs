@@ -501,7 +501,7 @@ namespace DACs.Forms.OrderForms
                 }
 
                 logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateCustomer,
-                    $"Tạo khách hàng mới: {newKH.TenKhachHang} ({newKH.SoDienThoai})");
+                    $"Khách hàng: {newKH.TenKhachHang} ({newKH.SoDienThoai}) tham gia hệ thống");
 
             }
 
@@ -549,7 +549,7 @@ namespace DACs.Forms.OrderForms
                 // ---- 7. Trừ tồn kho ----
                 productService.UpdateVariantStock(c.MaBienThe, -c.SoLuong);
             }
-            logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateOrder, $"Tạo đơn hàng cho khách hàng có SĐT: {sdt} bởi user#{Session.currentUser.MaNhanVien}");
+            logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.CreateOrder, $"Tạo đơn hàng cho khách hàng có SĐT: {sdt}");
             MessageBox.Show("Tạo đơn hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             this.Close();

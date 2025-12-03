@@ -57,7 +57,7 @@ namespace DACs.Utils
         public static string FormatLog(LogHeThong log)
         {
             return $"[{log.ThoiGian:dd/MM/yyyy HH:mm:ss}] " +
-                   $"({log.MaNhanVien}) " +
+                   $"(userID#{log.MaNhanVien}) " +
                    $"{log.HanhDong} - {log.NoiDung}";
         }
     }

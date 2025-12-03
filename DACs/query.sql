@@ -37,3 +37,12 @@ JOIN chi_tiet_don_hang ct ON ct.MaDonHang = dh.MaDonHang
 WHERE CONVERT(date, dh.NgayDatHang) = '2025-11-16';
 
 
+CREATE PROCEDURE ClearOldLogs
+AS
+BEGIN
+    DELETE FROM Log_He_Thong WHERE ThoiGian < DATEADD(day, -7, GETDATE());
+END;
+truncate table Log_He_Thong
+
+
+select * from Log_He_Thong
