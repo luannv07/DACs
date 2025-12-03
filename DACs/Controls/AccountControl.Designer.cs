@@ -516,6 +516,7 @@
             // 
             // btnAccountVipFeatures
             // 
+            this.btnAccountVipFeatures.Enabled = false;
             this.btnAccountVipFeatures.Image = ((System.Drawing.Image)(resources.GetObject("btnAccountVipFeatures.Image")));
             this.btnAccountVipFeatures.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnAccountVipFeatures.Location = new System.Drawing.Point(30, 227);
@@ -524,6 +525,7 @@
             this.btnAccountVipFeatures.TabIndex = 4;
             this.btnAccountVipFeatures.Text = "Nâng cao";
             this.btnAccountVipFeatures.UseVisualStyleBackColor = true;
+            this.btnAccountVipFeatures.Visible = false;
             // 
             // btnAccountDeleteUser
             // 
