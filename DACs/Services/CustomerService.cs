@@ -9,9 +9,6 @@ namespace DACs.Services
 {
     internal class CustomerService
     {
-        // ================================
-        //  GET ALL CUSTOMERS
-        // ================================
         public List<KhachHang> GetAllCustomers()
         {
             string query = "SELECT * FROM KHACH_HANG ORDER BY MaKhachHang DESC";
@@ -42,9 +39,6 @@ namespace DACs.Services
             return data;
         }
 
-        // ================================
-        //  GET BY ID
-        // ================================
         public KhachHang GetCustomerById(int id)
         {
             string query = "SELECT * FROM KHACH_HANG WHERE MaKhachHang = @ID";
@@ -62,9 +56,6 @@ namespace DACs.Services
             return MapRow(dt.Rows[0]);
         }
 
-        // ================================
-        //  ADD
-        // ================================
         public int AddCustomer(KhachHang kh)
         {
             string query = @"
@@ -85,9 +76,6 @@ namespace DACs.Services
         }
 
 
-        // ================================
-        //  UPDATE
-        // ================================
         public bool UpdateCustomer(KhachHang kh, int loaikhachhang = 0)
         {
             string query = @"
@@ -112,10 +100,6 @@ namespace DACs.Services
 
             return DbUtils.ExecuteNonQuery(query, p) > 0;
         }
-
-        // ================================
-        //  DELETE
-        // ================================
         public bool DeleteCustomer(int id)
         {
             string query = "DELETE FROM KHACH_HANG WHERE MaKhachHang = @ID";
@@ -127,10 +111,6 @@ namespace DACs.Services
 
             return DbUtils.ExecuteNonQuery(query, p) > 0;
         }
-
-        // ================================
-        //  SEARCH
-        // ================================
         public List<KhachHang> Search(string keyword)
         {
             string query = @"
@@ -147,10 +127,6 @@ namespace DACs.Services
 
             return ConvertToList(dt);
         }
-
-        // ================================
-        //  CHECK PHONE EXISTS
-        // ================================
         public bool IsPhoneExists(string phone, int exceptId = -1)
         {
             string query = @"
@@ -168,10 +144,6 @@ namespace DACs.Services
 
             return count > 0;
         }
-
-        // ================================
-        //  HELPERS
-        // ================================
         private List<KhachHang> ConvertToList(DataTable dt)
         {
             List<KhachHang> list = new List<KhachHang>();

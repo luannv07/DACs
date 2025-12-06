@@ -335,7 +335,7 @@ namespace DACs.Services
                         break;
 
                     case 547: // Foreign key
-                        message = "Không thể xóa hoặc cập nhật do dữ liệu đang được sử dụng ở bảng khác.";
+                        message = "Dữ liệu không hợp lệ.";
                         break;
 
                     case 515: // Cannot insert NULL
@@ -492,7 +492,7 @@ namespace DACs.Services
                 pd.trangthaibienthe, p.ngaytao, p.mancc 
                 from san_pham as p
                 inner join bien_the_san_pham as pd on pd.masanpham = p.masanpham
-                where pd.xoabienthe = 0 and pd.soluong > 0
+                where pd.xoabienthe = 0 and pd.soluong > 0 and trangthaibienthe = 1
             ";
 
             DataTable dt = DbUtils.ExecuteSelectQuery(query);
@@ -539,7 +539,7 @@ namespace DACs.Services
             string query = @"
                 select mabienthe, masanpham, mausac, kichco, soluong, dongia, giamgia
                 from bien_the_san_pham
-                where xoabienthe = 0
+                where xoabienthe = 0 and trangthaibienthe = 1
             ";
 
             DataTable dt = DbUtils.ExecuteSelectQuery(query);

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace DACs.Controls
@@ -171,9 +172,10 @@ namespace DACs.Controls
 
         private void btnAppliesEdit_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtTenKH.Text))
+            string fullNamePattern = @"^[\p{L}\s]+$";
+            if (string.IsNullOrWhiteSpace(txtTenKH.Text) || !Regex.IsMatch(txtTenKH.Text, fullNamePattern))
             {
-                MessageBox.Show("Tên khách hàng không được để trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Tên khách hàng không hợp lệ hoặc đang bỏ trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -192,6 +194,11 @@ namespace DACs.Controls
             if (string.IsNullOrWhiteSpace(txtDiaChi.Text))
             {
                 MessageBox.Show("Địa chỉ không được để trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (_service.IsPhoneExists(txtSdtKH.Text.Trim(), int.Parse(txtMaKH.Text)))
+            {
+                MessageBox.Show("Số điện thoại đã tồn tại trong hệ thống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

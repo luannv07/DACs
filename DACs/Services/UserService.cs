@@ -10,7 +10,6 @@ namespace DACs.Services
 {
     public class UserService
     {
-        // Lấy 1 user theo username/password
         public NhanVien AuthenticateUser(string username, string password)
         {
             string query = "SELECT * FROM nhan_vien WHERE taikhoan = @username AND matkhau = @password AND xoataikhoan = 0";
@@ -25,7 +24,6 @@ namespace DACs.Services
             return MapNhanVien(dt.Rows[0]);
         }
 
-        // Lấy tất cả user
         public List<NhanVien> GetAllUsers()
         {
             string query = "SELECT * FROM nhan_vien WHERE xoataikhoan = 0 AND taikhoan != @username";
@@ -112,7 +110,6 @@ namespace DACs.Services
         }
 
 
-        // Kiểm tra email tồn tại
         public bool CheckEmailExists(string email)
         {
             string query = "SELECT COUNT(email) FROM nhan_vien WHERE email = @email";
@@ -121,7 +118,6 @@ namespace DACs.Services
             return dt.Rows.Count > 0 && Convert.ToInt32(dt.Rows[0][0]) > 0;
         }
 
-        // Thêm user
         public void AddUser(NhanVien user)
         {
             string query = @"INSERT INTO nhan_vien 
@@ -146,7 +142,6 @@ namespace DACs.Services
             DbUtils.ExecuteNonQuery(query, parameters);
         }
 
-        // Cập nhật user
         public void UpdateUser(NhanVien user)
         {
             string query = @"UPDATE nhan_vien SET 
@@ -177,7 +172,6 @@ namespace DACs.Services
             DbUtils.ExecuteNonQuery(query, parameters);
         }
 
-        // Xóa user
         public void DeleteUser(string username)
         {
             string query = "UPDATE nhan_vien SET xoaTaiKhoan = 1 WHERE taikhoan = @taikhoan";

@@ -41,7 +41,6 @@ namespace DACs.Forms.Authentication
 
             MessageBox.Show("Đăng nhập thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            // Lưu thông tin session
             Session.CurrentRole = ParseRole(user.VaiTro);
             Session.CurrentUsername = user.TaiKhoan;
             Session.currentUser = user;
@@ -49,7 +48,6 @@ namespace DACs.Forms.Authentication
             logService.WriteLog(Session.currentUser.MaNhanVien, LogAction.Login, $"Đăng nhập hệ thống.");
             ControlUtil.LoadForm(this, new MainForm());
 
-            // Remember me
             if (chkRememberMe.Checked)
             {
                 Properties.Settings.Default.username = txtUsername.Text;

@@ -22,6 +22,6 @@ namespace DACs.Utils
         };
         public const int VIP_PERCENTAGE = 5;
         public const int MAX_LOGS_COUNT = 50;
-        public const int TOP_TIER_REPORT_COUNT = 5;
+        //public const int TOP_TIER_REPORT_COUNT = 5;
     }
 }
