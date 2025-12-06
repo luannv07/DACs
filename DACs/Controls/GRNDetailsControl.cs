@@ -24,7 +24,6 @@ namespace DACs.Controls
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            // Remove old combination BEFORE disposing control
             if (selectedProductId.HasValue
                 && !string.IsNullOrEmpty(selectedColor)
                 && !string.IsNullOrEmpty(selectedSize))
@@ -183,7 +182,6 @@ namespace DACs.Controls
                 RemoveCombination(selectedProductId.Value, selectedColor, selectedSize);
             }
 
-            // reset để updateThanhTien() hiểu là combo rỗng
             selectedProductId = null;
             selectedColor = null;
             selectedSize = null;
@@ -193,8 +191,7 @@ namespace DACs.Controls
         private void updateThanhTien()
         {
             if (isLoading) return;
-            if (cbSP.SelectedValue == null
-                || string.IsNullOrEmpty(cbMauSac.Text)
+            if (cbSP.SelectedValue == null || string.IsNullOrEmpty(cbMauSac.Text)
                 || string.IsNullOrEmpty(cbKichCo.Text)
                 || string.IsNullOrEmpty(txtDonGia.Text))
                 return;
@@ -203,15 +200,12 @@ namespace DACs.Controls
             string color = cbMauSac.Text;
             string size = cbKichCo.Text;
 
-            // Nếu user chọn lại đúng bộ cũ -> KHÔNG CHECK TRÙNG
             if (selectedProductId != productId || selectedColor != color || selectedSize != size)
             {
-                // Nếu đổi sang bộ mới -> phải check mới
                 if (!AddCombination(productId, color, size))
                 {
                     MessageBox.Show("Biến thể sản phẩm này đã được thêm rồi!", "Lỗi");
 
-                    // Reset UI về trạng thái chọn lại
                     cbSP.SelectedIndex = 0;
                     cbMauSac.SelectedItem = null;
                     cbKichCo.SelectedItem = null;
@@ -219,13 +213,10 @@ namespace DACs.Controls
                     return;
                 }
 
-                // Nếu thêm mới thành công, update tracking values
                 selectedProductId = productId;
                 selectedColor = color;
                 selectedSize = size;
             }
-
-            // Tính tiền
             txtThanhTien.Text = (Convert.ToDecimal(txtDonGia.Text) * nudSoLuong.Value).ToString();
             TongTienChanged?.Invoke(this, EventArgs.Empty);
         }

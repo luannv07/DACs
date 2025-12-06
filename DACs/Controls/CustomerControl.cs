@@ -44,9 +44,6 @@ namespace DACs.Controls
             BindEvents();
         }
 
-        // ================================
-        // LOAD DATA
-        // ================================
         private void LoadCustomers()
         {
             _currentList = _service.GetAllCustomers();
@@ -84,16 +81,11 @@ namespace DACs.Controls
             dgvCustomerList.Dock = DockStyle.Fill;
         }
 
-
-        // ================================
-        // EVENT SETUP
-        // ================================
         private void BindEvents()
         {
             dgvCustomerList.CellClick += DgvCustomerList_CellClick;
             btnTriggerSearching.Click += BtnTriggerSearching_Click;
             btnAccountResetData.Click += BtnAccountResetData_Click;
-
         }
 
         private void DgvCustomerList_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -109,15 +101,10 @@ namespace DACs.Controls
             txtSdtKH.Text = row.Cells["SoDienThoai"].Value?.ToString();
             txtDiaChi.Text = row.Cells["DiaChi"].Value?.ToString();
 
-            // ===== Map lại giới tính cho combobox =====
-            string genderText = row.Cells["GioiTinh"].Value?.ToString();  // "Nam" / "Nữ" / "Khác"
+            string genderText = row.Cells["GioiTinh"].Value?.ToString();
             cbGioiTinh.SelectedItem = genderText;
         }
 
-
-        // ================================
-        // SEARCHING
-        // ================================
         private void BtnTriggerSearching_Click(object sender, EventArgs e)
         {
             Search();
@@ -136,9 +123,6 @@ namespace DACs.Controls
             SetupCustomerGridView(_service.Search(keyword));
         }
 
-        // ================================
-        // RESET
-        // ================================
         private void BtnAccountResetData_Click(object sender, EventArgs e)
         {
             txtSearching.Text = "";

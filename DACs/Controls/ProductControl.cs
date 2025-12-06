@@ -252,7 +252,6 @@ namespace DACs.Controls
             SanPham sanPham = new SanPham();
             BienTheSanPham bienThe = new BienTheSanPham();
 
-            // Kiểm tra dữ liệu đầu vào
             if (string.IsNullOrEmpty(txtTenSp.Text))
             {
                 MessageBox.Show("Hãy nhập tên sản phẩm.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);

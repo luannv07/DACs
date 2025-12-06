@@ -79,7 +79,7 @@ namespace DACs.Services
         }
         public NhanVien getById(int manv)
         {
-            String query = @"select * from nhan_vien where MaNhanVien = @manv";
+            string query = @"select * from nhan_vien where MaNhanVien = @manv";
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@manv", manv)
@@ -95,7 +95,7 @@ namespace DACs.Services
 
         public NhanVien getByUsername(string username)
         {
-            String query = @"select * from nhan_vien where taikhoan = @username";
+            string query = @"select * from nhan_vien where taikhoan = @username";
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@taikhoan", username)

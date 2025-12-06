@@ -86,11 +86,7 @@ namespace DACs.Services
 
             int rows = DbUtils.ExecuteNonQuery(query, parameters);
 
-            if (rows > 0)
-            {
-                return true;
-            }
-            return false;
+            return rows > 0;
         }
 
 

@@ -187,7 +187,7 @@ namespace DACs.Controls
 
             List<string> lines = new List<string>();
             lines.Add("Ngay,DoanhThu");
-            //lines.Add($"{DateTime.Today.ToString("dd-MM-yyyy")},TuiNhoBan");
+            //lines.Add($"{DateTime.Today.ToString("dd-MM-yyyy")},Test doanh so o day neee brooo!");
             foreach (var item in data)
             {
                 string line = $"{item.Ngay:dd-MM-yyyy},{item.DoanhThu}";

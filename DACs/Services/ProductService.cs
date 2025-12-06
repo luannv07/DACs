@@ -11,7 +11,6 @@ namespace DACs.Services
 {
     internal class ProductService
     {
-        // Trả về danh sách "flat", mỗi dòng là 1 sản phẩm + 1 biến thể
         public List<SanPham> GetAllProducts(bool needProductID = false)
         {
             string query = @"
@@ -409,7 +408,6 @@ namespace DACs.Services
 
         public bool AddNewProductWithVariant(SanPham sanPham, BienTheSanPham bienThe)
         {
-            // 1. Thêm sản phẩm và lấy ID
             string insertSanPham = @"
                 INSERT INTO San_Pham (TenSanPham, MaNCC, NgayTao)
                 VALUES (@TenSanPham, @MaNCC, @NgayTao);
@@ -428,7 +426,6 @@ namespace DACs.Services
 
             int newProductId = Convert.ToInt32(result);
 
-            // 2. Gọi hàm mới để thêm biến thể
             return AddProductVariantForNewProduct(newProductId, bienThe);
         }
 
@@ -502,7 +499,6 @@ namespace DACs.Services
             {
                 int maSP = Convert.ToInt32(row["masanpham"]);
 
-                // Kiểm tra sản phẩm đã tồn tại chưa
                 var product = products.FirstOrDefault(x => x.MaSanPham == maSP);
                 if (product == null)
                 {
@@ -518,7 +514,6 @@ namespace DACs.Services
                     products.Add(product);
                 }
 
-                // Thêm biến thể vào đúng sản phẩm
                 product.BienThes.Add(new BienTheSanPham
                 {
                     MaBienThe = Convert.ToInt32(row["mabienthe"]),

@@ -93,7 +93,6 @@ namespace DACs.Controls
 
         private void btnStoreDetails_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show(txtMaPNDisabled.Text);
             ControlUtil.LoadFormWithoutClose(Form.ActiveForm, new ViewGRN(txtMaPNDisabled.Text));
         }
 

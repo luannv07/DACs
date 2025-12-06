@@ -36,19 +36,11 @@ namespace DACs.Controls
         {
             SetupGrid();
         }
-
-        // -------------------------------
-        // 1. Load dữ liệu
-        // -------------------------------
         private void LoadOrders()
         {
             orders = orderService.getAllOrders();
 
         }
-
-        // -------------------------------
-        // 2. Tạo danh sách hiển thị
-        // -------------------------------
         private List<object> BuildOrderDisplayData()
         {
             var allCustomers = customerService.GetAllCustomers()
@@ -81,10 +73,6 @@ namespace DACs.Controls
             }).ToList<object>();
         }
 
-
-        // -------------------------------
-        // 3. Setup DataGridView
-        // -------------------------------
         private void SetupGrid()
         {
             if (dgvOrderList.Columns.Count == 0) return;
@@ -100,17 +88,10 @@ namespace DACs.Controls
             dgvOrderList.ReadOnly = true;
         }
 
-        // -------------------------------
-        // 4. Sự kiện load control
-        // -------------------------------
         private void ucOrderControl_Load(object sender, EventArgs e)
         {
             RefreshGrid();
         }
-
-        // -------------------------------
-        // HÀM TÁI SỬ DỤNG
-        // -------------------------------
         private void RefreshGrid()
         {
             LoadOrders();
@@ -143,7 +124,6 @@ namespace DACs.Controls
         {
             string keyword = txtSearching.Text.Trim();
 
-            // Nếu để trống → load tất cả
             if (string.IsNullOrEmpty(keyword))
             {
                 orders = orderService.getAllOrders();
@@ -151,7 +131,6 @@ namespace DACs.Controls
                 return;
             }
 
-            // Search theo keyword cho cả khách hàng + nhân viên
             var result = orderService.search(keyword);
 
             LoadOrderData(result);
@@ -204,7 +183,6 @@ namespace DACs.Controls
                 dgvOrderList.SelectedRows[0].Cells["MaDonHang"].Value
             );
 
-            // tìm đơn hàng trong list đang load (orders là list bạn đã bind vào grid)
             var don = orders.FirstOrDefault(x => x.MaDonHang == maDonHang);
 
             if (don == null)
@@ -212,8 +190,6 @@ namespace DACs.Controls
                 MessageBox.Show("Không tìm thấy đơn hàng!", "Lỗi");
                 return;
             }
-
-            // lấy chi tiết đơn hàng từ DB
             var details = orderService.GetOrderDetails(maDonHang);
 
             if (details.Count == 0)
@@ -222,14 +198,12 @@ namespace DACs.Controls
                 return;
             }
 
-            // format từng dòng SP
             string detailText = string.Join("\n",
                 details.Select(d =>
                     $"- CT #{d.MaDonHangChiTiet}: Biến thể {d.MaBienThe}, SL = {d.SoLuong}, Đơn giá = {StringUtils.FormatNumber(d.DonGia * 1000):n0}đ"
                 )
             );
 
-            // hiện messagebox
             MessageBox.Show(
                 $"📦 ĐƠN HÀNG #{don.MaDonHang}\n" +
                 $"👤 Khách: {don.MaKhachHang}\n" +
